@@ -1,0 +1,25 @@
+name: it@M Default Policy
+
+codescanning:
+  level: error
+
+# Dependency Security Alerts
+dependabot:
+  level: high
+
+# Dependency Licensing Alerts
+licensing:
+  conditions:
+    ids:
+      - GPL-*
+      - LGPL-*
+      - AGPL-*
+
+  warnings:
+    # Warning is the dependency isn't known
+    ids:
+      - Other
+      - NA
+
+secretscanning:
+  level: all
