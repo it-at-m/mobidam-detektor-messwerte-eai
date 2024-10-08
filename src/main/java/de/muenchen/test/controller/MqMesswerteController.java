@@ -34,7 +34,7 @@ public class MqMesswerteController {
     }
 
     @GetMapping(value = "/messwerte", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<MqMesswerteDTO> loadMesswerte(@RequestParam(name = "messquerschnitte", required = true) List<String> messquerschnitte,
+    public ResponseEntity<MqMesswerteDTO> loadMesswerte(@RequestParam(name = "messquerschnitte") List<String> messquerschnitte,
             @RequestParam(name = "datumVon") LocalDateTime datumVon,
             @RequestParam(name = "datumBis") LocalDateTime datumBis,
             @RequestParam(name = "uhrzeitVon", required = false) Optional<LocalTime> uhrzeitVon,

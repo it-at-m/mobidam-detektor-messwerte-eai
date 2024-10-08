@@ -28,19 +28,16 @@ public class Mapper {
         return dto;
     }
 
-    public MqMesswerteDTO map(List<MqMesswerte> messwerte, final Optional<List<FzTyp>> fzTypen) {
+    public MqMesswerteDTO map(List<MqMesswerte> messwerte, final List<FzTyp> fzTypen) {
         MqMesswerteDTO dto = new MqMesswerteDTO();
-        if (fzTypen.isPresent())
-            dto.setFormat(MesswerteFormatBuilder.createFormat(fzTypen.get()));
-        else
-            dto.setFormat(MesswerteFormatBuilder.createFormat(Arrays.asList(FzTyp.values())));
+        dto.setFormat(MesswerteFormatBuilder.createFormat(fzTypen));
         dto.setVersion(Constants.VERSION1);
 
         mapMesswerte(dto, messwerte, fzTypen);
         return dto;
     }
 
-    private void mapMesswerte(MqMesswerteDTO dto, List<MqMesswerte> messwerteList, Optional<List<FzTyp>> fzTypen) {
+    private void mapMesswerte(MqMesswerteDTO dto, List<MqMesswerte> messwerteList, List<FzTyp> fzTypen) {
         for (MqMesswerte messwerte : messwerteList) {
             // Get existing mq or create new one:
             Optional<MessquerschnitteDTO> mqDtoOptional = dto.getMessquerschnitte().stream().filter(mq -> mq.getMqId().equals(messwerte.getMqId())).findFirst();
@@ -61,10 +58,7 @@ public class Mapper {
             intervallWerteList.add(messwerte.getDatumUhrzeitVon().format(Constants.DATE_FORMATTER));
             intervallWerteList.add(messwerte.getDatumUhrzeitBis().format(Constants.DATE_FORMATTER));
 
-            if (fzTypen.isEmpty())
-                addSpecifiedMesswerte(messwerte, intervallWerteList, new ArrayList<>(Arrays.asList(FzTyp.values())));
-            else
-                addSpecifiedMesswerte(messwerte, intervallWerteList, fzTypen.get());
+            addSpecifiedMesswerte(messwerte, intervallWerteList, fzTypen);
         }
     }
 

@@ -2,6 +2,7 @@ package de.muenchen.test.service;
 
 import de.muenchen.test.domain.FzTyp;
 import de.muenchen.test.domain.Mapper;
+import de.muenchen.test.domain.MesswerteFormatBuilder;
 import de.muenchen.test.domain.MqMesswerte;
 import de.muenchen.test.domain.MqMesswerteDTO;
 import de.muenchen.test.repository.MqMesswerteRepository;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,7 +30,7 @@ public class MesswerteService {
 
     public MqMesswerteDTO loadMesswerte(List<String> messquerschnitte, LocalDateTime datumVon, LocalDateTime datumBis, Optional<LocalTime> uhrzeitVon, Optional<LocalTime> uhrzeitBis, List<Integer> tagestypen, Optional<List<FzTyp>> fzTypen, Optional<Integer> limit, Optional<Integer> page) {
         List<MqMesswerte> messwerte = null;
-            if (uhrzeitVon == null || uhrzeitBis == null) {
+            if (uhrzeitVon.isEmpty() || uhrzeitBis.isEmpty()) {
                 messwerte = repo.findByDatumAndTagestypenAndFzTypen(messquerschnitte.get(0), datumVon, datumBis);
             } else {
                 //                messwerte = repo.findByDatumAndUhrzeitAndTagestypenAndFzTypen(); TODO
@@ -36,7 +38,10 @@ public class MesswerteService {
             //            if (page > resultPage.getTotalPages()) { TODO
             //                throw new MyResourceNotFoundException();
             //            }
-            MqMesswerteDTO messwerteDTO = mapper.map(messwerte, fzTypen);
+        List<FzTyp> fzTypenList;
+        fzTypenList = fzTypen.orElseGet(() -> Arrays.asList(FzTyp.values()));
+
+        MqMesswerteDTO messwerteDTO = mapper.map(messwerte, fzTypenList);
         return messwerteDTO;
     }
 }
