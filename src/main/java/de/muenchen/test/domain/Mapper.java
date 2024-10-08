@@ -1,20 +1,17 @@
 package de.muenchen.test.domain;
 
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
 public class Mapper {
-    public List<MqMesswerteDTO> map(List<MqMesswerte> messwerte) {
-        List<MqMesswerteDTO> dtos = new ArrayList<>();
+    public MqMesswerteDTO map(List<MqMesswerte> messwerte) {
         MqMesswerteDTO dto = new MqMesswerteDTO();
-        dto.setFormat("DATUM_UHRZEIT_VON DATUM_UHRZEIT_BIS ANZAHL_PKW ANZAHL_LKW ANZALH_BUS");
-        dto.setVersion("1.0");
+        dto.setFormat(Constants.ATTRIBUTE_DATUM_UHRZEIT_VON+" " + Constants.ATTRIBUTE_DATUM_UHRZEIT_BIS + " ANZAHL_PKW ANZAHL_LKW ANZALH_BUS");
+        dto.setVersion(Constants.VERSION1);
         dto.getMessquerschnitte().add(new MessquerschnitteDTO());
         dto.getMessquerschnitte().get(0).setMqId(messwerte.get(0).getMqId());
-        dtos.add(dto);
         for (int i = 0; i < messwerte.size(); i++) {
             dto.getMessquerschnitte().get(0).getIntervalle().add(new ArrayList<>());
             dto.getMessquerschnitte().get(0).getIntervalle().get(i).add(messwerte.get(i).getDatumUhrzeitVon().toString());
@@ -28,7 +25,7 @@ public class Mapper {
                     .add(messwerte.get(i).getAnzahlBus() == null ? "NULL" : messwerte.get(i).getAnzahlBus().toString());
 
         }
-        return dtos;
+        return dto;
     }
 
     public MqMesswerteDTO map(List<MqMesswerte> messwerte, final Optional<List<FzTyp>> fzTypen) {
@@ -36,8 +33,8 @@ public class Mapper {
         if (fzTypen.isPresent())
             dto.setFormat(MesswerteFormatBuilder.createFormat(fzTypen.get()));
         else
-            dto.setFormat(MesswerteFormatBuilder.createDefaultFormat());
-        dto.setVersion(Constants.VERSION);
+            dto.setFormat(MesswerteFormatBuilder.createFormat(Arrays.asList(FzTyp.values())));
+        dto.setVersion(Constants.VERSION1);
 
         mapMesswerte(dto, messwerte, fzTypen);
         return dto;
@@ -61,8 +58,8 @@ public class Mapper {
             List<String> intervallWerteList = new ArrayList<>();
             mqDto.getIntervalle().add(intervallWerteList);
 
-            intervallWerteList.add(messwerte.getDatumUhrzeitVon().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
-            intervallWerteList.add(messwerte.getDatumUhrzeitBis().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+            intervallWerteList.add(messwerte.getDatumUhrzeitVon().format(Constants.DATE_FORMATTER));
+            intervallWerteList.add(messwerte.getDatumUhrzeitBis().format(Constants.DATE_FORMATTER));
 
             if (fzTypen.isEmpty())
                 addSpecifiedMesswerte(messwerte, intervallWerteList, new ArrayList<>(Arrays.asList(FzTyp.values())));

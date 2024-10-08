@@ -4,16 +4,9 @@ import java.util.List;
 
 public class MesswerteFormatBuilder {
 
-    public static String createDefaultFormat() {
-        StringBuilder sb = new StringBuilder("DATUM_UHRZEIT_VON DATUM_UHRZEIT_BIS");
-        for (FzTyp fzTyp : FzTyp.values()) {
-            sb.append(" ").append(fzTyp);
-        }
-        return sb.toString();
-    }
-
     public static String createFormat(List<FzTyp> fzTypen) {
-        StringBuilder sb = new StringBuilder("DATUM_UHRZEIT_VON DATUM_UHRZEIT_BIS");
+        StringBuilder sb = new StringBuilder();
+        sb.append(Constants.ATTRIBUTE_DATUM_UHRZEIT_VON).append(" ").append(Constants.ATTRIBUTE_DATUM_UHRZEIT_BIS);
         for (FzTyp fzTyp : fzTypen) {
             switch (fzTyp) {
             case KFZ_VERKEHR:

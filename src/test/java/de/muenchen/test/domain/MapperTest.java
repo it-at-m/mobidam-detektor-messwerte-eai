@@ -43,7 +43,7 @@ public class MapperTest {
         MqMesswerteDTO dto = mapper.map(messwerte, Optional.of(fzTypen));
 
         assertNotNull(dto);
-        assertEquals("DATUM_UHRZEIT_VON DATUM_UHRZEIT_BIS " + FzTyp.SATTEL_KFZ.name() + " " + FzTyp.KFZ_VERKEHR.name(), dto.getFormat());
+        assertEquals(Constants.ATTRIBUTE_DATUM_UHRZEIT_VON + " " + Constants.ATTRIBUTE_DATUM_UHRZEIT_BIS + " " + FzTyp.SATTEL_KFZ.name() + " " + FzTyp.KFZ_VERKEHR.name(), dto.getFormat());
         assertNotNull(dto.getMessquerschnitte());
         assertFalse(dto.getMessquerschnitte().isEmpty());
 
@@ -58,8 +58,8 @@ public class MapperTest {
         assertFalse(dto.getMessquerschnitte().get(0).getIntervalle().get(0).isEmpty());
         assertNotNull(dto.getMessquerschnitte().get(0).getIntervalle().get(0).get(0));
         assertFalse(dto.getMessquerschnitte().get(0).getIntervalle().get(0).get(0).isEmpty());
-        assertEquals(datumVon1.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")), dto.getMessquerschnitte().get(0).getIntervalle().get(0).get(0));
-        assertEquals(datumBis1.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")), dto.getMessquerschnitte().get(0).getIntervalle().get(0).get(1));
+        assertEquals(datumVon1.format(Constants.DATE_FORMATTER), dto.getMessquerschnitte().get(0).getIntervalle().get(0).get(0));
+        assertEquals(datumBis1.format(Constants.DATE_FORMATTER), dto.getMessquerschnitte().get(0).getIntervalle().get(0).get(1));
         assertEquals("15", dto.getMessquerschnitte().get(0).getIntervalle().get(0).get(2));
         assertEquals("23", dto.getMessquerschnitte().get(0).getIntervalle().get(0).get(3));
 
@@ -68,8 +68,8 @@ public class MapperTest {
         assertFalse(dto.getMessquerschnitte().get(0).getIntervalle().get(1).isEmpty());
         assertNotNull(dto.getMessquerschnitte().get(0).getIntervalle().get(1).get(0));
         assertFalse(dto.getMessquerschnitte().get(0).getIntervalle().get(1).get(0).isEmpty());
-        assertEquals(datumVon2.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")), dto.getMessquerschnitte().get(0).getIntervalle().get(1).get(0));
-        assertEquals(datumBis2.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")), dto.getMessquerschnitte().get(0).getIntervalle().get(1).get(1));
+        assertEquals(datumVon2.format(Constants.DATE_FORMATTER), dto.getMessquerschnitte().get(0).getIntervalle().get(1).get(0));
+        assertEquals(datumBis2.format(Constants.DATE_FORMATTER), dto.getMessquerschnitte().get(0).getIntervalle().get(1).get(1));
         assertEquals("16", dto.getMessquerschnitte().get(0).getIntervalle().get(1).get(2));
         assertEquals("31", dto.getMessquerschnitte().get(0).getIntervalle().get(1).get(3));
 
@@ -84,8 +84,8 @@ public class MapperTest {
         assertFalse(dto.getMessquerschnitte().get(1).getIntervalle().get(0).isEmpty());
         assertNotNull(dto.getMessquerschnitte().get(1).getIntervalle().get(0).get(0));
         assertFalse(dto.getMessquerschnitte().get(1).getIntervalle().get(0).get(0).isEmpty());
-        assertEquals(datumVon3.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")), dto.getMessquerschnitte().get(1).getIntervalle().get(0).get(0));
-        assertEquals(datumBis3.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")), dto.getMessquerschnitte().get(1).getIntervalle().get(0).get(1));
+        assertEquals(datumVon3.format(Constants.DATE_FORMATTER), dto.getMessquerschnitte().get(1).getIntervalle().get(0).get(0));
+        assertEquals(datumBis3.format(Constants.DATE_FORMATTER), dto.getMessquerschnitte().get(1).getIntervalle().get(0).get(1));
         assertEquals("15", dto.getMessquerschnitte().get(1).getIntervalle().get(0).get(2));
         assertEquals("23", dto.getMessquerschnitte().get(1).getIntervalle().get(0).get(3));
 
@@ -94,8 +94,8 @@ public class MapperTest {
         assertFalse(dto.getMessquerschnitte().get(1).getIntervalle().get(1).isEmpty());
         assertNotNull(dto.getMessquerschnitte().get(1).getIntervalle().get(1).get(0));
         assertFalse(dto.getMessquerschnitte().get(1).getIntervalle().get(1).get(0).isEmpty());
-        assertEquals(datumVon4.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")), dto.getMessquerschnitte().get(1).getIntervalle().get(1).get(0));
-        assertEquals(datumBis4.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")), dto.getMessquerschnitte().get(1).getIntervalle().get(1).get(1));
+        assertEquals(datumVon4.format(Constants.DATE_FORMATTER), dto.getMessquerschnitte().get(1).getIntervalle().get(1).get(0));
+        assertEquals(datumBis4.format(Constants.DATE_FORMATTER), dto.getMessquerschnitte().get(1).getIntervalle().get(1).get(1));
         assertEquals("16", dto.getMessquerschnitte().get(1).getIntervalle().get(1).get(2));
         assertEquals("31", dto.getMessquerschnitte().get(1).getIntervalle().get(1).get(3));
     }
