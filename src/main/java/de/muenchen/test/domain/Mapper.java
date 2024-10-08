@@ -2,6 +2,7 @@ package de.muenchen.test.domain;
 
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,69 +31,111 @@ public class Mapper {
         return dtos;
     }
 
-    public MqMesswerteDTO map(List<MqMesswerte> messwerte, final List<String> fzTypen) {
+    public MqMesswerteDTO map(List<MqMesswerte> messwerte, final Optional<List<FzTyp>> fzTypen) {
         MqMesswerteDTO dto = new MqMesswerteDTO();
-        List<FzTyp> fzTypList = new ArrayList<>();
-        for (String typ : fzTypen) {
-            fzTypList.add(FzTyp.valueOf(typ));
-        }
-        dto.setFormat(createFormat(fzTypList));
-        dto.setVersion("1.0");
+        if (fzTypen.isPresent())
+            dto.setFormat(MesswerteFormatBuilder.createFormat(fzTypen.get()));
+        else
+            dto.setFormat(MesswerteFormatBuilder.createDefaultFormat());
+        dto.setVersion(Constants.VERSION);
 
-        mapMesswerte(dto, messwerte, fzTypList);
+        mapMesswerte(dto, messwerte, fzTypen);
         return dto;
     }
 
-    private void mapMesswerte(MqMesswerteDTO dto, List<MqMesswerte> messwerte, List<FzTyp> fzTypen) {
-        for (MqMesswerte messwert : messwerte) {
+    private void mapMesswerte(MqMesswerteDTO dto, List<MqMesswerte> messwerteList, Optional<List<FzTyp>> fzTypen) {
+        for (MqMesswerte messwerte : messwerteList) {
             // Get existing mq or create new one:
-            Optional<MessquerschnitteDTO> mqDtoOptional = dto.getMessquerschnitte().stream().filter(mq -> mq.getMqId().equals(messwert.getMqId())).findFirst();
+            Optional<MessquerschnitteDTO> mqDtoOptional = dto.getMessquerschnitte().stream().filter(mq -> mq.getMqId().equals(messwerte.getMqId())).findFirst();
             MessquerschnitteDTO mqDto;
             if (mqDtoOptional.isPresent()) {
                 mqDto = mqDtoOptional.get();
             } else {
                 mqDto = new MessquerschnitteDTO();
-                mqDto.setMqId(messwert.getMqId());
+                mqDto.setMqId(messwerte.getMqId());
                 List<List<String>> intervalleList = new ArrayList<>();
                 mqDto.setIntervalle(intervalleList);
                 dto.getMessquerschnitte().add(mqDto);
             }
 
-            ArrayList<String> intervallWerteList = new ArrayList<>();
+            List<String> intervallWerteList = new ArrayList<>();
             mqDto.getIntervalle().add(intervallWerteList);
 
-            intervallWerteList.add(messwert.getDatumUhrzeitVon().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
-            intervallWerteList.add(messwert.getDatumUhrzeitBis().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+            intervallWerteList.add(messwerte.getDatumUhrzeitVon().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+            intervallWerteList.add(messwerte.getDatumUhrzeitBis().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
 
-            for (FzTyp fzTyp : fzTypen) {
-                switch (fzTyp) {
-                case KFZ_VERKEHR:
-                    intervallWerteList
-                            .add(messwert.getSummeKraftfahrzeugverkehr() == null ? "NULL" : messwert.getSummeKraftfahrzeugverkehr().toString());
-                    break;
-                case SATTEL_KFZ:
-                    intervallWerteList
-                            .add(messwert.getAnzahlSattelKfz() == null ? "NULL" : messwert.getAnzahlSattelKfz().toString());
-                    break;
-                }
-            }
+            if (fzTypen.isEmpty())
+                addSpecifiedMesswerte(messwerte, intervallWerteList, new ArrayList<>(Arrays.asList(FzTyp.values())));
+            else
+                addSpecifiedMesswerte(messwerte, intervallWerteList, fzTypen.get());
         }
     }
 
-    private String createFormat(List<FzTyp> fzTypen) {
-        StringBuilder sb = new StringBuilder("DATUM_UHRZEIT_VON DATUM_UHRZEIT_BIS");
+    private void addSpecifiedMesswerte(MqMesswerte messwerte, List<String> intervallWerteList, List<FzTyp> fzTypen) {
         for (FzTyp fzTyp : fzTypen) {
             switch (fzTyp) {
             case KFZ_VERKEHR:
-                sb.append(" ").append(FzTyp.KFZ_VERKEHR);
+                intervallWerteList
+                        .add(messwerte.getSummeKraftfahrzeugverkehr() == null ? "NULL" : messwerte.getSummeKraftfahrzeugverkehr().toString());
+                break;
+            case PKW:
+                intervallWerteList
+                        .add(messwerte.getAnzahlPkw() == null ? "NULL" : messwerte.getAnzahlPkw().toString());
+                break;
+            case PKWA:
+                intervallWerteList
+                        .add(messwerte.getAnzahlPkwA() == null ? "NULL" : messwerte.getAnzahlPkwA().toString());
+                break;
+            case LKW:
+                intervallWerteList
+                        .add(messwerte.getAnzahlLkw() == null ? "NULL" : messwerte.getAnzahlLkw().toString());
+                break;
+            case LKWA:
+                intervallWerteList
+                        .add(messwerte.getAnzahlLkwA() == null ? "NULL" : messwerte.getAnzahlLkwA().toString());
+                break;
+            case KRAD:
+                intervallWerteList
+                        .add(messwerte.getAnzahlKrad() == null ? "NULL" : messwerte.getAnzahlKrad().toString());
+                break;
+            case LFW:
+                intervallWerteList
+                        .add(messwerte.getAnzahlLfw() == null ? "NULL" : messwerte.getAnzahlLfw().toString());
                 break;
             case SATTEL_KFZ:
-                sb.append(" ").append(FzTyp.SATTEL_KFZ);
+                intervallWerteList
+                        .add(messwerte.getAnzahlSattelKfz() == null ? "NULL" : messwerte.getAnzahlSattelKfz().toString());
                 break;
-            // TODO
+            case BUS:
+                intervallWerteList
+                        .add(messwerte.getAnzahlBus() == null ? "NULL" : messwerte.getAnzahlBus().toString());
+                break;
+            case NK_KFZ:
+                intervallWerteList
+                        .add(messwerte.getAnzahlNkKfz() == null ? "NULL" : messwerte.getAnzahlNkKfz().toString());
+                break;
+            case ALLE_PKW:
+                intervallWerteList
+                        .add(messwerte.getSummeAllePkw() == null ? "NULL" : messwerte.getSummeAllePkw().toString());
+                break;
+            case LASTZUG:
+                intervallWerteList
+                        .add(messwerte.getSummeLastzug() == null ? "NULL" : messwerte.getSummeLastzug().toString());
+                break;
+            case GUETERVERKEHR:
+                intervallWerteList
+                        .add(messwerte.getSummeGueterverkehr() == null ? "NULL" : messwerte.getSummeGueterverkehr().toString());
+                break;
+            case SCHWERVERKEHR:
+                intervallWerteList
+                        .add(messwerte.getSummeSchwerverkehr() == null ? "NULL" : messwerte.getSummeSchwerverkehr().toString());
+                break;
+            case RAD:
+                intervallWerteList
+                        .add(messwerte.getAnzahlRad() == null ? "NULL" : messwerte.getAnzahlRad().toString());
+                break;
             }
         }
-        return sb.toString();
     }
 
 }

@@ -1,5 +1,7 @@
 package de.muenchen.test.controller;
 
+import de.muenchen.test.domain.Constants;
+import de.muenchen.test.domain.FzTyp;
 import de.muenchen.test.domain.Mapper;
 import de.muenchen.test.domain.MqMesswerte;
 import de.muenchen.test.domain.MqMesswerteDTO;
@@ -20,8 +22,10 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
+@RequestMapping(Constants.VERSION)
 @RequiredArgsConstructor
 @Slf4j
 public class MqMesswerteController {
@@ -45,12 +49,12 @@ public class MqMesswerteController {
     public ResponseEntity<MqMesswerteDTO> loadMesswerte(@RequestParam(name = "messquerschnitte", required = true) List<String> messquerschnitte,
             @RequestParam(name = "datumVon", required = true) LocalDateTime datumVon,
             @RequestParam(name = "datumBis", required = true) LocalDateTime datumBis,
-            @RequestParam(name = "uhrzeitVon", required = false) LocalTime uhrzeitVon,
-            @RequestParam(name = "uhrzeitBis", required = false) LocalTime uhrzeitBis,
+            @RequestParam(name = "uhrzeitVon", required = false) Optional<LocalTime> uhrzeitVon,
+            @RequestParam(name = "uhrzeitBis", required = false) Optional<LocalTime> uhrzeitBis,
             @RequestParam(name = "tagestypen", required = true) List<Integer> tagestypen,
-            @RequestParam(name = "fzTypen", required = true) List<String> fzTypen,
-            @RequestParam(name = "limit", required = false) Integer limit,
-            @RequestParam(name = "page", required = false) Integer page) {
+            @RequestParam(name = "fzTypen", required = false) Optional<List<FzTyp>> fzTypen,
+            @RequestParam(name = "limit", required = false) Optional<Integer> limit,
+            @RequestParam(name = "page", required = false) Optional<Integer> page) {
         log.info("loadMesswerte");
         List<MqMesswerte> messwerte = null;
         try {

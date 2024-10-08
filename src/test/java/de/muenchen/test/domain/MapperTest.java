@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -35,11 +36,11 @@ public class MapperTest {
         LocalDateTime datumBis4 = LocalDateTime.of(2024, 9, 1, 0, 30, 0);
         messwerte.add(createMesswerte(400102L, datumVon2, datumBis2, 31L, 16L));
 
-        final List<String> fzTypen = new ArrayList<>();
-        fzTypen.add(FzTyp.SATTEL_KFZ.name());
-        fzTypen.add(FzTyp.KFZ_VERKEHR.name());
+        final List<FzTyp> fzTypen = new ArrayList<>();
+        fzTypen.add(FzTyp.SATTEL_KFZ);
+        fzTypen.add(FzTyp.KFZ_VERKEHR);
 
-        MqMesswerteDTO dto = mapper.map(messwerte, fzTypen);
+        MqMesswerteDTO dto = mapper.map(messwerte, Optional.of(fzTypen));
 
         assertNotNull(dto);
         assertEquals("DATUM_UHRZEIT_VON DATUM_UHRZEIT_BIS " + FzTyp.SATTEL_KFZ.name() + " " + FzTyp.KFZ_VERKEHR.name(), dto.getFormat());
