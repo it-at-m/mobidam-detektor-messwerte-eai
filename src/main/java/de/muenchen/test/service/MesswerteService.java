@@ -1,13 +1,16 @@
 package de.muenchen.test.service;
 
+import de.muenchen.test.domain.Constants;
 import de.muenchen.test.domain.FzTyp;
 import de.muenchen.test.domain.Mapper;
 import de.muenchen.test.domain.MqMesswerte;
 import de.muenchen.test.domain.MqMesswerteDTO;
+import de.muenchen.test.domain.Tagestyp;
 import de.muenchen.test.repository.MqMesswerteRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Arrays;
@@ -26,19 +29,41 @@ public class MesswerteService {
         return mapper.map(messwerte);
     }
 
-    public MqMesswerteDTO loadMesswerte(List<String> messquerschnitte, LocalDateTime datumVon, LocalDateTime datumBis, Optional<LocalTime> uhrzeitVon, Optional<LocalTime> uhrzeitBis, List<Integer> tagestypen, Optional<List<FzTyp>> fzTypen, Optional<Integer> limit, Optional<Integer> page) {
-        List<MqMesswerte> messwerte = null;
-            if (uhrzeitVon.isEmpty() || uhrzeitBis.isEmpty()) {
-                messwerte = repo.findByDatumAndTagestypenAndFzTypen(messquerschnitte.get(0), datumVon, datumBis);
-            } else {
-                //                messwerte = repo.findByDatumAndUhrzeitAndTagestypenAndFzTypen(); TODO
-            }
-            //            if (page > resultPage.getTotalPages()) { TODO
-            //                throw new MyResourceNotFoundException();
-            //            }
-        List<FzTyp> fzTypenList;
-        fzTypenList = fzTypen.orElseGet(() -> Arrays.asList(FzTyp.values()));
+    public MqMesswerteDTO loadMesswerteWithinTimeRange(List<String> messquerschnitte, LocalDate datumVon, LocalDate datumBis, String uhrzeitVon,
+            String uhrzeitBis, Optional<List<Tagestyp>> tagestypen, Optional<List<FzTyp>> fzTypen, Optional<Integer> limit, Optional<Integer> page) {
+        List<MqMesswerte> messwerte;
+        if (tagestypen.isEmpty())
+            messwerte = repo.findByIdAndDatumAndUhrzeit(messquerschnitte.get(0), datumVon.atStartOfDay(), datumBis.atStartOfDay(),
+                    LocalTime.parse(uhrzeitVon, Constants.TIME_FORMATTER), LocalTime.parse(uhrzeitBis, Constants.TIME_FORMATTER));
+        else {
+
+            List<Integer> tagestypenInt = tagestypen.get().stream().map(Tagestyp::getId).toList();
+            messwerte = repo.findByIdAndDatumAndUhrzeitAndTagestypen(messquerschnitte.get(0), datumVon.atStartOfDay(), datumBis.atStartOfDay(),
+                    LocalTime.parse(uhrzeitVon, Constants.TIME_FORMATTER), LocalTime.parse(uhrzeitBis, Constants.TIME_FORMATTER), tagestypenInt);
+        }
+        //            if (page > resultPage.getTotalPages()) { TODO
+        //                throw new MyResourceNotFoundException();
+        //            }
+        List<FzTyp> fzTypenList = fzTypen.orElseGet(() -> Arrays.asList(FzTyp.values()));
 
         return mapper.map(messwerte, fzTypenList);
     }
+
+    public MqMesswerteDTO loadMesswerteWithFullRange(List<String> messquerschnitte, LocalDateTime datumVon, LocalDateTime datumBis,
+            Optional<List<Tagestyp>> tagestypen, Optional<List<FzTyp>> fzTypen, Optional<Integer> limit, Optional<Integer> page) {
+        List<MqMesswerte> messwerte;
+        if (tagestypen.isEmpty())
+            messwerte = repo.findByIdAndDatum(messquerschnitte.get(0), datumVon, datumBis);
+        else {
+            List<Integer> tagestypenInt = tagestypen.get().stream().map(Tagestyp::getId).toList();
+            messwerte = repo.findByIdAndDatumAndTagestypen(messquerschnitte.get(0), datumVon, datumBis, tagestypenInt);
+        }
+        //                    if (page > resultPage.getTotalPages()) { TODO
+        //                        throw new MyResourceNotFoundException();
+        //                    }
+        List<FzTyp> fzTypenList = fzTypen.orElseGet(() -> Arrays.asList(FzTyp.values()));
+
+        return mapper.map(messwerte, fzTypenList);
+    }
+
 }

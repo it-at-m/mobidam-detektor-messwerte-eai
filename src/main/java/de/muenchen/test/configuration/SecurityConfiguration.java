@@ -38,6 +38,11 @@ public class SecurityConfiguration {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests((requests) -> requests.requestMatchers(
+                        // allow access to /swagger-ui
+                        AntPathRequestMatcher.antMatcher("/swagger-ui/*"),
+                        // allow acces to api-docs
+                        AntPathRequestMatcher.antMatcher("/v3/api-docs"),
+                        AntPathRequestMatcher.antMatcher("/v3/api-docs/*"),
                         // allow access to /actuator/info
                         AntPathRequestMatcher.antMatcher("/actuator/info"),
                         // allow access to /actuator/health for OpenShift Health Check

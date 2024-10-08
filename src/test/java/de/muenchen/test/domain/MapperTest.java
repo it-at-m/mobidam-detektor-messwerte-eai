@@ -41,7 +41,8 @@ public class MapperTest {
         MqMesswerteDTO dto = mapper.map(messwerte, fzTypen);
 
         assertNotNull(dto);
-        assertEquals(Constants.ATTRIBUTE_DATUM_UHRZEIT_VON + " " + Constants.ATTRIBUTE_DATUM_UHRZEIT_BIS + " " + FzTyp.SATTEL_KFZ.name() + " " + FzTyp.KFZ_VERKEHR.name(), dto.getFormat());
+        assertEquals(Constants.ATTRIBUTE_DATUM_UHRZEIT_VON + " " + Constants.ATTRIBUTE_DATUM_UHRZEIT_BIS + " " + FzTyp.SATTEL_KFZ.name() + " "
+                + FzTyp.KFZ_VERKEHR.name(), dto.getFormat());
         assertNotNull(dto.getMessquerschnitte());
         assertFalse(dto.getMessquerschnitte().isEmpty());
 

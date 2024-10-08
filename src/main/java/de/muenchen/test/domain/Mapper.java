@@ -7,7 +7,7 @@ import java.util.Optional;
 public class Mapper {
     public MqMesswerteDTO map(List<MqMesswerte> messwerte) {
         MqMesswerteDTO dto = new MqMesswerteDTO();
-        dto.setFormat(Constants.ATTRIBUTE_DATUM_UHRZEIT_VON+" " + Constants.ATTRIBUTE_DATUM_UHRZEIT_BIS + " ANZAHL_PKW ANZAHL_LKW ANZALH_BUS");
+        dto.setFormat(Constants.ATTRIBUTE_DATUM_UHRZEIT_VON + " " + Constants.ATTRIBUTE_DATUM_UHRZEIT_BIS + " ANZAHL_PKW ANZAHL_LKW ANZALH_BUS");
         dto.setVersion(Constants.VERSION1);
         dto.getMessquerschnitte().add(new MessquerschnitteDTO());
         dto.getMessquerschnitte().get(0).setMqId(messwerte.get(0).getMqId());

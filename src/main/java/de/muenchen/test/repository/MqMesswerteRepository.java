@@ -11,6 +11,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
 /**
@@ -29,7 +30,25 @@ public interface MqMesswerteRepository extends JpaRepository<MqMesswerte, Long> 
     List<MqMesswerte> findByDatumVon(@Param("datumUhrzeitVon") LocalDateTime datumUhrzeitVon);
 
     @Query("SELECT m FROM MqMesswerte m WHERE m.mqId = :mqId AND m.datumUhrzeitVon >= :datumUhrzeitVon AND m.datumUhrzeitVon <= :datumUhrzeitBis")
-    List<MqMesswerte> findByDatumAndTagestypenAndFzTypen(@Param("mqId") String mqId, @Param("datumUhrzeitVon") LocalDateTime datumUhrzeitVon,
+    List<MqMesswerte> findByIdAndDatum(@Param("mqId") String mqId, @Param("datumUhrzeitVon") LocalDateTime datumUhrzeitVon,
             @Param("datumUhrzeitBis") LocalDateTime datumUhrzeitBis);
 
+    @Query(
+        "SELECT m FROM MqMesswerte m WHERE m.mqId = :mqId AND m.datumUhrzeitVon >= :datumUhrzeitVon AND m.datumUhrzeitVon <= :datumUhrzeitBis AND m.tagetyp IN :tagestypen"
+    )
+    List<MqMesswerte> findByIdAndDatumAndTagestypen(@Param("mqId") String mqId, @Param("datumUhrzeitVon") LocalDateTime datumUhrzeitVon,
+            @Param("datumUhrzeitBis") LocalDateTime datumUhrzeitBis, @Param("tagestypen") List<Integer> tagestypen);
+
+    @Query(
+        "SELECT m FROM MqMesswerte m WHERE m.mqId = :mqId AND m.datumUhrzeitVon BETWEEN :datumVon AND :datumBis AND FORMATDATETIME(m.datumUhrzeitVon, 'HH:mm:ss') >= :uhrzeitVon AND FORMATDATETIME(m.datumUhrzeitVon, 'HH:mm:ss') <= :uhrzeitBis"
+    )
+    List<MqMesswerte> findByIdAndDatumAndUhrzeit(@Param("mqId") String mqId, @Param("datumVon") LocalDateTime datumVon,
+            @Param("datumBis") LocalDateTime datumBis, @Param("uhrzeitVon") LocalTime uhrzeitVon, @Param("uhrzeitBis") LocalTime uhrzeitBis);
+
+    @Query(
+        "SELECT m FROM MqMesswerte m WHERE m.mqId = :mqId AND m.datumUhrzeitVon BETWEEN :datumVon AND :datumBis AND FORMATDATETIME(m.datumUhrzeitVon, 'HH:mm:ss') >= :uhrzeitVon AND FORMATDATETIME(m.datumUhrzeitVon, 'HH:mm:ss') <= :uhrzeitBis AND m.tagetyp IN :tagestypen"
+    )
+    List<MqMesswerte> findByIdAndDatumAndUhrzeitAndTagestypen(@Param("mqId") String mqId, @Param("datumVon") LocalDateTime datumVon,
+            @Param("datumBis") LocalDateTime datumBis, @Param("uhrzeitVon") LocalTime uhrzeitVon, @Param("uhrzeitBis") LocalTime uhrzeitBis,
+            @Param("tagestypen") List<Integer> tagestypen);
 }
