@@ -123,7 +123,7 @@ public class MqMesswerteController {
                             content = @Content
                     ) }
     )
-    @PreAuthorize("hasRole(T(de.muenchen.test.domain.Constants).CLIENT_ROLE.name())")
+    @PreAuthorize("hasRole(T(de.muenchen.test.domain.Constants).CLIENT_ROLE)")
     @GetMapping(value = "/timerange", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<MqMesswerteDTO> loadMesswerteTimeRange(@RequestParam(name = "messquerschnitte") List<String> messquerschnitte,
             @RequestParam(name = "datumVon") LocalDate datumVon,
