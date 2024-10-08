@@ -2,7 +2,6 @@ package de.muenchen.test.service;
 
 import de.muenchen.test.domain.FzTyp;
 import de.muenchen.test.domain.Mapper;
-import de.muenchen.test.domain.MesswerteFormatBuilder;
 import de.muenchen.test.domain.MqMesswerte;
 import de.muenchen.test.domain.MqMesswerteDTO;
 import de.muenchen.test.repository.MqMesswerteRepository;
@@ -24,8 +23,7 @@ public class MesswerteService {
 
     public MqMesswerteDTO loadMesswerteByYear(Integer year) {
         List<MqMesswerte> messwerte = repo.findByDatumVon(LocalDateTime.of(year, 1, 1, 0, 0, 0));
-        MqMesswerteDTO messwerteDTO = mapper.map(messwerte);
-        return messwerteDTO;
+        return mapper.map(messwerte);
     }
 
     public MqMesswerteDTO loadMesswerte(List<String> messquerschnitte, LocalDateTime datumVon, LocalDateTime datumBis, Optional<LocalTime> uhrzeitVon, Optional<LocalTime> uhrzeitBis, List<Integer> tagestypen, Optional<List<FzTyp>> fzTypen, Optional<Integer> limit, Optional<Integer> page) {
@@ -41,7 +39,6 @@ public class MesswerteService {
         List<FzTyp> fzTypenList;
         fzTypenList = fzTypen.orElseGet(() -> Arrays.asList(FzTyp.values()));
 
-        MqMesswerteDTO messwerteDTO = mapper.map(messwerte, fzTypenList);
-        return messwerteDTO;
+        return mapper.map(messwerte, fzTypenList);
     }
 }
