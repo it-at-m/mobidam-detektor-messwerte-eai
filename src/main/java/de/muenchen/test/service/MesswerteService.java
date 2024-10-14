@@ -52,7 +52,7 @@ public class MesswerteService {
     }
 
     public MqMesswerteDTO loadMesswerteWithinTimeRange(List<String> messquerschnitte, LocalDate datumVon, LocalDate datumBis, String uhrzeitVon,
-            String uhrzeitBis, Optional<List<Tagestyp>> tagestypen, Optional<List<FzTyp>> fzTypen, Optional<Integer> limit, Optional<Integer> page) {
+            String uhrzeitBis, Optional<List<Tagestyp>> tagestypen, Optional<List<FzTyp>> fzTypen) {
         List<MqMesswerte> messwerte;
         if (tagestypen.isEmpty())
             messwerte = repo.findByIdAndDatumAndUhrzeit(messquerschnitte.get(0), datumVon.atStartOfDay(), datumBis.atStartOfDay(),
@@ -72,7 +72,7 @@ public class MesswerteService {
     }
 
     public MqMesswerteDTO loadMesswerteWithFullRange(List<String> messquerschnitte, LocalDateTime datumVon, LocalDateTime datumBis,
-            Optional<List<Tagestyp>> tagestypen, Optional<List<FzTyp>> fzTypen, Optional<Integer> limit, Optional<Integer> page) {
+            Optional<List<Tagestyp>> tagestypen, Optional<List<FzTyp>> fzTypen) {
         List<MqMesswerte> messwerte;
         if (tagestypen.isEmpty())
             messwerte = repo.findByIdAndDatum(messquerschnitte.get(0), datumVon, datumBis);
