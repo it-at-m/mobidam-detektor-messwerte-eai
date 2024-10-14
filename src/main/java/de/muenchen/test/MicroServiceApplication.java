@@ -28,6 +28,7 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.data.web.config.EnableSpringDataWebSupport;
 
 /**
  * Application class for starting the micro-service.
@@ -51,6 +52,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
         }
 )
 @EnableAutoConfiguration
+@EnableSpringDataWebSupport
 public class MicroServiceApplication {
 
     public static void main(String[] args) {

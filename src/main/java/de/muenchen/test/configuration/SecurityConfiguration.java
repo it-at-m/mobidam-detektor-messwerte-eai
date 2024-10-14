@@ -29,12 +29,21 @@ import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.Profile;
+import org.springframework.http.HttpMethod;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.CorsConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.List;
 
 /**
  * The central class for configuration of all security aspects.
@@ -54,7 +63,8 @@ public class SecurityConfiguration {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http
+        http.cors().configurationSource(corsConfigurationsrc())
+                .and()
                 .authorizeHttpRequests((requests) -> requests.requestMatchers(
                         // allow access to /swagger-ui
                         AntPathRequestMatcher.antMatcher("/swagger-ui/*"),
@@ -79,6 +89,31 @@ public class SecurityConfiguration {
                                 new UserInfoAuthoritiesService(userInfoUri, restTemplateBuilder)))));
 
         return http.build();
+    }
+
+    private CorsConfiguration corsConfiguration() {
+        CorsConfiguration corsConfig = new CorsConfiguration();
+        corsConfig.addAllowedOrigin("<OAUTH-SERVER>");
+        corsConfig.addAllowedHeader("*");
+        corsConfig.addAllowedMethod(HttpMethod.GET);
+        corsConfig.addAllowedMethod(HttpMethod.POST);
+        corsConfig.applyPermitDefaultValues();
+        corsConfig.setAllowCredentials(true);
+
+        return corsConfig;
+    }
+
+    @Bean
+    @Primary
+    public CorsConfigurationSource corsConfigurationsrc() {
+        CorsConfiguration corsConfig = new CorsConfiguration();
+        corsConfig.setAllowedOrigins(List.of("<OAUTH-SERVER>"));
+        corsConfig.setAllowedMethods(List.of("GET", "POST"));
+        corsConfig.setAllowCredentials(true);
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", corsConfig);
+        return source;
     }
 
 }
