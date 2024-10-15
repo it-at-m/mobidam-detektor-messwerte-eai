@@ -44,7 +44,8 @@ import java.util.Optional;
 public class MesswerteService {
 
     private final MqMesswerteRepository repo;
-    private final MesswerteMapper messwerteMapper = new MesswerteMapper();
+
+    private final MesswerteMapper messwerteMapper;
 
     public MqMesswerteDTO loadMesswerteByYear(final Integer year) {
         List<MqMesswerte> messwerte = repo.findByDatumVon(LocalDateTime.of(year, 1, 1, 0, 0, 0));
@@ -61,11 +62,11 @@ public class MesswerteService {
             final Optional<List<FzTyp>> fzTypen) {
         List<MqMesswerte> messwerte;
         if (tagestypen.isEmpty())
-            messwerte = repo.findByIdAndDatumAndUhrzeit(messquerschnitte.get(0), datumVon.atStartOfDay(), datumBis.atStartOfDay(),
+            messwerte = repo.findByIdAndDatumAndUhrzeit(messquerschnitte, datumVon.atStartOfDay(), datumBis.atStartOfDay(),
                     LocalTime.parse(uhrzeitVon, Constants.TIME_FORMATTER), LocalTime.parse(uhrzeitBis, Constants.TIME_FORMATTER));
         else {
             List<Integer> tagestypenInt = tagestypen.stream().map(Tagestyp::getId).toList();
-            messwerte = repo.findByIdAndDatumAndUhrzeitAndTagestypen(messquerschnitte.get(0), datumVon.atStartOfDay(), datumBis.atStartOfDay(),
+            messwerte = repo.findByIdAndDatumAndUhrzeitAndTagestypen(messquerschnitte, datumVon.atStartOfDay(), datumBis.atStartOfDay(),
                     LocalTime.parse(uhrzeitVon, Constants.TIME_FORMATTER), LocalTime.parse(uhrzeitBis, Constants.TIME_FORMATTER), tagestypenInt);
         }
         //            if (page > resultPage.getTotalPages()) { TODO
@@ -84,10 +85,10 @@ public class MesswerteService {
             final Optional<List<FzTyp>> fzTypen) {
         List<MqMesswerte> messwerte;
         if (tagestypen.isEmpty())
-            messwerte = repo.findByIdAndDatum(messquerschnitte.get(0), datumVon, datumBis);
+            messwerte = repo.findByIdAndDatum(messquerschnitte, datumVon, datumBis);
         else {
             List<Integer> tagestypenInt = tagestypen.stream().map(Tagestyp::getId).toList();
-            messwerte = repo.findByIdAndDatumAndTagestypen(messquerschnitte.get(0), datumVon, datumBis, tagestypenInt);
+            messwerte = repo.findByIdAndDatumAndTagestypen(messquerschnitte, datumVon, datumBis, tagestypenInt);
         }
         //                    if (page > resultPage.getTotalPages()) { TODO
         //                        throw new MyResourceNotFoundException();

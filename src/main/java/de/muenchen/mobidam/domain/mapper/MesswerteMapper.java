@@ -28,11 +28,15 @@ import de.muenchen.mobidam.domain.MessquerschnitteDTO;
 import de.muenchen.mobidam.domain.MesswerteFormatBuilder;
 import de.muenchen.mobidam.domain.MqMesswerte;
 import de.muenchen.mobidam.domain.MqMesswerteDTO;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+@Service
+@RequiredArgsConstructor
 public class MesswerteMapper {
 
     public MqMesswerteDTO map(List<MqMesswerte> messwerte) {
