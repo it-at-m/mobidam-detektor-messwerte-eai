@@ -32,6 +32,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -41,7 +42,9 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Stream;
 
 /**
  * The central class for configuration of all security aspects.
@@ -53,40 +56,50 @@ import java.util.List;
 @Import(RestTemplateAutoConfiguration.class)
 public class SecurityConfiguration {
 
-    @Autowired
-    private RestTemplateBuilder restTemplateBuilder;
+    private final RestTemplateBuilder restTemplateBuilder;
 
-    @Value("${security.oauth2.resource.user-info-uri}")
-    private String userInfoUri;
+    private final String userInfoUri;
+
+    private final String[] whitelist;
+
+    public SecurityConfiguration(final RestTemplateBuilder restTemplateBuilder,
+            @Value("${security.oauth2.resource.user-info-uri}") final String userInfoUri,
+            final String[] whitelist) {
+        this.restTemplateBuilder = restTemplateBuilder;
+        this.userInfoUri = userInfoUri;
+        this.whitelist = whitelist;
+    }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.cors().configurationSource(corsConfigurationsrc())
-                .and()
-                .authorizeHttpRequests((requests) -> requests.requestMatchers(
-                        // allow access to /swagger-ui
-                        AntPathRequestMatcher.antMatcher("/swagger-ui/*"),
-                        // allow acces to api-docs
-                        AntPathRequestMatcher.antMatcher("/v3/api-docs"),
-                        AntPathRequestMatcher.antMatcher("/v3/api-docs/*"),
-                        // allow access to /actuator/info
-                        AntPathRequestMatcher.antMatcher("/actuator/info"),
-                        // allow access to /actuator/health for OpenShift Health Check
-                        AntPathRequestMatcher.antMatcher("/actuator/health"),
-                        // allow access to /actuator/health/liveness for OpenShift Liveness Check
-                        AntPathRequestMatcher.antMatcher("/actuator/health/liveness"),
-                        // allow access to /actuator/health/readiness for OpenShift Readiness Check
-                        AntPathRequestMatcher.antMatcher("/actuator/health/readiness"),
-                        // allow access to /actuator/metrics for Prometheus monitoring in OpenShift
-                        AntPathRequestMatcher.antMatcher("/actuator/metrics"))
-                        .permitAll())
-                .authorizeHttpRequests((requests) -> requests.requestMatchers("/**")
+        return http
+                .authorizeHttpRequests(request -> request
+                        .requestMatchers(getPathMatchersForPermitAll())
+                        .permitAll()
+                        .requestMatchers(AntPathRequestMatcher.antMatcher("/**"))
                         .authenticated())
-                .oauth2ResourceServer(httpSecurityOAuth2ResourceServerConfigurer -> httpSecurityOAuth2ResourceServerConfigurer
-                        .jwt(jwtConfigurer -> jwtConfigurer.jwtAuthenticationConverter(new JwtUserInfoAuthenticationConverter(
-                                new UserInfoAuthoritiesService(userInfoUri, restTemplateBuilder)))));
+                .oauth2ResourceServer(oauth2 -> oauth2.jwt(
+                        jwtConfigurer -> jwtConfigurer.jwtAuthenticationConverter(
+                                new JwtUserInfoAuthenticationConverter(new UserInfoAuthoritiesService(userInfoUri, restTemplateBuilder)))))
+                .build();
+    }
 
-        return http.build();
+    private AntPathRequestMatcher[] getPathMatchersForPermitAll() {
+        return Stream
+                .concat(
+                        Stream.of(
+                                // allow access to /actuator/info
+                                AntPathRequestMatcher.antMatcher("/actuator/info"),
+                                // allow access to /actuator/health for OpenShift Health Check
+                                AntPathRequestMatcher.antMatcher("/actuator/health"),
+                                // allow access to /actuator/health/liveness for OpenShift Liveness Check
+                                AntPathRequestMatcher.antMatcher("/actuator/health/liveness"),
+                                // allow access to /actuator/health/readiness for OpenShift Readiness Check
+                                AntPathRequestMatcher.antMatcher("/actuator/health/readiness"),
+                                // allow access to /actuator/metrics for Prometheus monitoring in OpenShift
+                                AntPathRequestMatcher.antMatcher("/actuator/metrics")),
+                        Arrays.stream(whitelist).map(AntPathRequestMatcher::antMatcher))
+                .toArray(AntPathRequestMatcher[]::new);
     }
 
     private CorsConfiguration corsConfiguration() {
