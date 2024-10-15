@@ -78,7 +78,7 @@ public class JwtUserInfoAuthenticationConverter implements Converter<Jwt, Abstra
                         .map(SimpleGrantedAuthority::new)
                         .toList();
                 authorities.addAll(extractedAuthorities);
-            } catch (Exception e) {
+            } catch (Exception exception) {
                 log.error("Folgende Resource ist nicht im Access-Token vorhanden: {}", "resource_access.mobidam-verkehrsdetektor-eai.roles");
             }
         }
