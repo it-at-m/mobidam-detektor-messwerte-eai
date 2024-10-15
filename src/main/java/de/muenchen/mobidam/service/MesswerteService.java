@@ -22,7 +22,6 @@
  */
 package de.muenchen.mobidam.service;
 
-import de.muenchen.mobidam.domain.Constants;
 import de.muenchen.mobidam.domain.FzTyp;
 import de.muenchen.mobidam.domain.mapper.MesswerteMapper;
 import de.muenchen.mobidam.domain.MqMesswerte;
@@ -43,12 +42,13 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class MesswerteService {
 
-    private final MqMesswerteRepository repo;
+    private final MqMesswerteRepository mqMesswerteRepository;
 
     private final MesswerteMapper messwerteMapper;
 
     public MqMesswerteDTO loadMesswerteByYear(final Integer year) {
-        List<MqMesswerte> messwerte = repo.findByDatumVon(LocalDateTime.of(year, 1, 1, 0, 0, 0));
+        List<MqMesswerte> messwerte = mqMesswerteRepository.findByDatumVon(
+                LocalDateTime.of(year, 1, 1, 0, 0, 0));
         return messwerteMapper.map(messwerte);
     }
 
@@ -56,18 +56,27 @@ public class MesswerteService {
             final List<String> messquerschnitte,
             final LocalDate datumVon,
             final LocalDate datumBis,
-            final String uhrzeitVon,
-            final String uhrzeitBis,
+            final LocalTime uhrzeitVon,
+            final LocalTime uhrzeitBis,
             final List<Tagestyp> tagestypen,
             final Optional<List<FzTyp>> fzTypen) {
         List<MqMesswerte> messwerte;
         if (tagestypen.isEmpty())
-            messwerte = repo.findByMqIdsAndDatumAndUhrzeit(messquerschnitte, datumVon.atStartOfDay(), datumBis.atStartOfDay(),
-                    LocalTime.parse(uhrzeitVon, Constants.TIME_FORMATTER), LocalTime.parse(uhrzeitBis, Constants.TIME_FORMATTER));
+            messwerte = mqMesswerteRepository.findByMqIdsAndDatumAndUhrzeit(
+                    messquerschnitte,
+                    datumVon.atStartOfDay(),
+                    datumBis.atStartOfDay(),
+                    uhrzeitVon,
+                    uhrzeitBis);
         else {
-            List<Integer> tagestypenInt = tagestypen.stream().map(Tagestyp::getId).toList();
-            messwerte = repo.findByMqIdsAndDatumAndUhrzeitAndTagestypen(messquerschnitte, datumVon.atStartOfDay(), datumBis.atStartOfDay(),
-                    LocalTime.parse(uhrzeitVon, Constants.TIME_FORMATTER), LocalTime.parse(uhrzeitBis, Constants.TIME_FORMATTER), tagestypenInt);
+            List<Integer> tagesTypIds = tagestypen.stream().map(Tagestyp::getId).toList();
+            messwerte = mqMesswerteRepository.findByMqIdsAndDatumAndUhrzeitAndTagestypen(
+                    messquerschnitte,
+                    datumVon.atStartOfDay(),
+                    datumBis.atStartOfDay(),
+                    uhrzeitVon,
+                    uhrzeitBis,
+                    tagesTypIds);
         }
         //            if (page > resultPage.getTotalPages()) { TODO
         //                throw new MyResourceNotFoundException();
@@ -85,10 +94,18 @@ public class MesswerteService {
             final Optional<List<FzTyp>> fzTypen) {
         List<MqMesswerte> messwerte;
         if (tagestypen.isEmpty())
-            messwerte = repo.findByMqIdsAndDatum(messquerschnitte, datumVon, datumBis);
+            messwerte = mqMesswerteRepository.findByMqIdsAndDatum(
+                    messquerschnitte,
+                    datumVon,
+                    datumBis);
         else {
-            List<Integer> tagestypenInt = tagestypen.stream().map(Tagestyp::getId).toList();
-            messwerte = repo.findByMqIdsAndDatumAndTagestypen(messquerschnitte, datumVon, datumBis, tagestypenInt);
+            List<Integer> tagesTypIds = tagestypen.stream().map(Tagestyp::getId).toList();
+            messwerte = mqMesswerteRepository.findByMqIdsAndDatumAndTagestypen(
+                    messquerschnitte,
+                    datumVon,
+                    datumBis,
+                    tagesTypIds
+            );
         }
         //                    if (page > resultPage.getTotalPages()) { TODO
         //                        throw new MyResourceNotFoundException();

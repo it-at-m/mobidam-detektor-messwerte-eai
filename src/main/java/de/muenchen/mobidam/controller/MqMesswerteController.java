@@ -50,6 +50,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -140,8 +141,8 @@ public class MqMesswerteController {
             @RequestParam @NotEmpty final List<@NotEmpty String> messquerschnitte,
             @RequestParam @NotNull final LocalDate datumVon,
             @RequestParam @NotNull final LocalDate datumBis,
-            @RequestParam @NotNull final String uhrzeitVon,
-            @RequestParam @NotNull final String uhrzeitBis,
+            @RequestParam @NotNull final LocalTime uhrzeitVon,
+            @RequestParam @NotNull final LocalTime uhrzeitBis,
             @RequestParam @NotEmpty final List<@NotNull Tagestyp> tagestypen,
             @RequestParam(required = false) final Optional<List<@NotNull FzTyp>> fzTypen,
             @RequestParam(required = false) final Optional<@PositiveOrZero Integer> page,
