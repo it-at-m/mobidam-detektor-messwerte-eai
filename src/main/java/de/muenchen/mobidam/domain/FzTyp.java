@@ -23,6 +23,35 @@
 package de.muenchen.mobidam.domain;
 
 public enum FzTyp {
-    KFZ_VERKEHR, PKW, PKWA, LKW, LKWA, KRAD, LFW, SATTEL_KFZ, BUS, NK_KFZ, ALLE_PKW, LASTZUG, GUETERVERKEHR, SCHWERVERKEHR, RAD
+
+    KFZ_VERKEHR,
+
+    PKW,
+
+    PKWA,
+
+    LKW,
+
+    LKWA,
+
+    KRAD,
+
+    LFW,
+
+    SATTEL_KFZ,
+
+    BUS,
+
+    NK_KFZ,
+
+    ALLE_PKW,
+
+    LASTZUG,
+
+    GUETERVERKEHR,
+
+    SCHWERVERKEHR,
+
+    RAD;
 
 }

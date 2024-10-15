@@ -20,13 +20,21 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package de.muenchen.mobidam.domain;
+package de.muenchen.mobidam.domain.mapper;
+
+import de.muenchen.mobidam.domain.Constants;
+import de.muenchen.mobidam.domain.FzTyp;
+import de.muenchen.mobidam.domain.MessquerschnitteDTO;
+import de.muenchen.mobidam.domain.MesswerteFormatBuilder;
+import de.muenchen.mobidam.domain.MqMesswerte;
+import de.muenchen.mobidam.domain.MqMesswerteDTO;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 public class Mapper {
+
     public MqMesswerteDTO map(List<MqMesswerte> messwerte) {
         MqMesswerteDTO dto = new MqMesswerteDTO();
         dto.setFormat(Constants.ATTRIBUTE_DATUM_UHRZEIT_VON + " " + Constants.ATTRIBUTE_DATUM_UHRZEIT_BIS + " ANZAHL_PKW ANZAHL_LKW ANZALH_BUS");

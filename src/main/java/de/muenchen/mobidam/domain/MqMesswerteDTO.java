@@ -57,7 +57,9 @@ import java.util.List;
 public class MqMesswerteDTO implements Serializable {
 
     private String version;
+
     private String format;
+
     private List<MessquerschnitteDTO> messquerschnitte = new ArrayList<>();
 
 }

@@ -24,7 +24,7 @@ package de.muenchen.mobidam.service;
 
 import de.muenchen.mobidam.domain.Constants;
 import de.muenchen.mobidam.domain.FzTyp;
-import de.muenchen.mobidam.domain.Mapper;
+import de.muenchen.mobidam.domain.mapper.Mapper;
 import de.muenchen.mobidam.domain.MqMesswerte;
 import de.muenchen.mobidam.domain.MqMesswerteDTO;
 import de.muenchen.mobidam.domain.Tagestyp;
