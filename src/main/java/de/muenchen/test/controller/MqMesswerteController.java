@@ -98,13 +98,13 @@ public class MqMesswerteController {
     @GetMapping(value = "/fullrange", produces = MediaType.APPLICATION_JSON_VALUE)
     @LogExecutionTime
     public ResponseEntity<MqMesswerteDTO> loadMesswerteFullRange(
-            @RequestParam(name = "messquerschnitte") @NotEmpty final List<String> messquerschnitte,
-            @RequestParam(name = "datumVon") @NotNull final LocalDateTime datumVon,
-            @RequestParam(name = "datumBis") @NotNull final LocalDateTime datumBis,
-            @RequestParam(name = "tagestypen") @NotEmpty final List<Tagestyp> tagestypen,
-            @RequestParam(name = "fzTypen", required = false) final Optional<List<FzTyp>> fzTypen,
-            @RequestParam(name = "page", required = false) final Optional<@PositiveOrZero Integer> page,
-            @RequestParam(name = "size", required = false) final Optional<@Positive Integer> size) {
+            @RequestParam @NotEmpty final List<@NotEmpty String> messquerschnitte,
+            @RequestParam @NotNull final LocalDateTime datumVon,
+            @RequestParam @NotNull final LocalDateTime datumBis,
+            @RequestParam @NotEmpty final List<@NotNull Tagestyp> tagestypen,
+            @RequestParam(required = false) final Optional<List<@NotNull FzTyp>> fzTypen,
+            @RequestParam(required = false) final Optional<@PositiveOrZero Integer> page,
+            @RequestParam(required = false) final Optional<@Positive Integer> size) {
         //        Pageable pageable = PageRequest.of(page.get(), size.get());
         MqMesswerteDTO messwerteDTO = service.loadMesswerteWithFullRange(messquerschnitte, datumVon, datumBis, tagestypen, fzTypen);
         return ResponseEntity.ok(messwerteDTO);
@@ -138,15 +138,15 @@ public class MqMesswerteController {
     @GetMapping(value = "/timerange", produces = MediaType.APPLICATION_JSON_VALUE)
     @LogExecutionTime
     public ResponseEntity<MqMesswerteDTO> loadMesswerteTimeRange(
-            @RequestParam(name = "messquerschnitte") @NotEmpty final List<String> messquerschnitte,
-            @RequestParam(name = "datumVon") @NotNull final LocalDate datumVon,
-            @RequestParam(name = "datumBis") @NotNull final LocalDate datumBis,
-            @RequestParam(name = "uhrzeitVon") @NotNull final String uhrzeitVon,
-            @RequestParam(name = "uhrzeitBis") @NotNull final String uhrzeitBis,
-            @RequestParam(name = "tagestypen") @NotEmpty final List<Tagestyp> tagestypen,
-            @RequestParam(name = "fzTypen", required = false) final Optional<List<FzTyp>> fzTypen,
-            @RequestParam(name = "page", required = false) final Optional<@PositiveOrZero Integer> page,
-            @RequestParam(name = "size", required = false) final Optional<@Positive Integer> size) {
+            @RequestParam @NotEmpty final List<@NotEmpty String> messquerschnitte,
+            @RequestParam @NotNull final LocalDate datumVon,
+            @RequestParam @NotNull final LocalDate datumBis,
+            @RequestParam @NotNull final String uhrzeitVon,
+            @RequestParam @NotNull final String uhrzeitBis,
+            @RequestParam @NotEmpty final List<@NotNull Tagestyp> tagestypen,
+            @RequestParam(required = false) final Optional<List<@NotNull FzTyp>> fzTypen,
+            @RequestParam(required = false) final Optional<@PositiveOrZero Integer> page,
+            @RequestParam(required = false) final Optional<@Positive Integer> size) {
         //        Pageable pageable = PageRequest.of(page.get(), size.get());
         MqMesswerteDTO messwerteDTO = service.loadMesswerteWithinTimeRange(messquerschnitte, datumVon, datumBis, uhrzeitVon, uhrzeitBis, tagestypen, fzTypen);
         return ResponseEntity.ok(messwerteDTO);
