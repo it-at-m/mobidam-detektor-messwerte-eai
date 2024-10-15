@@ -39,7 +39,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class MesswerteMapper {
 
-    public MqMesswerteDTO map(List<MqMesswerte> messwerte) {
+    public MqMesswerteDTO map(final List<MqMesswerte> messwerte) {
         MqMesswerteDTO dto = new MqMesswerteDTO();
         dto.setFormat(Constants.ATTRIBUTE_DATUM_UHRZEIT_VON + " " + Constants.ATTRIBUTE_DATUM_UHRZEIT_BIS + " ANZAHL_PKW ANZAHL_LKW ANZALH_BUS");
         dto.setVersion(Constants.VERSION1);
@@ -61,7 +61,7 @@ public class MesswerteMapper {
         return dto;
     }
 
-    public MqMesswerteDTO map(List<MqMesswerte> messwerte, final List<FzTyp> fzTypen) {
+    public MqMesswerteDTO map(final List<MqMesswerte> messwerte, final List<FzTyp> fzTypen) {
         MqMesswerteDTO dto = new MqMesswerteDTO();
         dto.setFormat(MesswerteFormatBuilder.createFormat(fzTypen));
         dto.setVersion(Constants.VERSION1);
@@ -70,7 +70,7 @@ public class MesswerteMapper {
         return dto;
     }
 
-    private void mapMesswerte(MqMesswerteDTO dto, List<MqMesswerte> messwerteList, List<FzTyp> fzTypen) {
+    private void mapMesswerte(final MqMesswerteDTO dto, final List<MqMesswerte> messwerteList, final List<FzTyp> fzTypen) {
         for (MqMesswerte messwerte : messwerteList) {
             // Get existing mq or create new one:
             Optional<MessquerschnitteDTO> mqDtoOptional = dto.getMessquerschnitte().stream().filter(mq -> mq.getMqId().equals(messwerte.getMqId())).findFirst();
@@ -95,7 +95,7 @@ public class MesswerteMapper {
         }
     }
 
-    private void addSpecifiedMesswerte(MqMesswerte messwerte, List<String> intervallWerteList, List<FzTyp> fzTypen) {
+    private void addSpecifiedMesswerte(final MqMesswerte messwerte, final List<String> intervallWerteList, final List<FzTyp> fzTypen) {
         for (FzTyp fzTyp : fzTypen) {
             switch (fzTyp) {
             case KFZ_VERKEHR:
