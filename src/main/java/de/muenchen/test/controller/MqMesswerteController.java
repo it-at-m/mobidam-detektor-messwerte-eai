@@ -22,6 +22,7 @@
  */
 package de.muenchen.test.controller;
 
+import de.muenchen.test.configuration.LogExecutionTime;
 import de.muenchen.test.domain.Constants;
 import de.muenchen.test.domain.FzTyp;
 import de.muenchen.test.domain.MqMesswerteDTO;
@@ -58,6 +59,7 @@ public class MqMesswerteController {
 
     @PreAuthorize("hasRole(T(de.muenchen.test.domain.Constants).CLIENT_ROLE)")
     @GetMapping(value = "/year", produces = MediaType.APPLICATION_JSON_VALUE)
+    @LogExecutionTime
     public ResponseEntity<MqMesswerteDTO> loadMesswerteByYear(@RequestParam(name = "year") Integer year) {
         log.info("loadMesswerteByYear");
         MqMesswerteDTO messwerteDTO = service.loadMesswerteByYear(year);
@@ -90,6 +92,7 @@ public class MqMesswerteController {
     @SecurityRequirement(name = "oauth2", scopes = { "read" })
     @PreAuthorize("hasRole(T(de.muenchen.test.domain.Constants).CLIENT_ROLE)")
     @GetMapping(value = "/fullrange", produces = MediaType.APPLICATION_JSON_VALUE)
+    @LogExecutionTime
     public ResponseEntity<MqMesswerteDTO> loadMesswerteFullRange(@RequestParam(name = "messquerschnitte") List<String> messquerschnitte,
             @RequestParam(name = "datumVon") LocalDateTime datumVon,
             @RequestParam(name = "datumBis") LocalDateTime datumBis,
@@ -129,6 +132,7 @@ public class MqMesswerteController {
     @SecurityRequirement(name = "oauth2", scopes = { "read" })
     @PreAuthorize("hasRole(T(de.muenchen.test.domain.Constants).CLIENT_ROLE)")
     @GetMapping(value = "/timerange", produces = MediaType.APPLICATION_JSON_VALUE)
+    @LogExecutionTime
     public ResponseEntity<MqMesswerteDTO> loadMesswerteTimeRange(@RequestParam(name = "messquerschnitte") List<String> messquerschnitte,
             @RequestParam(name = "datumVon") LocalDate datumVon,
             @RequestParam(name = "datumBis") LocalDate datumBis,
