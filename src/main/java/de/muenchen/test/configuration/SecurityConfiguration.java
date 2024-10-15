@@ -22,28 +22,22 @@
  */
 package de.muenchen.test.configuration;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import de.muenchen.test.security.JwtUserInfoAuthenticationConverter;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.web.client.RestTemplateAutoConfiguration;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
-import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.Profile;
-import org.springframework.http.HttpMethod;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.Arrays;
-import java.util.List;
 import java.util.stream.Stream;
 
 /**
@@ -54,34 +48,24 @@ import java.util.stream.Stream;
 @EnableWebSecurity
 @EnableMethodSecurity(securedEnabled = true)
 @Import(RestTemplateAutoConfiguration.class)
+@RequiredArgsConstructor
 public class SecurityConfiguration {
-
-    private final RestTemplateBuilder restTemplateBuilder;
-
-    private final String userInfoUri;
 
     private final String[] whitelist;
 
-    public SecurityConfiguration(final RestTemplateBuilder restTemplateBuilder,
-            @Value("${security.oauth2.resource.user-info-uri}") final String userInfoUri,
-            final String[] whitelist) {
-        this.restTemplateBuilder = restTemplateBuilder;
-        this.userInfoUri = userInfoUri;
-        this.whitelist = whitelist;
-    }
-
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        // @formatter:off
         return http
                 .authorizeHttpRequests(request -> request
-                        .requestMatchers(getPathMatchersForPermitAll())
-                        .permitAll()
-                        .requestMatchers(AntPathRequestMatcher.antMatcher("/**"))
-                        .authenticated())
-                .oauth2ResourceServer(oauth2 -> oauth2.jwt(
-                        jwtConfigurer -> jwtConfigurer.jwtAuthenticationConverter(
-                                new JwtUserInfoAuthenticationConverter(new UserInfoAuthoritiesService(userInfoUri, restTemplateBuilder)))))
+                        .requestMatchers(getPathMatchersForPermitAll()).permitAll()
+                        .requestMatchers(AntPathRequestMatcher.antMatcher("/**")).authenticated())
+                .oauth2ResourceServer(oauth2 ->
+                        oauth2.jwt(jwtConfigurer -> jwtConfigurer
+                                .jwtAuthenticationConverter(new JwtUserInfoAuthenticationConverter()))
+                )
                 .build();
+        // @formatter:on
     }
 
     private AntPathRequestMatcher[] getPathMatchersForPermitAll() {
@@ -102,6 +86,7 @@ public class SecurityConfiguration {
                 .toArray(AntPathRequestMatcher[]::new);
     }
 
+    /*
     private CorsConfiguration corsConfiguration() {
         CorsConfiguration corsConfig = new CorsConfiguration();
         corsConfig.addAllowedOrigin("<OAUTH-SERVER>");
@@ -126,5 +111,5 @@ public class SecurityConfiguration {
         source.registerCorsConfiguration("/**", corsConfig);
         return source;
     }
-
+    */
 }

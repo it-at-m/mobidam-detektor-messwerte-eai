@@ -41,16 +41,16 @@ public class NoSecurityConfiguration {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         // @formatter:off
-        http
+        return http
                 .headers(customizer -> customizer.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable))
-                .authorizeHttpRequests(requests -> requests.requestMatchers(AntPathRequestMatcher.antMatcher("/**"))
-                        .permitAll()
+                .authorizeHttpRequests(requests ->
+                        requests.requestMatchers(AntPathRequestMatcher.antMatcher("/**")).permitAll()
                         .requestMatchers(PathRequest.toH2Console()).permitAll()
-                        .anyRequest()
-                        .permitAll())
-                .csrf(AbstractHttpConfigurer::disable);
+                        .anyRequest().permitAll()
+                )
+                .csrf(AbstractHttpConfigurer::disable)
+                .build();
         // @formatter:on
-        return http.build();
     }
 
 }
