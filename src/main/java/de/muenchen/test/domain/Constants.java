@@ -34,5 +34,6 @@ public class Constants {
     public static final String ATTRIBUTE_DATUM_UHRZEIT_VON = "DATUM_UHRZEIT_VON";
     public static final String ATTRIBUTE_DATUM_UHRZEIT_BIS = "DATUM_UHRZEIT_BIS";
 
-    public static final String CLIENT_ROLE = "DETEKTOR_MESSWERTE_VIEWER";
+    public static final String ROLE_PREFIX = "ROLE_";
+    public static final String CLIENT_ROLE = ROLE_PREFIX + "verkehrsdetektor-viewer";
 }

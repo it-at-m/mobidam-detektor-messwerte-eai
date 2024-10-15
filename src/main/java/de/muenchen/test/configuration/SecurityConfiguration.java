@@ -87,29 +87,30 @@ public class SecurityConfiguration {
     }
 
     /*
-    private CorsConfiguration corsConfiguration() {
-        CorsConfiguration corsConfig = new CorsConfiguration();
-        corsConfig.addAllowedOrigin("<OAUTH-SERVER>");
-        corsConfig.addAllowedHeader("*");
-        corsConfig.addAllowedMethod(HttpMethod.GET);
-        corsConfig.addAllowedMethod(HttpMethod.POST);
-        corsConfig.applyPermitDefaultValues();
-        corsConfig.setAllowCredentials(true);
-
-        return corsConfig;
-    }
-
-    @Bean
-    @Primary
-    public CorsConfigurationSource corsConfigurationsrc() {
-        CorsConfiguration corsConfig = new CorsConfiguration();
-        corsConfig.setAllowedOrigins(List.of("<OAUTH-SERVER>"));
-        corsConfig.setAllowedMethods(List.of("GET", "POST"));
-        corsConfig.setAllowCredentials(true);
-
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", corsConfig);
-        return source;
-    }
-    */
+     * private CorsConfiguration corsConfiguration() {
+     * CorsConfiguration corsConfig = new CorsConfiguration();
+     * corsConfig.addAllowedOrigin("<OAUTH-SERVER>");
+     * corsConfig.addAllowedHeader("*");
+     * corsConfig.addAllowedMethod(HttpMethod.GET);
+     * corsConfig.addAllowedMethod(HttpMethod.POST);
+     * corsConfig.applyPermitDefaultValues();
+     * corsConfig.setAllowCredentials(true);
+     *
+     * return corsConfig;
+     * }
+     *
+     * @Bean
+     *
+     * @Primary
+     * public CorsConfigurationSource corsConfigurationsrc() {
+     * CorsConfiguration corsConfig = new CorsConfiguration();
+     * corsConfig.setAllowedOrigins(List.of("<OAUTH-SERVER>"));
+     * corsConfig.setAllowedMethods(List.of("GET", "POST"));
+     * corsConfig.setAllowCredentials(true);
+     *
+     * UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+     * source.registerCorsConfiguration("/**", corsConfig);
+     * return source;
+     * }
+     */
 }

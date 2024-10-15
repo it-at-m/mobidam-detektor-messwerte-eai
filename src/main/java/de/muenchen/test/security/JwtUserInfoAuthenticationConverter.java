@@ -22,24 +22,106 @@
  */
 package de.muenchen.test.security;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import de.muenchen.test.domain.Constants;
+import io.micrometer.common.util.StringUtils;
+import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.collections4.MapUtils;
+import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Ein custom {@link JwtAuthenticationConverter}, der die Authorities ermittelt
  */
+@Slf4j
 public class JwtUserInfoAuthenticationConverter implements Converter<Jwt, AbstractAuthenticationToken> {
 
+    public static final String RESOURCE_ACCESS = "resource_access";
 
+    /**
+     * Die Methode extrahiert aus dem JWT die Rollen aus folgendem Claim-Pfad.
+     *
+     * - resource_access.mobidam-verkehrsdetektor-eai.roles
+     *
+     * @param source als JWT
+     * @return den Token mit den Rollen als Authorties.
+     */
     @Override
-    public AbstractAuthenticationToken convert(Jwt source) {
+    public AbstractAuthenticationToken convert(final Jwt source) {
+        final var authorities = new ArrayList<SimpleGrantedAuthority>();
+        final var resourceAccessClaim = source.getClaimAsMap(RESOURCE_ACCESS);
+        if (MapUtils.isNotEmpty(resourceAccessClaim)) {
+            try {
+                final var typeRef = new TypeReference<ResourceAccess>() {
+                };
+                final var resourceAccess = new ObjectMapper().convertValue(resourceAccessClaim, typeRef);
+                final var roles = ObjectUtils.defaultIfNull(resourceAccess.getMobidamVerkehrsdetektorEai(), new MobidamVerkehrsdetektorEai()).getRoles();
+                final var extractedAuthorities = CollectionUtils.emptyIfNull(roles)
+                        .stream()
+                        .map(role -> Constants.ROLE_PREFIX + role)
+                        .map(SimpleGrantedAuthority::new)
+                        .toList();
+                authorities.addAll(extractedAuthorities);
+            } catch (Exception e) {
+                log.error("Folgende Resource ist nicht im Access-Token vorhanden: {}", "resource_access.mobidam-verkehrsdetektor-eai.roles");
+            }
+        }
+        return new JwtAuthenticationToken(source, authorities);
+    }
 
-        return new JwtAuthenticationToken(source, List.of());
+    /**
+     * Bildet den folgenden Token-Claim ab:
+     *
+     * "resource_access": {
+     * "mobidam-verkehrsdetektor-eai": {
+     * "roles": [
+     * "verkehrsdetektor-viewer"
+     * ]
+     * },
+     * ...
+     * },
+     * }
+     */
+    @Data
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    private static class ResourceAccess {
+
+        @JsonProperty("mobidam-verkehrsdetektor-eai")
+        private MobidamVerkehrsdetektorEai mobidamVerkehrsdetektorEai;
+
+    }
+
+    /**
+     * Bildet den folgenden Token-Claim ab:
+     *
+     * "mobidam-verkehrsdetektor-eai": {
+     * "roles": [
+     * "verkehrsdetektor-viewer"
+     * ]
+     * }
+     */
+    @Data
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    private static class MobidamVerkehrsdetektorEai {
+
+        private List<String> roles;
+
     }
 
 }
