@@ -103,7 +103,7 @@ class JwtUserInfoAuthenticationConverterTest {
     void convertWithRoleClaim() {
         final var mobidamVerkehrsdetektorEai = new LinkedHashMap<>();
         final var notRoles = new LinkedHashMap<>();
-        notRoles.put("roles", List.of("foo", "bar"));
+        notRoles.put("roles", List.of("foo", "ROLE_bar"));
         mobidamVerkehrsdetektorEai.put("mobidam-verkehrsdetektor-eai", notRoles);
 
         final var jwt = Jwt
