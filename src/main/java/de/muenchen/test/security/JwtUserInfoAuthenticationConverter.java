@@ -30,12 +30,12 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.muenchen.test.domain.Constants;
-import io.micrometer.common.util.StringUtils;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.ObjectUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -74,7 +74,7 @@ public class JwtUserInfoAuthenticationConverter implements Converter<Jwt, Abstra
                 final var roles = ObjectUtils.defaultIfNull(resourceAccess.getMobidamVerkehrsdetektorEai(), new MobidamVerkehrsdetektorEai()).getRoles();
                 final var extractedAuthorities = CollectionUtils.emptyIfNull(roles)
                         .stream()
-                        .map(role -> Constants.ROLE_PREFIX + role)
+                        .map(role -> StringUtils.prependIfMissing(role, Constants.ROLE_PREFIX))
                         .map(SimpleGrantedAuthority::new)
                         .toList();
                 authorities.addAll(extractedAuthorities);
