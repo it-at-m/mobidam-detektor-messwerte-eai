@@ -45,7 +45,7 @@
         </appender>
 
         <!-- Logger -->
-        <logger name="de.muenchen.test"
+        <logger name="de.muenchen.mobidam"
                 level="debug"
                 additivity="false">
             <appender-ref ref="STDOUT"/>
@@ -109,7 +109,7 @@
         </appender>
 
         <!-- Logger -->
-        <logger name="de.muenchen.test"
+        <logger name="de.muenchen.mobidam"
                 level="info"
                 additivity="false">
             <appender-ref ref="JSON_STDOUT"/>
