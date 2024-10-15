@@ -24,13 +24,6 @@ package de.muenchen.test.configuration;
 
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.github.benmanes.caffeine.cache.Ticker;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.cache.Cache;
@@ -44,6 +37,14 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.client.RestTemplate;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Service, der einen OIDC /userinfo Endpoint aufruft (mit JWT Bearer Auth) und dort die enthaltenen
@@ -77,9 +78,23 @@ public class UserInfoAuthoritiesService {
                         .build());
     }
 
+    private static List<SimpleGrantedAuthority> asAuthorities(Object object) {
+        List<SimpleGrantedAuthority> authorities = new ArrayList<>();
+        if (object instanceof Collection<?> collection) {
+            object = collection.toArray(new Object[0]);
+        }
+        if (ObjectUtils.isArray(object)) {
+            authorities.addAll(
+                    Stream.of(((Object[]) object))
+                            .map(Object::toString)
+                            .map(SimpleGrantedAuthority::new)
+                            .collect(Collectors.toList()));
+        }
+        return authorities;
+    }
+
     /**
-     * Ruft den /userinfo Endpoint und extrahiert {@link GrantedAuthority}s aus dem "authorities"
-     * Claim.
+     * Ruft den /userinfo Endpoint und extrahiert {@link GrantedAuthority}s aus dem "authorities" Claim.
      *
      * @param jwt der JWT
      * @return die {@link GrantedAuthority}s gem. Claim "authorities" des /userinfo Endpoints
@@ -117,22 +132,6 @@ public class UserInfoAuthoritiesService {
                     this.userInfoUri), e);
         }
 
-        return authorities;
-    }
-
-    private static List<SimpleGrantedAuthority> asAuthorities(Object object) {
-        List<SimpleGrantedAuthority> authorities = new ArrayList<>();
-        if (object instanceof Collection) {
-            Collection<?> collection = (Collection<?>) object;
-            object = collection.toArray(new Object[0]);
-        }
-        if (ObjectUtils.isArray(object)) {
-            authorities.addAll(
-                    Stream.of(((Object[]) object))
-                            .map(Object::toString)
-                            .map(SimpleGrantedAuthority::new)
-                            .collect(Collectors.toList()));
-        }
         return authorities;
     }
 
