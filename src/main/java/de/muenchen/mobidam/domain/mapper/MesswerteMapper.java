@@ -33,7 +33,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class Mapper {
+public class MesswerteMapper {
 
     public MqMesswerteDTO map(List<MqMesswerte> messwerte) {
         MqMesswerteDTO dto = new MqMesswerteDTO();

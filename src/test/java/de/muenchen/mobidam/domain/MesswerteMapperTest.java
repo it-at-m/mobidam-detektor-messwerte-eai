@@ -22,7 +22,7 @@
  */
 package de.muenchen.mobidam.domain;
 
-import de.muenchen.mobidam.domain.mapper.Mapper;
+import de.muenchen.mobidam.domain.mapper.MesswerteMapper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -39,9 +39,9 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
-public class MapperTest {
+public class MesswerteMapperTest {
 
-    private final Mapper mapper = new Mapper();
+    private final MesswerteMapper messwerteMapper = new MesswerteMapper();
 
     @Test
     public void testMap() {
@@ -67,7 +67,7 @@ public class MapperTest {
         fzTypen.add(FzTyp.SATTEL_KFZ);
         fzTypen.add(FzTyp.KFZ_VERKEHR);
 
-        MqMesswerteDTO dto = mapper.map(messwerte, fzTypen);
+        MqMesswerteDTO dto = messwerteMapper.map(messwerte, fzTypen);
 
         assertNotNull(dto);
         assertEquals(Constants.ATTRIBUTE_DATUM_UHRZEIT_VON + " " + Constants.ATTRIBUTE_DATUM_UHRZEIT_BIS + " " + FzTyp.SATTEL_KFZ.name() + " "

@@ -24,7 +24,7 @@ package de.muenchen.mobidam.service;
 
 import de.muenchen.mobidam.domain.Constants;
 import de.muenchen.mobidam.domain.FzTyp;
-import de.muenchen.mobidam.domain.mapper.Mapper;
+import de.muenchen.mobidam.domain.mapper.MesswerteMapper;
 import de.muenchen.mobidam.domain.MqMesswerte;
 import de.muenchen.mobidam.domain.MqMesswerteDTO;
 import de.muenchen.mobidam.domain.Tagestyp;
@@ -44,11 +44,11 @@ import java.util.Optional;
 public class MesswerteService {
 
     private final MqMesswerteRepository repo;
-    private final Mapper mapper = new Mapper();
+    private final MesswerteMapper messwerteMapper = new MesswerteMapper();
 
     public MqMesswerteDTO loadMesswerteByYear(final Integer year) {
         List<MqMesswerte> messwerte = repo.findByDatumVon(LocalDateTime.of(year, 1, 1, 0, 0, 0));
-        return mapper.map(messwerte);
+        return messwerteMapper.map(messwerte);
     }
 
     public MqMesswerteDTO loadMesswerteWithinTimeRange(
@@ -73,7 +73,7 @@ public class MesswerteService {
         //            }
         List<FzTyp> fzTypenList = fzTypen.orElseGet(() -> Arrays.asList(FzTyp.values()));
 
-        return mapper.map(messwerte, fzTypenList);
+        return messwerteMapper.map(messwerte, fzTypenList);
     }
 
     public MqMesswerteDTO loadMesswerteWithFullRange(
@@ -94,7 +94,7 @@ public class MesswerteService {
         //                    }
         List<FzTyp> fzTypenList = fzTypen.orElseGet(() -> Arrays.asList(FzTyp.values()));
 
-        return mapper.map(messwerte, fzTypenList);
+        return messwerteMapper.map(messwerte, fzTypenList);
     }
 
 }
