@@ -39,7 +39,7 @@ public interface MqMesswerteRepository extends JpaRepository<MqMesswerte, Long> 
     List<MqMesswerte> findByDatumVon(@Param("datumUhrzeitVon") final LocalDateTime datumUhrzeitVon);
 
     @Query("SELECT m FROM MqMesswerte m WHERE m.mqId IN :mqIds AND m.datumUhrzeitVon >= :datumUhrzeitVon AND m.datumUhrzeitVon <= :datumUhrzeitBis")
-    List<MqMesswerte> findByIdAndDatum(
+    List<MqMesswerte> findByMqIdsAndDatum(
             @Param("mqIds") final List<String> mqIds,
             @Param("datumUhrzeitVon") final LocalDateTime datumUhrzeitVon,
             @Param("datumUhrzeitBis") final LocalDateTime datumUhrzeitBis
@@ -48,7 +48,7 @@ public interface MqMesswerteRepository extends JpaRepository<MqMesswerte, Long> 
     @Query(
         "SELECT m FROM MqMesswerte m WHERE m.mqId IN :mqIds AND m.datumUhrzeitVon >= :datumUhrzeitVon AND m.datumUhrzeitVon <= :datumUhrzeitBis AND m.tagetyp IN :tagestypen"
     )
-    List<MqMesswerte> findByIdAndDatumAndTagestypen(
+    List<MqMesswerte> findByMqIdsAndDatumAndTagestypen(
             @Param("mqIds") final List<String> mqIds,
             @Param("datumUhrzeitVon") final LocalDateTime datumUhrzeitVon,
             @Param("datumUhrzeitBis") final LocalDateTime datumUhrzeitBis,
@@ -58,7 +58,7 @@ public interface MqMesswerteRepository extends JpaRepository<MqMesswerte, Long> 
     @Query(
         "SELECT m FROM MqMesswerte m WHERE m.mqId IN :mqIds AND m.datumUhrzeitVon BETWEEN :datumVon AND :datumBis AND FORMATDATETIME(m.datumUhrzeitVon, 'HH:mm:ss') >= :uhrzeitVon AND FORMATDATETIME(m.datumUhrzeitVon, 'HH:mm:ss') <= :uhrzeitBis"
     )
-    List<MqMesswerte> findByIdAndDatumAndUhrzeit(
+    List<MqMesswerte> findByMqIdsAndDatumAndUhrzeit(
             @Param("mqIds") final List<String> mqIds,
             @Param("datumVon") final LocalDateTime datumVon,
             @Param("datumBis") final LocalDateTime datumBis,
@@ -69,7 +69,7 @@ public interface MqMesswerteRepository extends JpaRepository<MqMesswerte, Long> 
     @Query(
         "SELECT m FROM MqMesswerte m WHERE m.mqId IN :mqIds AND m.datumUhrzeitVon BETWEEN :datumVon AND :datumBis AND FORMATDATETIME(m.datumUhrzeitVon, 'HH:mm:ss') >= :uhrzeitVon AND FORMATDATETIME(m.datumUhrzeitVon, 'HH:mm:ss') <= :uhrzeitBis AND m.tagetyp IN :tagestypen"
     )
-    List<MqMesswerte> findByIdAndDatumAndUhrzeitAndTagestypen(
+    List<MqMesswerte> findByMqIdsAndDatumAndUhrzeitAndTagestypen(
             @Param("mqIds") final List<String> mqIds,
             @Param("datumVon") final LocalDateTime datumVon,
             @Param("datumBis") final LocalDateTime datumBis,

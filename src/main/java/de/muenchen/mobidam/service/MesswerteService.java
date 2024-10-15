@@ -62,11 +62,11 @@ public class MesswerteService {
             final Optional<List<FzTyp>> fzTypen) {
         List<MqMesswerte> messwerte;
         if (tagestypen.isEmpty())
-            messwerte = repo.findByIdAndDatumAndUhrzeit(messquerschnitte, datumVon.atStartOfDay(), datumBis.atStartOfDay(),
+            messwerte = repo.findByMqIdsAndDatumAndUhrzeit(messquerschnitte, datumVon.atStartOfDay(), datumBis.atStartOfDay(),
                     LocalTime.parse(uhrzeitVon, Constants.TIME_FORMATTER), LocalTime.parse(uhrzeitBis, Constants.TIME_FORMATTER));
         else {
             List<Integer> tagestypenInt = tagestypen.stream().map(Tagestyp::getId).toList();
-            messwerte = repo.findByIdAndDatumAndUhrzeitAndTagestypen(messquerschnitte, datumVon.atStartOfDay(), datumBis.atStartOfDay(),
+            messwerte = repo.findByMqIdsAndDatumAndUhrzeitAndTagestypen(messquerschnitte, datumVon.atStartOfDay(), datumBis.atStartOfDay(),
                     LocalTime.parse(uhrzeitVon, Constants.TIME_FORMATTER), LocalTime.parse(uhrzeitBis, Constants.TIME_FORMATTER), tagestypenInt);
         }
         //            if (page > resultPage.getTotalPages()) { TODO
@@ -85,10 +85,10 @@ public class MesswerteService {
             final Optional<List<FzTyp>> fzTypen) {
         List<MqMesswerte> messwerte;
         if (tagestypen.isEmpty())
-            messwerte = repo.findByIdAndDatum(messquerschnitte, datumVon, datumBis);
+            messwerte = repo.findByMqIdsAndDatum(messquerschnitte, datumVon, datumBis);
         else {
             List<Integer> tagestypenInt = tagestypen.stream().map(Tagestyp::getId).toList();
-            messwerte = repo.findByIdAndDatumAndTagestypen(messquerschnitte, datumVon, datumBis, tagestypenInt);
+            messwerte = repo.findByMqIdsAndDatumAndTagestypen(messquerschnitte, datumVon, datumBis, tagestypenInt);
         }
         //                    if (page > resultPage.getTotalPages()) { TODO
         //                        throw new MyResourceNotFoundException();
