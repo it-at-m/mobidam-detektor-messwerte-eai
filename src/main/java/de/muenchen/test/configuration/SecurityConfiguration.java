@@ -61,8 +61,7 @@ public class SecurityConfiguration {
                         .requestMatchers(getPathMatchersForPermitAll()).permitAll()
                         .requestMatchers(AntPathRequestMatcher.antMatcher("/**")).authenticated())
                 .oauth2ResourceServer(oauth2 ->
-                        oauth2.jwt(jwtConfigurer -> jwtConfigurer
-                                .jwtAuthenticationConverter(new JwtUserInfoAuthenticationConverter()))
+                        oauth2.jwt(jwtConfigurer -> jwtConfigurer.jwtAuthenticationConverter(new JwtUserInfoAuthenticationConverter()))
                 )
                 .build();
         // @formatter:on
