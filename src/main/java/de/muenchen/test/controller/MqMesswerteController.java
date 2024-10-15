@@ -146,7 +146,7 @@ public class MqMesswerteController {
             @RequestParam(name = "tagestypen") @NotEmpty final List<Tagestyp> tagestypen,
             @RequestParam(name = "fzTypen", required = false) final Optional<List<FzTyp>> fzTypen,
             @RequestParam(name = "page", required = false) final Optional<@PositiveOrZero Integer> page,
-            @RequestParam(name = "limit", required = false) final Optional<@Positive Integer> size) {
+            @RequestParam(name = "size", required = false) final Optional<@Positive Integer> size) {
         //        Pageable pageable = PageRequest.of(page.get(), size.get());
         MqMesswerteDTO messwerteDTO = service.loadMesswerteWithinTimeRange(messquerschnitte, datumVon, datumBis, uhrzeitVon, uhrzeitBis, tagestypen, fzTypen);
         return ResponseEntity.ok(messwerteDTO);
