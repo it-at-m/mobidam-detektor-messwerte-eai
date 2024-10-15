@@ -32,15 +32,6 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 
-/**
- * Provides a Repository for {@link MqMesswerte}. This Repository is exported as a REST resource.
- * <p>
- * The Repository handles CRUD Operations. Every Operation is secured and takes care of the tenancy.
- * For specific Documentation on how the generated REST point
- * behaves, please consider the Spring Data Rest Reference
- * <a href="http://docs.spring.io/spring-data/rest/docs/current/reference/html/">here</a>.
- * </p>
- */
 @Repository
 public interface MqMesswerteRepository extends JpaRepository<MqMesswerte, Long> { //NOSONAR
 
