@@ -29,6 +29,8 @@ import de.muenchen.mobidam.domain.MqMesswerteDTO;
 import de.muenchen.mobidam.domain.Tagestyp;
 import de.muenchen.mobidam.repository.MqMesswerteRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.querydsl.QPageRequest;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -59,7 +61,8 @@ public class MesswerteService {
             final LocalTime uhrzeitVon,
             final LocalTime uhrzeitBis,
             final List<Tagestyp> tagestypen,
-            final Optional<List<FzTyp>> fzTypen) {
+            final Optional<List<FzTyp>> fzTypen,
+            final PageRequest pageRequest) {
         final List<MqMesswerte> messwerte;
         if (tagestypen.isEmpty()) {
             messwerte = mqMesswerteRepository.findByMqIdsAndDatumAndUhrzeit(
@@ -90,7 +93,8 @@ public class MesswerteService {
             final LocalDateTime datumVon,
             final LocalDateTime datumBis,
             final List<Tagestyp> tagestypen,
-            final Optional<List<FzTyp>> fzTypen) {
+            final Optional<List<FzTyp>> fzTypen,
+            final PageRequest pageRequest) {
         final List<MqMesswerte> messwerte;
         if (tagestypen.isEmpty()) {
             messwerte = mqMesswerteRepository.findByMqIdsAndDatum(
@@ -103,8 +107,7 @@ public class MesswerteService {
                     messquerschnitte,
                     datumVon,
                     datumBis,
-                    tagesTypIds
-            );
+                    tagesTypIds);
         }
         //                    if (page > resultPage.getTotalPages()) { TODO
         //                        throw new MyResourceNotFoundException();

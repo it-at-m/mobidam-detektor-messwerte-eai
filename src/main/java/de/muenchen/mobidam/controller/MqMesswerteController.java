@@ -40,6 +40,8 @@ import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -56,11 +58,23 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping(Constants.VERSION1 + "/messwerte")
-@RequiredArgsConstructor
 @Slf4j
 public class MqMesswerteController {
 
+    private final String defaultPageNumber;
+
+    private final String defaultPageSize;
+
     private final MesswerteService service;
+
+    public MqMesswerteController(
+            final MesswerteService service,
+            @Value("${mobidam.detektor.messwerte.eai.pageing.default.page-size:100000}") final String defaultPageSize,
+            @Value("${mobidam.detektor.messwerte.eai.pageing.default.page-number:0}") final String defaultPageNumber) {
+        this.service = service;
+        this.defaultPageNumber = defaultPageNumber;
+        this.defaultPageSize = defaultPageSize;
+    }
 
     @PreAuthorize("hasRole(T(de.muenchen.mobidam.domain.Constants).CLIENT_ROLE)")
     @GetMapping(value = "/year", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -103,10 +117,18 @@ public class MqMesswerteController {
             @RequestParam @NotNull final LocalDateTime datumBis,
             @RequestParam @NotEmpty final List<@NotNull Tagestyp> tagestypen,
             @RequestParam(required = false) final Optional<List<@NotNull FzTyp>> fzTypen,
-            @RequestParam(required = false) final Optional<@PositiveOrZero Integer> page,
-            @RequestParam(required = false) final Optional<@Positive Integer> size) {
-        //        Pageable pageable = PageRequest.of(page.get(), size.get());
-        MqMesswerteDTO messwerteDTO = service.loadMesswerteWithFullRange(messquerschnitte, datumVon, datumBis, tagestypen, fzTypen);
+            @RequestParam(required = false, defaultValue = "${mobidam.detektor.messwerte.eai.pageing.default.page-number:0}") final @PositiveOrZero
+            Integer page,
+            @RequestParam(required = false, defaultValue = "${mobidam.detektor.messwerte.eai.pageing.default.page-size:100000}") final @Positive
+            Integer size) {
+        final var pageRequest = PageRequest.of(page, size);
+        MqMesswerteDTO messwerteDTO = service.loadMesswerteWithFullRange(
+                messquerschnitte,
+                datumVon,
+                datumBis,
+                tagestypen,
+                fzTypen,
+                pageRequest);
         return ResponseEntity.ok(messwerteDTO);
     }
 
@@ -145,10 +167,24 @@ public class MqMesswerteController {
             @RequestParam @NotNull final LocalTime uhrzeitBis,
             @RequestParam @NotEmpty final List<@NotNull Tagestyp> tagestypen,
             @RequestParam(required = false) final Optional<List<@NotNull FzTyp>> fzTypen,
-            @RequestParam(required = false) final Optional<@PositiveOrZero Integer> page,
-            @RequestParam(required = false) final Optional<@Positive Integer> size) {
-        //        Pageable pageable = PageRequest.of(page.get(), size.get());
-        MqMesswerteDTO messwerteDTO = service.loadMesswerteWithinTimeRange(messquerschnitte, datumVon, datumBis, uhrzeitVon, uhrzeitBis, tagestypen, fzTypen);
+            @RequestParam(
+                    required = false,
+                    defaultValue = "${mobidam.detektor.messwerte.eai.pageing.default.page-number:0}"
+            ) @PositiveOrZero final Integer page,
+            @RequestParam(
+                    required = false,
+                    defaultValue = "${mobidam.detektor.messwerte.eai.pageing.default.page-size:100000}"
+            ) @Positive final Integer size) {
+        final var pageRequest = PageRequest.of(page, size);
+        MqMesswerteDTO messwerteDTO = service.loadMesswerteWithinTimeRange(
+                messquerschnitte,
+                datumVon,
+                datumBis,
+                uhrzeitVon,
+                uhrzeitBis,
+                tagestypen,
+                fzTypen,
+                pageRequest);
         return ResponseEntity.ok(messwerteDTO);
     }
 }

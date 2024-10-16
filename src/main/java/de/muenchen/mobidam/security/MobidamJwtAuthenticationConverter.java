@@ -44,7 +44,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * Ein custom {@link org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter}, der die Authorities ermittelt
+ * Ein custom
+ * {@link org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter},
+ * der die Authorities ermittelt
  */
 @Slf4j
 public class MobidamJwtAuthenticationConverter implements Converter<Jwt, AbstractAuthenticationToken> {

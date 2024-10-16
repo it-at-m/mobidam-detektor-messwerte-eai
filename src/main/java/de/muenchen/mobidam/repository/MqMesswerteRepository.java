@@ -42,8 +42,7 @@ public interface MqMesswerteRepository extends JpaRepository<MqMesswerte, Long> 
     List<MqMesswerte> findByMqIdsAndDatum(
             @Param("mqIds") final List<String> mqIds,
             @Param("datumUhrzeitVon") final LocalDateTime datumUhrzeitVon,
-            @Param("datumUhrzeitBis") final LocalDateTime datumUhrzeitBis
-    );
+            @Param("datumUhrzeitBis") final LocalDateTime datumUhrzeitBis);
 
     @Query(
         "SELECT m FROM MqMesswerte m WHERE m.mqId IN :mqIds AND m.datumUhrzeitVon >= :datumUhrzeitVon AND m.datumUhrzeitVon <= :datumUhrzeitBis AND m.tagetyp IN :tagestypen"
@@ -52,8 +51,7 @@ public interface MqMesswerteRepository extends JpaRepository<MqMesswerte, Long> 
             @Param("mqIds") final List<String> mqIds,
             @Param("datumUhrzeitVon") final LocalDateTime datumUhrzeitVon,
             @Param("datumUhrzeitBis") final LocalDateTime datumUhrzeitBis,
-            @Param("tagestypen") final List<Integer> tagestypen
-    );
+            @Param("tagestypen") final List<Integer> tagestypen);
 
     @Query(
         "SELECT m FROM MqMesswerte m WHERE m.mqId IN :mqIds AND m.datumUhrzeitVon BETWEEN :datumVon AND :datumBis AND FORMATDATETIME(m.datumUhrzeitVon, 'HH:mm:ss') >= :uhrzeitVon AND FORMATDATETIME(m.datumUhrzeitVon, 'HH:mm:ss') <= :uhrzeitBis"
@@ -63,8 +61,7 @@ public interface MqMesswerteRepository extends JpaRepository<MqMesswerte, Long> 
             @Param("datumVon") final LocalDateTime datumVon,
             @Param("datumBis") final LocalDateTime datumBis,
             @Param("uhrzeitVon") final LocalTime uhrzeitVon,
-            @Param("uhrzeitBis") final LocalTime uhrzeitBis
-    );
+            @Param("uhrzeitBis") final LocalTime uhrzeitBis);
 
     @Query(
         "SELECT m FROM MqMesswerte m WHERE m.mqId IN :mqIds AND m.datumUhrzeitVon BETWEEN :datumVon AND :datumBis AND FORMATDATETIME(m.datumUhrzeitVon, 'HH:mm:ss') >= :uhrzeitVon AND FORMATDATETIME(m.datumUhrzeitVon, 'HH:mm:ss') <= :uhrzeitBis AND m.tagetyp IN :tagestypen"
@@ -75,6 +72,5 @@ public interface MqMesswerteRepository extends JpaRepository<MqMesswerte, Long> 
             @Param("datumBis") final LocalDateTime datumBis,
             @Param("uhrzeitVon") final LocalTime uhrzeitVon,
             @Param("uhrzeitBis") final LocalTime uhrzeitBis,
-            @Param("tagestypen") final List<Integer> tagestypen
-    );
+            @Param("tagestypen") final List<Integer> tagestypen);
 }
