@@ -15,9 +15,9 @@ import java.util.List;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
-class JwtUserInfoAuthenticationConverterTest {
+class JwtAuthenticationConverterTest {
 
-    private JwtUserInfoAuthenticationConverter converter = new JwtUserInfoAuthenticationConverter();
+    private JwtAuthenticationConverter converter = new JwtAuthenticationConverter();
 
     @Test
     void convertWithMissingResourceAccess() {

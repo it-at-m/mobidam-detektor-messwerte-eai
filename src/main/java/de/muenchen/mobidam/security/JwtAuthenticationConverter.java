@@ -37,17 +37,16 @@ import org.springframework.core.convert.converter.Converter;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.jwt.Jwt;
-import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Ein custom {@link JwtAuthenticationConverter}, der die Authorities ermittelt
+ * Ein custom {@link org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter}, der die Authorities ermittelt
  */
 @Slf4j
-public class JwtUserInfoAuthenticationConverter implements Converter<Jwt, AbstractAuthenticationToken> {
+public class JwtAuthenticationConverter implements Converter<Jwt, AbstractAuthenticationToken> {
 
     public static final String RESOURCE_ACCESS = "resource_access";
 
