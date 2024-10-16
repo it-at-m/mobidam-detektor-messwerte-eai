@@ -15,9 +15,9 @@ import java.util.List;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
-class JwtAuthenticationConverterTest {
+class MobidamJwtAuthenticationConverterTest {
 
-    private JwtAuthenticationConverter converter = new JwtAuthenticationConverter();
+    private MobidamJwtAuthenticationConverter converter = new MobidamJwtAuthenticationConverter();
 
     @Test
     void convertWithMissingResourceAccess() {

@@ -41,12 +41,13 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtAut
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Ein custom {@link org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter}, der die Authorities ermittelt
  */
 @Slf4j
-public class JwtAuthenticationConverter implements Converter<Jwt, AbstractAuthenticationToken> {
+public class MobidamJwtAuthenticationConverter implements Converter<Jwt, AbstractAuthenticationToken> {
 
     public static final String RESOURCE_ACCESS = "resource_access";
 
@@ -68,12 +69,11 @@ public class JwtAuthenticationConverter implements Converter<Jwt, AbstractAuthen
                 };
                 final var resourceAccess = new ObjectMapper().convertValue(resourceAccessClaim, typeRef);
                 final var roles = ObjectUtils.defaultIfNull(resourceAccess.getMobidamVerkehrsdetektorEai(), new MobidamVerkehrsdetektorEai()).getRoles();
-                final var extractedAuthorities = CollectionUtils.emptyIfNull(roles)
+                CollectionUtils.emptyIfNull(roles)
                         .stream()
                         .map(role -> StringUtils.prependIfMissing(role, Constants.ROLE_PREFIX))
                         .map(SimpleGrantedAuthority::new)
-                        .toList();
-                authorities.addAll(extractedAuthorities);
+                        .collect(Collectors.toCollection(() -> authorities));
             } catch (Exception exception) {
                 log.error("Folgende Resource ist nicht im Access-Token vorhanden: {}", "resource_access.mobidam-verkehrsdetektor-eai.roles");
             }

@@ -22,7 +22,7 @@
  */
 package de.muenchen.mobidam.configuration;
 
-import de.muenchen.mobidam.security.JwtAuthenticationConverter;
+import de.muenchen.mobidam.security.MobidamJwtAuthenticationConverter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.web.client.RestTemplateAutoConfiguration;
 import org.springframework.context.annotation.Bean;
@@ -59,7 +59,7 @@ public class SecurityConfiguration {
                         .requestMatchers(getPathMatchersForPermitAll()).permitAll()
                         .requestMatchers(AntPathRequestMatcher.antMatcher("/**")).authenticated())
                 .oauth2ResourceServer(oauth2 ->
-                        oauth2.jwt(jwtConfigurer -> jwtConfigurer.jwtAuthenticationConverter(new JwtAuthenticationConverter()))
+                        oauth2.jwt(jwtConfigurer -> jwtConfigurer.jwtAuthenticationConverter(new MobidamJwtAuthenticationConverter()))
                 )
                 .build();
         // @formatter:on
