@@ -30,27 +30,42 @@ import java.util.List;
 
 /*{
   "version": "1.0",
-  "format": "ANZAHL_PKW;ANZAHL_LKW;...",
+  "format": "DATUM_UHRZEIT_VON,DATUM_UHRZEIT_BIS,ANZAHL_PKW,ANZAHL_LKW,...",
+  "page": 5,
+  "size": 100000
   "messquerschnitte": [
     {
       "mqId": "400001",
       "intervalle": [
         {
-          "datumUhrzeitVon": "2024-05-01T00:00:00.000Z",
-          "datumUhrzeitBis": "2024-05-01T00:15:00.000Z",
-          "messwerte": "22;34;..."
+          "2024-05-01T00:00:00.000Z",
+          "2024-05-01T00:15:00.000Z",
+          "22",
+          "34",
+          "..."
         },
         {
-          "datumUhrzeitVon": "2024-05-01T00:15:00.000Z",
-          "datumUhrzeitBis": "2024-05-01T00:30:00.000Z",
-          "messwerte": "22;34;..."
+          "2024-05-01T00:15:00.000Z",
+          "2024-05-01T00:30:00.000Z",
+          "21",
+          "54",
+          "..."
         }
       ]
     }
   ]
 }*/
 @Data
-public class MessquerschnitteDTO implements Serializable {
-    private Long mqId;
-    private List<List<String>> intervalle = new ArrayList<>();
+public class MqMesswerteDto implements Serializable {
+
+    private String version;
+
+    private String format;
+
+    private Integer page;
+
+    private Integer size;
+
+    private List<MessquerschnitteDto> messquerschnitte = new ArrayList<>();
+
 }

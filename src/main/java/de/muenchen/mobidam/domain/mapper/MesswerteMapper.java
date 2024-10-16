@@ -24,10 +24,10 @@ package de.muenchen.mobidam.domain.mapper;
 
 import de.muenchen.mobidam.domain.Constants;
 import de.muenchen.mobidam.domain.FzTyp;
-import de.muenchen.mobidam.domain.MessquerschnitteDTO;
+import de.muenchen.mobidam.domain.MessquerschnitteDto;
 import de.muenchen.mobidam.domain.MesswerteFormatBuilder;
 import de.muenchen.mobidam.domain.MqMesswerte;
-import de.muenchen.mobidam.domain.MqMesswerteDTO;
+import de.muenchen.mobidam.domain.MqMesswerteDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -39,11 +39,11 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class MesswerteMapper {
 
-    public MqMesswerteDTO map(final List<MqMesswerte> messwerte) {
-        MqMesswerteDTO dto = new MqMesswerteDTO();
+    public MqMesswerteDto map(final List<MqMesswerte> messwerte) {
+        MqMesswerteDto dto = new MqMesswerteDto();
         dto.setFormat(Constants.ATTRIBUTE_DATUM_UHRZEIT_VON + " " + Constants.ATTRIBUTE_DATUM_UHRZEIT_BIS + " ANZAHL_PKW ANZAHL_LKW ANZALH_BUS");
         dto.setVersion(Constants.VERSION1);
-        dto.getMessquerschnitte().add(new MessquerschnitteDTO());
+        dto.getMessquerschnitte().add(new MessquerschnitteDto());
         dto.getMessquerschnitte().get(0).setMqId(messwerte.get(0).getMqId());
         for (int i = 0; i < messwerte.size(); i++) {
             dto.getMessquerschnitte().get(0).getIntervalle().add(new ArrayList<>());
@@ -61,8 +61,8 @@ public class MesswerteMapper {
         return dto;
     }
 
-    public MqMesswerteDTO map(final List<MqMesswerte> messwerte, final List<FzTyp> fzTypen) {
-        MqMesswerteDTO dto = new MqMesswerteDTO();
+    public MqMesswerteDto map(final List<MqMesswerte> messwerte, final List<FzTyp> fzTypen) {
+        MqMesswerteDto dto = new MqMesswerteDto();
         dto.setFormat(MesswerteFormatBuilder.createFormat(fzTypen));
         dto.setVersion(Constants.VERSION1);
 
@@ -70,15 +70,15 @@ public class MesswerteMapper {
         return dto;
     }
 
-    private void mapMesswerte(final MqMesswerteDTO dto, final List<MqMesswerte> messwerteList, final List<FzTyp> fzTypen) {
+    private void mapMesswerte(final MqMesswerteDto dto, final List<MqMesswerte> messwerteList, final List<FzTyp> fzTypen) {
         for (MqMesswerte messwerte : messwerteList) {
             // Get existing mq or create new one:
-            Optional<MessquerschnitteDTO> mqDtoOptional = dto.getMessquerschnitte().stream().filter(mq -> mq.getMqId().equals(messwerte.getMqId())).findFirst();
-            MessquerschnitteDTO mqDto;
+            Optional<MessquerschnitteDto> mqDtoOptional = dto.getMessquerschnitte().stream().filter(mq -> mq.getMqId().equals(messwerte.getMqId())).findFirst();
+            MessquerschnitteDto mqDto;
             if (mqDtoOptional.isPresent()) {
                 mqDto = mqDtoOptional.get();
             } else {
-                mqDto = new MessquerschnitteDTO();
+                mqDto = new MessquerschnitteDto();
                 mqDto.setMqId(messwerte.getMqId());
                 List<List<String>> intervalleList = new ArrayList<>();
                 mqDto.setIntervalle(intervalleList);

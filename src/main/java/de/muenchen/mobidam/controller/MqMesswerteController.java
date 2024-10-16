@@ -25,7 +25,7 @@ package de.muenchen.mobidam.controller;
 import de.muenchen.mobidam.configuration.LogExecutionTime;
 import de.muenchen.mobidam.domain.Constants;
 import de.muenchen.mobidam.domain.FzTyp;
-import de.muenchen.mobidam.domain.MqMesswerteDTO;
+import de.muenchen.mobidam.domain.MqMesswerteDto;
 import de.muenchen.mobidam.domain.Tagestyp;
 import de.muenchen.mobidam.service.MesswerteService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -38,7 +38,6 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
@@ -79,9 +78,9 @@ public class MqMesswerteController {
     @PreAuthorize("hasRole(T(de.muenchen.mobidam.domain.Constants).CLIENT_ROLE)")
     @GetMapping(value = "/year", produces = MediaType.APPLICATION_JSON_VALUE)
     @LogExecutionTime
-    public ResponseEntity<MqMesswerteDTO> loadMesswerteByYear(@RequestParam(name = "year") @NotNull @Positive final Integer year) {
-        MqMesswerteDTO messwerteDTO = service.loadMesswerteByYear(year);
-        return ResponseEntity.ok(messwerteDTO);
+    public ResponseEntity<MqMesswerteDto> loadMesswerteByYear(@RequestParam(name = "year") @NotNull @Positive final Integer year) {
+        MqMesswerteDto messwerte = service.loadMesswerteByYear(year);
+        return ResponseEntity.ok(messwerte);
     }
 
     @Operation(summary = "Get messwerte without a time range")
@@ -91,7 +90,7 @@ public class MqMesswerteController {
                             responseCode = "200", description = "Found messwerte",
                             content = { @Content(
                                     mediaType = "application/json",
-                                    schema = @Schema(implementation = MqMesswerteDTO.class)
+                                    schema = @Schema(implementation = MqMesswerteDto.class)
                             ) }
                     ),
                     @ApiResponse(
@@ -111,7 +110,7 @@ public class MqMesswerteController {
     @PreAuthorize("hasRole(T(de.muenchen.mobidam.domain.Constants).CLIENT_ROLE)")
     @GetMapping(value = "/fullrange", produces = MediaType.APPLICATION_JSON_VALUE)
     @LogExecutionTime
-    public ResponseEntity<MqMesswerteDTO> loadMesswerteFullRange(
+    public ResponseEntity<MqMesswerteDto> loadMesswerteFullRange(
             @RequestParam @NotEmpty final List<@NotEmpty String> messquerschnitte,
             @RequestParam @NotNull final LocalDateTime datumVon,
             @RequestParam @NotNull final LocalDateTime datumBis,
@@ -122,14 +121,14 @@ public class MqMesswerteController {
             @RequestParam(required = false, defaultValue = "${mobidam.detektor.messwerte.eai.pageing.default.page-size:100000}") final @Positive
             Integer size) {
         final var pageRequest = PageRequest.of(page, size);
-        MqMesswerteDTO messwerteDTO = service.loadMesswerteWithFullRange(
+        final var messwerte = service.loadMesswerteWithFullRange(
                 messquerschnitte,
                 datumVon,
                 datumBis,
                 tagestypen,
                 fzTypen,
                 pageRequest);
-        return ResponseEntity.ok(messwerteDTO);
+        return ResponseEntity.ok(messwerte);
     }
 
     @Operation(summary = "Get messwerte within a time range")
@@ -139,7 +138,7 @@ public class MqMesswerteController {
                             responseCode = "200", description = "Found messwerte",
                             content = { @Content(
                                     mediaType = "application/json",
-                                    schema = @Schema(implementation = MqMesswerteDTO.class)
+                                    schema = @Schema(implementation = MqMesswerteDto.class)
                             ) }
                     ),
                     @ApiResponse(
@@ -159,7 +158,7 @@ public class MqMesswerteController {
     @PreAuthorize("hasRole(T(de.muenchen.mobidam.domain.Constants).CLIENT_ROLE)")
     @GetMapping(value = "/timerange", produces = MediaType.APPLICATION_JSON_VALUE)
     @LogExecutionTime
-    public ResponseEntity<MqMesswerteDTO> loadMesswerteTimeRange(
+    public ResponseEntity<MqMesswerteDto> loadMesswerteTimeRange(
             @RequestParam @NotEmpty final List<@NotEmpty String> messquerschnitte,
             @RequestParam @NotNull final LocalDate datumVon,
             @RequestParam @NotNull final LocalDate datumBis,
@@ -176,7 +175,7 @@ public class MqMesswerteController {
                     defaultValue = "${mobidam.detektor.messwerte.eai.pageing.default.page-size:100000}"
             ) @Positive final Integer size) {
         final var pageRequest = PageRequest.of(page, size);
-        MqMesswerteDTO messwerteDTO = service.loadMesswerteWithinTimeRange(
+        final var messwerte = service.loadMesswerteWithinTimeRange(
                 messquerschnitte,
                 datumVon,
                 datumBis,
@@ -185,6 +184,6 @@ public class MqMesswerteController {
                 tagestypen,
                 fzTypen,
                 pageRequest);
-        return ResponseEntity.ok(messwerteDTO);
+        return ResponseEntity.ok(messwerte);
     }
 }

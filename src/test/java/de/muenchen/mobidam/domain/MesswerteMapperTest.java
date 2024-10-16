@@ -67,7 +67,7 @@ public class MesswerteMapperTest {
         fzTypen.add(FzTyp.SATTEL_KFZ);
         fzTypen.add(FzTyp.KFZ_VERKEHR);
 
-        MqMesswerteDTO dto = messwerteMapper.map(messwerte, fzTypen);
+        MqMesswerteDto dto = messwerteMapper.map(messwerte, fzTypen);
 
         assertNotNull(dto);
         assertEquals(Constants.ATTRIBUTE_DATUM_UHRZEIT_VON + " " + Constants.ATTRIBUTE_DATUM_UHRZEIT_BIS + " " + FzTyp.SATTEL_KFZ.name() + " "

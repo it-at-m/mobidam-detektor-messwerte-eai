@@ -25,7 +25,7 @@ package de.muenchen.mobidam.service;
 import de.muenchen.mobidam.domain.FzTyp;
 import de.muenchen.mobidam.domain.mapper.MesswerteMapper;
 import de.muenchen.mobidam.domain.MqMesswerte;
-import de.muenchen.mobidam.domain.MqMesswerteDTO;
+import de.muenchen.mobidam.domain.MqMesswerteDto;
 import de.muenchen.mobidam.domain.Tagestyp;
 import de.muenchen.mobidam.repository.MqMesswerteRepository;
 import lombok.RequiredArgsConstructor;
@@ -48,13 +48,13 @@ public class MesswerteService {
 
     private final MesswerteMapper messwerteMapper;
 
-    public MqMesswerteDTO loadMesswerteByYear(final Integer year) {
+    public MqMesswerteDto loadMesswerteByYear(final Integer year) {
         List<MqMesswerte> messwerte = mqMesswerteRepository.findByDatumVon(
                 LocalDateTime.of(year, 1, 1, 0, 0, 0));
         return messwerteMapper.map(messwerte);
     }
 
-    public MqMesswerteDTO loadMesswerteWithinTimeRange(
+    public MqMesswerteDto loadMesswerteWithinTimeRange(
             final List<String> messquerschnitte,
             final LocalDate datumVon,
             final LocalDate datumBis,
@@ -87,10 +87,13 @@ public class MesswerteService {
             //throw new Exception();
         }
         final var fzTypes = fzTypen.orElseGet(() -> Arrays.asList(FzTyp.values()));
-        return messwerteMapper.map(messwerte.getContent(), fzTypes);
+        final var messwerteResponse = messwerteMapper.map(messwerte.getContent(), fzTypes);
+        messwerteResponse.setPage(pageRequest.getPageNumber());
+        messwerteResponse.setSize(pageRequest.getPageSize());
+        return messwerteResponse;
     }
 
-    public MqMesswerteDTO loadMesswerteWithFullRange(
+    public MqMesswerteDto loadMesswerteWithFullRange(
             final List<String> messquerschnitte,
             final LocalDateTime datumVon,
             final LocalDateTime datumBis,
@@ -117,7 +120,10 @@ public class MesswerteService {
             //throw new Exception();
         }
         final var fzTypes = fzTypen.orElseGet(() -> Arrays.asList(FzTyp.values()));
-        return messwerteMapper.map(messwerte.getContent(), fzTypes);
+        final var messwerteResponse = messwerteMapper.map(messwerte.getContent(), fzTypes);
+        messwerteResponse.setPage(pageRequest.getPageNumber());
+        messwerteResponse.setSize(pageRequest.getPageSize());
+        return messwerteResponse;
     }
 
 }
