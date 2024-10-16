@@ -23,6 +23,7 @@
 package de.muenchen.mobidam.domain;
 
 import lombok.Data;
+import org.springframework.data.domain.Pageable;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -31,6 +32,8 @@ import java.util.List;
 /*{
   "version": "1.0",
   "format": "DATUM_UHRZEIT_VON,DATUM_UHRZEIT_BIS,ANZAHL_PKW,ANZAHL_LKW,...",
+  "page": 5,
+  "size": 100000
   "messquerschnitte": [
     {
       "mqId": "400001",
@@ -59,6 +62,10 @@ public class MqMesswerteDTO implements Serializable {
     private String version;
 
     private String format;
+
+    private Integer page;
+
+    private Integer size;
 
     private List<MessquerschnitteDTO> messquerschnitte = new ArrayList<>();
 

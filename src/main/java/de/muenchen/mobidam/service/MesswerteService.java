@@ -29,6 +29,7 @@ import de.muenchen.mobidam.domain.MqMesswerteDTO;
 import de.muenchen.mobidam.domain.Tagestyp;
 import de.muenchen.mobidam.repository.MqMesswerteRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
@@ -62,14 +63,15 @@ public class MesswerteService {
             final List<Tagestyp> tagestypen,
             final Optional<List<FzTyp>> fzTypen,
             final PageRequest pageRequest) {
-        final List<MqMesswerte> messwerte;
+        final Page<MqMesswerte> messwerte;
         if (tagestypen.isEmpty()) {
             messwerte = mqMesswerteRepository.findByMqIdsAndDatumAndUhrzeit(
                     messquerschnitte,
                     datumVon.atStartOfDay(),
                     datumBis.atStartOfDay(),
                     uhrzeitVon,
-                    uhrzeitBis);
+                    uhrzeitBis,
+                    pageRequest);
         } else {
             final var tagesTypIds = tagestypen.stream().map(Tagestyp::getId).toList();
             messwerte = mqMesswerteRepository.findByMqIdsAndDatumAndUhrzeitAndTagestypen(
@@ -78,13 +80,14 @@ public class MesswerteService {
                     datumBis.atStartOfDay(),
                     uhrzeitVon,
                     uhrzeitBis,
-                    tagesTypIds);
+                    tagesTypIds,
+                    pageRequest);
         }
-        //            if (page > resultPage.getTotalPages()) { TODO
-        //                throw new MyResourceNotFoundException();
-        //            }
+        if (pageRequest.getPageNumber() >= messwerte.getTotalPages()) {
+            //throw new Exception();
+        }
         final var fzTypes = fzTypen.orElseGet(() -> Arrays.asList(FzTyp.values()));
-        return messwerteMapper.map(messwerte, fzTypes);
+        return messwerteMapper.map(messwerte.getContent(), fzTypes);
     }
 
     public MqMesswerteDTO loadMesswerteWithFullRange(
@@ -94,25 +97,27 @@ public class MesswerteService {
             final List<Tagestyp> tagestypen,
             final Optional<List<FzTyp>> fzTypen,
             final PageRequest pageRequest) {
-        final List<MqMesswerte> messwerte;
+        final Page<MqMesswerte> messwerte;
         if (tagestypen.isEmpty()) {
             messwerte = mqMesswerteRepository.findByMqIdsAndDatum(
                     messquerschnitte,
                     datumVon,
-                    datumBis);
+                    datumBis,
+                    pageRequest);
         } else {
             final var tagesTypIds = tagestypen.stream().map(Tagestyp::getId).toList();
             messwerte = mqMesswerteRepository.findByMqIdsAndDatumAndTagestypen(
                     messquerschnitte,
                     datumVon,
                     datumBis,
-                    tagesTypIds);
+                    tagesTypIds,
+                    pageRequest);
         }
-        //                    if (page > resultPage.getTotalPages()) { TODO
-        //                        throw new MyResourceNotFoundException();
-        //                    }
+        if (pageRequest.getPageNumber() >= messwerte.getTotalPages()) {
+            //throw new Exception();
+        }
         final var fzTypes = fzTypen.orElseGet(() -> Arrays.asList(FzTyp.values()));
-        return messwerteMapper.map(messwerte, fzTypes);
+        return messwerteMapper.map(messwerte.getContent(), fzTypes);
     }
 
 }

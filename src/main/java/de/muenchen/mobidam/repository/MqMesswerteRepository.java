@@ -23,8 +23,10 @@
 package de.muenchen.mobidam.repository;
 
 import de.muenchen.mobidam.domain.MqMesswerte;
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
@@ -33,44 +35,48 @@ import java.time.LocalTime;
 import java.util.List;
 
 @Repository
-public interface MqMesswerteRepository extends JpaRepository<MqMesswerte, Long> { //NOSONAR
+public interface MqMesswerteRepository extends PagingAndSortingRepository<MqMesswerte, Long> { //NOSONAR
 
     @Query("SELECT m FROM MqMesswerte m WHERE m.mqId = 400001 AND m.datumUhrzeitVon >= :datumUhrzeitVon")
     List<MqMesswerte> findByDatumVon(@Param("datumUhrzeitVon") final LocalDateTime datumUhrzeitVon);
 
     @Query("SELECT m FROM MqMesswerte m WHERE m.mqId IN :mqIds AND m.datumUhrzeitVon >= :datumUhrzeitVon AND m.datumUhrzeitVon <= :datumUhrzeitBis")
-    List<MqMesswerte> findByMqIdsAndDatum(
+    Page<MqMesswerte> findByMqIdsAndDatum(
             @Param("mqIds") final List<String> mqIds,
             @Param("datumUhrzeitVon") final LocalDateTime datumUhrzeitVon,
-            @Param("datumUhrzeitBis") final LocalDateTime datumUhrzeitBis);
+            @Param("datumUhrzeitBis") final LocalDateTime datumUhrzeitBis,
+            final Pageable pageable);
 
     @Query(
         "SELECT m FROM MqMesswerte m WHERE m.mqId IN :mqIds AND m.datumUhrzeitVon >= :datumUhrzeitVon AND m.datumUhrzeitVon <= :datumUhrzeitBis AND m.tagetyp IN :tagestypen"
     )
-    List<MqMesswerte> findByMqIdsAndDatumAndTagestypen(
+    Page<MqMesswerte> findByMqIdsAndDatumAndTagestypen(
             @Param("mqIds") final List<String> mqIds,
             @Param("datumUhrzeitVon") final LocalDateTime datumUhrzeitVon,
             @Param("datumUhrzeitBis") final LocalDateTime datumUhrzeitBis,
-            @Param("tagestypen") final List<Integer> tagestypen);
+            @Param("tagestypen") final List<Integer> tagestypen,
+            final Pageable pageable);
 
     @Query(
         "SELECT m FROM MqMesswerte m WHERE m.mqId IN :mqIds AND m.datumUhrzeitVon BETWEEN :datumVon AND :datumBis AND FORMATDATETIME(m.datumUhrzeitVon, 'HH:mm:ss') >= :uhrzeitVon AND FORMATDATETIME(m.datumUhrzeitVon, 'HH:mm:ss') <= :uhrzeitBis"
     )
-    List<MqMesswerte> findByMqIdsAndDatumAndUhrzeit(
-            @Param("mqIds") final List<String> mqIds,
-            @Param("datumVon") final LocalDateTime datumVon,
-            @Param("datumBis") final LocalDateTime datumBis,
-            @Param("uhrzeitVon") final LocalTime uhrzeitVon,
-            @Param("uhrzeitBis") final LocalTime uhrzeitBis);
-
-    @Query(
-        "SELECT m FROM MqMesswerte m WHERE m.mqId IN :mqIds AND m.datumUhrzeitVon BETWEEN :datumVon AND :datumBis AND FORMATDATETIME(m.datumUhrzeitVon, 'HH:mm:ss') >= :uhrzeitVon AND FORMATDATETIME(m.datumUhrzeitVon, 'HH:mm:ss') <= :uhrzeitBis AND m.tagetyp IN :tagestypen"
-    )
-    List<MqMesswerte> findByMqIdsAndDatumAndUhrzeitAndTagestypen(
+    Page<MqMesswerte> findByMqIdsAndDatumAndUhrzeit(
             @Param("mqIds") final List<String> mqIds,
             @Param("datumVon") final LocalDateTime datumVon,
             @Param("datumBis") final LocalDateTime datumBis,
             @Param("uhrzeitVon") final LocalTime uhrzeitVon,
             @Param("uhrzeitBis") final LocalTime uhrzeitBis,
-            @Param("tagestypen") final List<Integer> tagestypen);
+            final Pageable pageable);
+
+    @Query(
+        "SELECT m FROM MqMesswerte m WHERE m.mqId IN :mqIds AND m.datumUhrzeitVon BETWEEN :datumVon AND :datumBis AND FORMATDATETIME(m.datumUhrzeitVon, 'HH:mm:ss') >= :uhrzeitVon AND FORMATDATETIME(m.datumUhrzeitVon, 'HH:mm:ss') <= :uhrzeitBis AND m.tagetyp IN :tagestypen"
+    )
+    Page<MqMesswerte> findByMqIdsAndDatumAndUhrzeitAndTagestypen(
+            @Param("mqIds") final List<String> mqIds,
+            @Param("datumVon") final LocalDateTime datumVon,
+            @Param("datumBis") final LocalDateTime datumBis,
+            @Param("uhrzeitVon") final LocalTime uhrzeitVon,
+            @Param("uhrzeitBis") final LocalTime uhrzeitBis,
+            @Param("tagestypen") final List<Integer> tagestypen,
+            final Pageable pageable);
 }
