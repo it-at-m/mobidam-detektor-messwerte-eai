@@ -38,6 +38,7 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
@@ -58,22 +59,10 @@ import java.util.Optional;
 @RestController
 @RequestMapping(Constants.VERSION1 + "/messwerte")
 @Slf4j
+@RequiredArgsConstructor
 public class MqMesswerteController {
 
-    private final String defaultPageNumber;
-
-    private final String defaultPageSize;
-
     private final MesswerteService service;
-
-    public MqMesswerteController(
-            final MesswerteService service,
-            @Value("${mobidam.detektor.messwerte.eai.pageing.default.page-size:100000}") final String defaultPageSize,
-            @Value("${mobidam.detektor.messwerte.eai.pageing.default.page-number:0}") final String defaultPageNumber) {
-        this.service = service;
-        this.defaultPageNumber = defaultPageNumber;
-        this.defaultPageSize = defaultPageSize;
-    }
 
     @PreAuthorize("hasRole(T(de.muenchen.mobidam.domain.Constants).CLIENT_ROLE)")
     @GetMapping(value = "/year", produces = MediaType.APPLICATION_JSON_VALUE)
