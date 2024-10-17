@@ -63,12 +63,14 @@ public class MesswerteService {
             final List<Tagestyp> tagestypen,
             final Optional<List<FzTyp>> fzTypen,
             final PageRequest pageRequest) {
+        final var datumVonStartOfDay = LocalDateTime.of(datumVon, LocalTime.MIN);
+        final var datumBisEndOfDay = LocalDateTime.of(datumBis, LocalTime.MAX);
         final Page<MqMesswerte> messwerte;
         if (tagestypen.isEmpty()) {
             messwerte = mqMesswerteRepository.findByMqIdsAndDatumAndUhrzeit(
                     messquerschnitte,
-                    datumVon.atStartOfDay(),
-                    datumBis.atStartOfDay(),
+                    datumVonStartOfDay,
+                    datumBisEndOfDay,
                     uhrzeitVon,
                     uhrzeitBis,
                     pageRequest);
@@ -76,8 +78,8 @@ public class MesswerteService {
             final var tagesTypIds = tagestypen.stream().map(Tagestyp::getId).toList();
             messwerte = mqMesswerteRepository.findByMqIdsAndDatumAndUhrzeitAndTagestypen(
                     messquerschnitte,
-                    datumVon.atStartOfDay(),
-                    datumBis.atStartOfDay(),
+                    datumVonStartOfDay,
+                    datumBisEndOfDay,
                     uhrzeitVon,
                     uhrzeitBis,
                     tagesTypIds,

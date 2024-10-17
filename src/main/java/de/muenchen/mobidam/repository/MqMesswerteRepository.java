@@ -69,7 +69,7 @@ public interface MqMesswerteRepository extends PagingAndSortingRepository<MqMess
             final Pageable pageable);
 
     @Query(
-        "SELECT m FROM MqMesswerte m WHERE m.mqId IN :mqIds AND m.datumUhrzeitVon BETWEEN :datumVon AND :datumBis AND FORMATDATETIME(m.datumUhrzeitVon, 'HH:mm:ss') >= :uhrzeitVon AND FORMATDATETIME(m.datumUhrzeitVon, 'HH:mm:ss') <= :uhrzeitBis AND m.tagetyp IN :tagestypen"
+        "SELECT m FROM MqMesswerte m WHERE m.mqId IN :mqIds AND m.datumUhrzeitVon BETWEEN :datumVon AND :datumBis AND FORMATDATETIME(m.datumUhrzeitVon, 'HH:mm:ss') >= :uhrzeitVon AND FORMATDATETIME(m.datumUhrzeitVon, 'HH:mm:ss') < :uhrzeitBis AND m.tagetyp IN :tagestypen"
     )
     Page<MqMesswerte> findByMqIdsAndDatumAndUhrzeitAndTagestypen(
             @Param("mqIds") final List<String> mqIds,
