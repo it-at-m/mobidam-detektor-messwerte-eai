@@ -39,7 +39,7 @@ public final class TestConstants {
                     final var messwertList = new ArrayList<MqMesswerte>();
                     for (var index = 0; index < 96; index++) {
                         final var messwerte = new MqMesswerte();
-                        messwerte.setObjectId(new Random().nextLong());
+                        messwerte.setObjectId(counter.get());
                         messwerte.setMqId(mqId);
                         messwerte.setDatumUhrzeitVon(localDateTime);
                         if (index < 95) {
