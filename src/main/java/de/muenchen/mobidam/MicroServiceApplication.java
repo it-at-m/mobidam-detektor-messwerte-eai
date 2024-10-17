@@ -43,7 +43,7 @@ import org.springframework.data.web.config.EnableSpringDataWebSupport;
 @EntityScan(
         basePackages = {
                 "org.springframework.data.jpa.convert.threeten",
-                "de.muenchen.test"
+                "de.muenchen.mobidam"
         }
 )
 @EnableJpaRepositories(
