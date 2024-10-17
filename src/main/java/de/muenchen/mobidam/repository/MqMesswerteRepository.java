@@ -25,6 +25,7 @@ package de.muenchen.mobidam.repository;
 import de.muenchen.mobidam.domain.MqMesswerte;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
@@ -35,7 +36,7 @@ import java.time.LocalTime;
 import java.util.List;
 
 @Repository
-public interface MqMesswerteRepository extends PagingAndSortingRepository<MqMesswerte, Long> { //NOSONAR
+public interface MqMesswerteRepository extends PagingAndSortingRepository<MqMesswerte, Long>, JpaRepository<MqMesswerte, Long> { //NOSONAR
 
     @Query("SELECT m FROM MqMesswerte m WHERE m.mqId IN :mqIds AND m.datumUhrzeitVon BETWEEN :datumUhrzeitVon AND :datumUhrzeitBis")
     Page<MqMesswerte> findByMqIdsAndDatum(

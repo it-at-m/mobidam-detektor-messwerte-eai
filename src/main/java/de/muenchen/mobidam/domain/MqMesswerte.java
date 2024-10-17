@@ -51,10 +51,6 @@ public class MqMesswerte {
 
     private static final long serialVersionUID = 1L;
 
-    // ========= //
-    // Variables //
-    // ========= //
-
     @Id
     @Column(name = "OBJECTID")
     private Long objectId;
@@ -121,7 +117,5 @@ public class MqMesswerte {
 
     @Column(name = "ANZAHL_RAD")
     private Long anzahlRad;
-
-    // getters and setters
 
 }
