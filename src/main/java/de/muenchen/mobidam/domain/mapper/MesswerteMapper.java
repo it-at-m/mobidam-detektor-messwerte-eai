@@ -29,6 +29,7 @@ import de.muenchen.mobidam.domain.MesswerteFormatBuilder;
 import de.muenchen.mobidam.domain.MqMesswerte;
 import de.muenchen.mobidam.domain.MqMesswerteDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -61,8 +62,16 @@ public class MesswerteMapper {
         return dto;
     }
 
+    public MqMesswerteDto map(final Page<MqMesswerte> page, final List<FzTyp> fzTypen) {
+        final var dto = map(page.getContent(), fzTypen);
+        dto.setPageNumber(page.getNumber());
+        dto.setPageSize(page.getSize());
+        dto.setTotalPages(page.getTotalPages());
+        return dto;
+    }
+
     public MqMesswerteDto map(final List<MqMesswerte> messwerte, final List<FzTyp> fzTypen) {
-        MqMesswerteDto dto = new MqMesswerteDto();
+        final var dto = new MqMesswerteDto();
         dto.setFormat(MesswerteFormatBuilder.createFormat(fzTypen));
         dto.setVersion(Constants.VERSION1);
 
@@ -71,21 +80,21 @@ public class MesswerteMapper {
     }
 
     private void mapMesswerte(final MqMesswerteDto dto, final List<MqMesswerte> messwerteList, final List<FzTyp> fzTypen) {
-        for (MqMesswerte messwerte : messwerteList) {
+        for (final var messwerte : messwerteList) {
             // Get existing mq or create new one:
-            Optional<MessquerschnitteDto> mqDtoOptional = dto.getMessquerschnitte().stream().filter(mq -> mq.getMqId().equals(messwerte.getMqId())).findFirst();
+            final var mqDtoOptional = dto.getMessquerschnitte().stream().filter(mq -> mq.getMqId().equals(messwerte.getMqId())).findFirst();
             MessquerschnitteDto mqDto;
             if (mqDtoOptional.isPresent()) {
                 mqDto = mqDtoOptional.get();
             } else {
                 mqDto = new MessquerschnitteDto();
                 mqDto.setMqId(messwerte.getMqId());
-                List<List<String>> intervalleList = new ArrayList<>();
+                final var intervalleList = new ArrayList<List<String>>();
                 mqDto.setIntervalle(intervalleList);
                 dto.getMessquerschnitte().add(mqDto);
             }
 
-            List<String> intervallWerteList = new ArrayList<>();
+            final var intervallWerteList = new ArrayList<String>();
             mqDto.getIntervalle().add(intervallWerteList);
 
             intervallWerteList.add(messwerte.getDatumUhrzeitVon().format(Constants.DATE_FORMATTER));

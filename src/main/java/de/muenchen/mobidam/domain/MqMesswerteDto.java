@@ -62,9 +62,11 @@ public class MqMesswerteDto implements Serializable {
 
     private String format;
 
-    private Integer page;
+    private Integer pageNumber;
 
-    private Integer size;
+    private Integer pageSize;
+
+    private Integer totalPages;
 
     private List<MessquerschnitteDto> messquerschnitte = new ArrayList<>();
 

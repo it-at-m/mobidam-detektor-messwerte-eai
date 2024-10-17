@@ -87,10 +87,7 @@ public class MesswerteService {
             //throw new Exception();
         }
         final var fzTypes = fzTypen.orElseGet(() -> Arrays.asList(FzTyp.values()));
-        final var messwerteResponse = messwerteMapper.map(messwerte.getContent(), fzTypes);
-        messwerteResponse.setPage(pageRequest.getPageNumber());
-        messwerteResponse.setSize(pageRequest.getPageSize());
-        return messwerteResponse;
+        return messwerteMapper.map(messwerte, fzTypes);
     }
 
     public MqMesswerteDto loadMesswerteWithFullRange(
@@ -120,10 +117,7 @@ public class MesswerteService {
             //throw new Exception();
         }
         final var fzTypes = fzTypen.orElseGet(() -> Arrays.asList(FzTyp.values()));
-        final var messwerteResponse = messwerteMapper.map(messwerte.getContent(), fzTypes);
-        messwerteResponse.setPage(pageRequest.getPageNumber());
-        messwerteResponse.setSize(pageRequest.getPageSize());
-        return messwerteResponse;
+        return messwerteMapper.map(messwerte, fzTypes);
     }
 
 }
