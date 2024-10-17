@@ -50,7 +50,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
@@ -100,8 +99,8 @@ public class MqMesswerteController {
     @LogExecutionTime
     public ResponseEntity<MqMesswerteDto> loadMesswerteFullRange(
             @RequestParam @NotEmpty final List<@NotEmpty String> messquerschnitte,
-            @RequestParam @NotNull final LocalDateTime datumVon,
-            @RequestParam @NotNull final LocalDateTime datumBis,
+            @RequestParam @NotNull final LocalDate datumVon,
+            @RequestParam @NotNull final LocalDate datumBis,
             @RequestParam @NotEmpty final List<@NotNull Tagestyp> tagestypen,
             @RequestParam(required = false) final Optional<List<@NotNull FzTyp>> fzTypen,
             @RequestParam(required = false, defaultValue = "${mobidam.detektor.messwerte.eai.pageing.default.page-number:0}") final @PositiveOrZero
