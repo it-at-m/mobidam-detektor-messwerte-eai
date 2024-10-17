@@ -60,15 +60,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class MqMesswerteController {
 
-    private final MesswerteService service;
-
-    @PreAuthorize("hasRole(T(de.muenchen.mobidam.domain.Constants).CLIENT_ROLE)")
-    @GetMapping(value = "/year", produces = MediaType.APPLICATION_JSON_VALUE)
-    @LogExecutionTime
-    public ResponseEntity<MqMesswerteDto> loadMesswerteByYear(@RequestParam(name = "year") @NotNull @Positive final Integer year) {
-        MqMesswerteDto messwerte = service.loadMesswerteByYear(year);
-        return ResponseEntity.ok(messwerte);
-    }
+    private final MesswerteService messwerteService;
 
     @Operation(summary = "Get messwerte without a time range")
     @ApiResponses(
@@ -108,7 +100,7 @@ public class MqMesswerteController {
             @RequestParam(required = false, defaultValue = "${mobidam.detektor.messwerte.eai.pageing.default.page-size:100000}") final @Positive
             Integer size) {
         final var pageRequest = PageRequest.of(page, size);
-        final var messwerte = service.loadMesswerteWithFullRange(
+        final var messwerte = messwerteService.loadMesswerteWithFullRange(
                 messquerschnitte,
                 datumVon,
                 datumBis,
@@ -162,7 +154,7 @@ public class MqMesswerteController {
                     defaultValue = "${mobidam.detektor.messwerte.eai.pageing.default.page-size:100000}"
             ) @Positive final Integer size) {
         final var pageRequest = PageRequest.of(page, size);
-        final var messwerte = service.loadMesswerteWithinTimeRange(
+        final var messwerte = messwerteService.loadMesswerteWithinTimeRange(
                 messquerschnitte,
                 datumVon,
                 datumBis,

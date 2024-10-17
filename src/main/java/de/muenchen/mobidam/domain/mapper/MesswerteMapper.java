@@ -40,28 +40,6 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class MesswerteMapper {
 
-    public MqMesswerteDto map(final List<MqMesswerte> messwerte) {
-        MqMesswerteDto dto = new MqMesswerteDto();
-        dto.setFormat(Constants.ATTRIBUTE_DATUM_UHRZEIT_VON + " " + Constants.ATTRIBUTE_DATUM_UHRZEIT_BIS + " ANZAHL_PKW ANZAHL_LKW ANZALH_BUS");
-        dto.setVersion(Constants.VERSION1);
-        dto.getMessquerschnitte().add(new MessquerschnitteDto());
-        dto.getMessquerschnitte().get(0).setMqId(messwerte.get(0).getMqId());
-        for (int i = 0; i < messwerte.size(); i++) {
-            dto.getMessquerschnitte().get(0).getIntervalle().add(new ArrayList<>());
-            dto.getMessquerschnitte().get(0).getIntervalle().get(i).add(messwerte.get(i).getDatumUhrzeitVon().toString());
-            dto.getMessquerschnitte().get(0).getIntervalle().get(i).add(messwerte.get(i).getDatumUhrzeitBis().toString());
-
-            dto.getMessquerschnitte().get(0).getIntervalle().get(i)
-                    .add(messwerte.get(i).getAnzahlPkw() == null ? "NULL" : messwerte.get(i).getAnzahlPkw().toString());
-            dto.getMessquerschnitte().get(0).getIntervalle().get(i)
-                    .add(messwerte.get(i).getAnzahlLkw() == null ? "NULL" : messwerte.get(i).getAnzahlLkw().toString());
-            dto.getMessquerschnitte().get(0).getIntervalle().get(i)
-                    .add(messwerte.get(i).getAnzahlBus() == null ? "NULL" : messwerte.get(i).getAnzahlBus().toString());
-
-        }
-        return dto;
-    }
-
     public MqMesswerteDto map(final Page<MqMesswerte> page, final List<FzTyp> fzTypen) {
         final var dto = map(page.getContent(), fzTypen);
         dto.setPageNumber(page.getNumber());

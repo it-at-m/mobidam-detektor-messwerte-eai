@@ -48,12 +48,6 @@ public class MesswerteService {
 
     private final MesswerteMapper messwerteMapper;
 
-    public MqMesswerteDto loadMesswerteByYear(final Integer year) {
-        List<MqMesswerte> messwerte = mqMesswerteRepository.findByDatumVon(
-                LocalDateTime.of(year, 1, 1, 0, 0, 0));
-        return messwerteMapper.map(messwerte);
-    }
-
     public MqMesswerteDto loadMesswerteWithinTimeRange(
             final List<String> messquerschnitte,
             final LocalDate datumVon,

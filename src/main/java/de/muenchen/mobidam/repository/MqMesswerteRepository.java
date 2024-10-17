@@ -37,9 +37,6 @@ import java.util.List;
 @Repository
 public interface MqMesswerteRepository extends PagingAndSortingRepository<MqMesswerte, Long> { //NOSONAR
 
-    @Query("SELECT m FROM MqMesswerte m WHERE m.mqId = 400001 AND m.datumUhrzeitVon >= :datumUhrzeitVon")
-    List<MqMesswerte> findByDatumVon(@Param("datumUhrzeitVon") final LocalDateTime datumUhrzeitVon);
-
     @Query("SELECT m FROM MqMesswerte m WHERE m.mqId IN :mqIds AND m.datumUhrzeitVon BETWEEN :datumUhrzeitVon AND :datumUhrzeitBis")
     Page<MqMesswerte> findByMqIdsAndDatum(
             @Param("mqIds") final List<String> mqIds,
