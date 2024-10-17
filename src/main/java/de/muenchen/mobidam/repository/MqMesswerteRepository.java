@@ -40,7 +40,7 @@ public interface MqMesswerteRepository extends PagingAndSortingRepository<MqMess
     @Query("SELECT m FROM MqMesswerte m WHERE m.mqId = 400001 AND m.datumUhrzeitVon >= :datumUhrzeitVon")
     List<MqMesswerte> findByDatumVon(@Param("datumUhrzeitVon") final LocalDateTime datumUhrzeitVon);
 
-    @Query("SELECT m FROM MqMesswerte m WHERE m.mqId IN :mqIds AND m.datumUhrzeitVon >= :datumUhrzeitVon AND m.datumUhrzeitVon <= :datumUhrzeitBis")
+    @Query("SELECT m FROM MqMesswerte m WHERE m.mqId IN :mqIds AND m.datumUhrzeitVon BETWEEN :datumUhrzeitVon AND :datumUhrzeitBis")
     Page<MqMesswerte> findByMqIdsAndDatum(
             @Param("mqIds") final List<String> mqIds,
             @Param("datumUhrzeitVon") final LocalDateTime datumUhrzeitVon,
@@ -48,7 +48,7 @@ public interface MqMesswerteRepository extends PagingAndSortingRepository<MqMess
             final Pageable pageable);
 
     @Query(
-        "SELECT m FROM MqMesswerte m WHERE m.mqId IN :mqIds AND m.datumUhrzeitVon >= :datumUhrzeitVon AND m.datumUhrzeitVon <= :datumUhrzeitBis AND m.tagetyp IN :tagestypen"
+        "SELECT m FROM MqMesswerte m WHERE m.mqId IN :mqIds AND m.datumUhrzeitVon BETWEEN :datumUhrzeitVon AND :datumUhrzeitBis AND m.tagetyp IN :tagestypen"
     )
     Page<MqMesswerte> findByMqIdsAndDatumAndTagestypen(
             @Param("mqIds") final List<String> mqIds,
@@ -58,23 +58,23 @@ public interface MqMesswerteRepository extends PagingAndSortingRepository<MqMess
             final Pageable pageable);
 
     @Query(
-        "SELECT m FROM MqMesswerte m WHERE m.mqId IN :mqIds AND m.datumUhrzeitVon BETWEEN :datumVon AND :datumBis AND FORMATDATETIME(m.datumUhrzeitVon, 'HH:mm:ss') >= :uhrzeitVon AND FORMATDATETIME(m.datumUhrzeitVon, 'HH:mm:ss') <= :uhrzeitBis"
+        "SELECT m FROM MqMesswerte m WHERE m.mqId IN :mqIds AND m.datumUhrzeitVon BETWEEN :datumUhrzeitVon AND :datumUhrzeitBis AND FORMATDATETIME(m.datumUhrzeitVon, 'HH:mm:ss') >= :uhrzeitVon AND FORMATDATETIME(m.datumUhrzeitVon, 'HH:mm:ss') < :uhrzeitBis"
     )
     Page<MqMesswerte> findByMqIdsAndDatumAndUhrzeit(
             @Param("mqIds") final List<String> mqIds,
-            @Param("datumVon") final LocalDateTime datumVon,
-            @Param("datumBis") final LocalDateTime datumBis,
+            @Param("datumUhrzeitVon") final LocalDateTime datumUhrzeitVon,
+            @Param("datumUhrzeitBis") final LocalDateTime datumUhrzeitBis,
             @Param("uhrzeitVon") final LocalTime uhrzeitVon,
             @Param("uhrzeitBis") final LocalTime uhrzeitBis,
             final Pageable pageable);
 
     @Query(
-        "SELECT m FROM MqMesswerte m WHERE m.mqId IN :mqIds AND m.datumUhrzeitVon BETWEEN :datumVon AND :datumBis AND FORMATDATETIME(m.datumUhrzeitVon, 'HH:mm:ss') >= :uhrzeitVon AND FORMATDATETIME(m.datumUhrzeitVon, 'HH:mm:ss') < :uhrzeitBis AND m.tagetyp IN :tagestypen"
+        "SELECT m FROM MqMesswerte m WHERE m.mqId IN :mqIds AND m.datumUhrzeitVon BETWEEN :datumUhrzeitVon AND :datumUhrzeitBis AND FORMATDATETIME(m.datumUhrzeitVon, 'HH:mm:ss') >= :uhrzeitVon AND FORMATDATETIME(m.datumUhrzeitVon, 'HH:mm:ss') < :uhrzeitBis AND m.tagetyp IN :tagestypen"
     )
     Page<MqMesswerte> findByMqIdsAndDatumAndUhrzeitAndTagestypen(
             @Param("mqIds") final List<String> mqIds,
-            @Param("datumVon") final LocalDateTime datumVon,
-            @Param("datumBis") final LocalDateTime datumBis,
+            @Param("datumUhrzeitVon") final LocalDateTime datumUhrzeitVon,
+            @Param("datumUhrzeitBis") final LocalDateTime datumUhrzeitBis,
             @Param("uhrzeitVon") final LocalTime uhrzeitVon,
             @Param("uhrzeitBis") final LocalTime uhrzeitBis,
             @Param("tagestypen") final List<Integer> tagestypen,
