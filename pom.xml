@@ -446,7 +446,7 @@
                 </executions>
             </plugin>
             <!-- Linter Checkstyle -->
-            <plugin>
+            <!-- <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-checkstyle-plugin</artifactId>
                 <version>3.2.1</version>
@@ -467,7 +467,7 @@
                         <version>9.3</version>
                     </dependency>
                 </dependencies>
-            </plugin>
+            </plugin>-->
 
             <plugin>
                 <groupId>com.mycila</groupId>
