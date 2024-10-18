@@ -62,6 +62,7 @@ public class MesswerteService {
         final var datumVonStartOfDay = LocalDateTime.of(datumVon, LocalTime.MIN);
         final var datumBisEndOfDay = LocalDateTime.of(datumBis, LocalTime.MAX);
         final Page<MqMesswerte> messwerte;
+
         if (tagestypen.isEmpty()) {
             messwerte = mqMesswerteRepository.findByMqIdsAndDatumAndUhrzeit(
                     messquerschnitte,
@@ -81,6 +82,7 @@ public class MesswerteService {
                     tagesTypIds,
                     pageRequest);
         }
+
         if (pageRequest.getPageNumber() >= messwerte.getTotalPages()) {
             //throw new Exception();
         }
@@ -99,6 +101,7 @@ public class MesswerteService {
         final var datumVonStartOfDay = LocalDateTime.of(datumVon, LocalTime.MIN);
         final var datumBisEndOfDay = LocalDateTime.of(datumBis, LocalTime.MAX);
         final Page<MqMesswerte> messwerte;
+
         if (tagestypen.isEmpty()) {
             messwerte = mqMesswerteRepository.findByMqIdsAndDatum(
                     messquerschnitte,
@@ -114,6 +117,7 @@ public class MesswerteService {
                     tagesTypIds,
                     pageRequest);
         }
+
         if (pageRequest.getPageNumber() >= messwerte.getTotalPages()) {
             //throw new Exception();
         }
