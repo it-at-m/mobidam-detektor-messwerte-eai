@@ -41,6 +41,16 @@ class MesswerteServiceTest {
     }
 
     @Test
+    void loadMesswerteWithinTimeRangeWithoutTagestyp() {
+        Assertions.assertThat(1).isEqualTo(2);
+    }
+
+    @Test
+    void loadMesswerteWithinTimeRangeWithTagestyp() {
+        Assertions.assertThat(1).isEqualTo(2);
+    }
+
+    @Test
     void loadMesswerteWithFullRangeWithoutTagestyp() {
         final var messwerte = TestData.createMqMesswerte(
                 List.of(1L),
@@ -48,24 +58,24 @@ class MesswerteServiceTest {
                 LocalDate.of(2024, 1, 1),
                 LocalDate.of(2024, 1, 1))
                 .stream()
-                .filter(messwert -> messwert.getDatumUhrzeitVon().isAfter(LocalDateTime.of(2024,1,1,9,59,0))
-                        && messwert.getDatumUhrzeitVon().isBefore(LocalDateTime.of(2024,1,1,10,29,0)))
+                .filter(messwert -> messwert.getDatumUhrzeitVon().isAfter(LocalDateTime.of(2024, 1, 1, 9, 59, 0))
+                        && messwert.getDatumUhrzeitVon().isBefore(LocalDateTime.of(2024, 1, 1, 10, 29, 0)))
                 .toList();
-        final var page = new PageImpl<>(messwerte, PageRequest.of(4,500), 2153);
+        final var page = new PageImpl<>(messwerte, PageRequest.of(4, 500), 2153);
 
         Mockito.when(mqMesswerteRepository.findByMqIdsAndDatum(
                 List.of("1"),
-                LocalDateTime.of(LocalDate.of(2024,1,1), LocalTime.MIN),
-                LocalDateTime.of(LocalDate.of(2024,1,1), LocalTime.MAX),
-                PageRequest.of(4,500))).thenReturn(page);
+                LocalDateTime.of(LocalDate.of(2024, 1, 1), LocalTime.MIN),
+                LocalDateTime.of(LocalDate.of(2024, 1, 1), LocalTime.MAX),
+                PageRequest.of(4, 500))).thenReturn(page);
 
         final var result = messwerteService.loadMesswerteWithFullRange(
                 List.of("1"),
-                LocalDate.of(2024,1,1),
-                LocalDate.of(2024,1,1),
+                LocalDate.of(2024, 1, 1),
+                LocalDate.of(2024, 1, 1),
                 List.of(),
                 Optional.of(List.of(FzTyp.ALLE_PKW)),
-                PageRequest.of(4,500));
+                PageRequest.of(4, 500));
 
         final var expected = new MqMesswerteDto();
         expected.setTotalPages(5);
@@ -76,7 +86,8 @@ class MesswerteServiceTest {
 
         final var expectedMq = new MessquerschnitteDto();
         expectedMq.setMqId(1L);
-        expectedMq.setIntervalle(List.of(List.of("2024-01-01 10:00:00", "2024-01-01 10:15:00", "41") ,List.of("2024-01-01 10:15:00", "2024-01-01 10:30:00", "42")));
+        expectedMq.setIntervalle(
+                List.of(List.of("2024-01-01 10:00:00", "2024-01-01 10:15:00", "41"), List.of("2024-01-01 10:15:00", "2024-01-01 10:30:00", "42")));
 
         expected.setMessquerschnitte(List.of(expectedMq));
 
@@ -84,9 +95,9 @@ class MesswerteServiceTest {
 
         Mockito.verify(mqMesswerteRepository, Mockito.times(1)).findByMqIdsAndDatum(
                 List.of("1"),
-                LocalDateTime.of(LocalDate.of(2024,1,1), LocalTime.MIN),
-                LocalDateTime.of(LocalDate.of(2024,1,1), LocalTime.MAX),
-                PageRequest.of(4,500));
+                LocalDateTime.of(LocalDate.of(2024, 1, 1), LocalTime.MIN),
+                LocalDateTime.of(LocalDate.of(2024, 1, 1), LocalTime.MAX),
+                PageRequest.of(4, 500));
 
         Mockito.verify(mqMesswerteRepository, Mockito.times(0)).findByMqIdsAndDatumAndTagestypen(
                 Mockito.anyList(),
@@ -99,30 +110,30 @@ class MesswerteServiceTest {
     @Test
     void loadMesswerteWithFullRangeWithTagestyp() {
         final var messwerte = TestData.createMqMesswerte(
-                        List.of(1L),
-                        List.of(4),
-                        LocalDate.of(2024, 1, 1),
-                        LocalDate.of(2024, 1, 1))
+                List.of(1L),
+                List.of(4),
+                LocalDate.of(2024, 1, 1),
+                LocalDate.of(2024, 1, 1))
                 .stream()
-                .filter(messwert -> messwert.getDatumUhrzeitVon().isAfter(LocalDateTime.of(2024,1,1,9,59,0))
-                        && messwert.getDatumUhrzeitVon().isBefore(LocalDateTime.of(2024,1,1,10,29,0)))
+                .filter(messwert -> messwert.getDatumUhrzeitVon().isAfter(LocalDateTime.of(2024, 1, 1, 9, 59, 0))
+                        && messwert.getDatumUhrzeitVon().isBefore(LocalDateTime.of(2024, 1, 1, 10, 29, 0)))
                 .toList();
-        final var page = new PageImpl<>(messwerte, PageRequest.of(4,500), 2153);
+        final var page = new PageImpl<>(messwerte, PageRequest.of(4, 500), 2153);
 
         Mockito.when(mqMesswerteRepository.findByMqIdsAndDatumAndTagestypen(
                 List.of("1"),
-                LocalDateTime.of(LocalDate.of(2024,1,1), LocalTime.MIN),
-                LocalDateTime.of(LocalDate.of(2024,1,1), LocalTime.MAX),
+                LocalDateTime.of(LocalDate.of(2024, 1, 1), LocalTime.MIN),
+                LocalDateTime.of(LocalDate.of(2024, 1, 1), LocalTime.MAX),
                 List.of(Tagestyp.SONNTAG_FEIERTAG.getId()),
-                PageRequest.of(4,500))).thenReturn(page);
+                PageRequest.of(4, 500))).thenReturn(page);
 
         final var result = messwerteService.loadMesswerteWithFullRange(
                 List.of("1"),
-                LocalDate.of(2024,1,1),
-                LocalDate.of(2024,1,1),
+                LocalDate.of(2024, 1, 1),
+                LocalDate.of(2024, 1, 1),
                 List.of(Tagestyp.SONNTAG_FEIERTAG),
                 Optional.of(List.of(FzTyp.ALLE_PKW)),
-                PageRequest.of(4,500));
+                PageRequest.of(4, 500));
 
         final var expected = new MqMesswerteDto();
         expected.setTotalPages(5);
@@ -133,7 +144,8 @@ class MesswerteServiceTest {
 
         final var expectedMq = new MessquerschnitteDto();
         expectedMq.setMqId(1L);
-        expectedMq.setIntervalle(List.of(List.of("2024-01-01 10:00:00", "2024-01-01 10:15:00", "41") ,List.of("2024-01-01 10:15:00", "2024-01-01 10:30:00", "42")));
+        expectedMq.setIntervalle(
+                List.of(List.of("2024-01-01 10:00:00", "2024-01-01 10:15:00", "41"), List.of("2024-01-01 10:15:00", "2024-01-01 10:30:00", "42")));
 
         expected.setMessquerschnitte(List.of(expectedMq));
 
@@ -147,10 +159,10 @@ class MesswerteServiceTest {
 
         Mockito.verify(mqMesswerteRepository, Mockito.times(1)).findByMqIdsAndDatumAndTagestypen(
                 List.of("1"),
-                LocalDateTime.of(LocalDate.of(2024,1,1), LocalTime.MIN),
-                LocalDateTime.of(LocalDate.of(2024,1,1), LocalTime.MAX),
+                LocalDateTime.of(LocalDate.of(2024, 1, 1), LocalTime.MIN),
+                LocalDateTime.of(LocalDate.of(2024, 1, 1), LocalTime.MAX),
                 List.of(Tagestyp.SONNTAG_FEIERTAG.getId()),
-                PageRequest.of(4,500));
+                PageRequest.of(4, 500));
     }
 
 }
