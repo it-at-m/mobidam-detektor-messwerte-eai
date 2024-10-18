@@ -45,23 +45,45 @@ class MqMesswerteRepositoryTest {
     void findByMqIdsAndDatumOneDay() {
         final var result = mqMesswerteRepository.findByMqIdsAndDatum(
                 List.of("2"),
-                LocalDateTime.of(LocalDate.of(24,1,10), LocalTime.MIN),
-                LocalDateTime.of(LocalDate.of(24,1,10), LocalTime.MAX),
+                LocalDateTime.of(LocalDate.of(2024,1,10), LocalTime.MIN),
+                LocalDateTime.of(LocalDate.of(2024,1,10), LocalTime.MAX),
                 PageRequest.of(0, 10000, Sort.by(Sort.Direction.ASC,"datumUhrzeitVon"))
         );
 
-        result.getContent();
+        Assertions.assertThat(result.getTotalPages()).isEqualTo(1);
+        Assertions.assertThat(result.getNumber()).isEqualTo(0);
+        Assertions.assertThat(result.getNumberOfElements()).isEqualTo(288);
+        Assertions.assertThat(result.getContent().getFirst().getDatumUhrzeitVon())
+                .isEqualTo(LocalDateTime.of(LocalDate.of(2024,1,10), LocalTime.of(0,0,0)));
+        Assertions.assertThat(result.getContent().getFirst().getDatumUhrzeitBis())
+                .isEqualTo(LocalDateTime.of(LocalDate.of(2024,1,10), LocalTime.of(0,15,0)));
+        Assertions.assertThat(result.getContent().getLast().getDatumUhrzeitVon())
+                .isEqualTo(LocalDateTime.of(LocalDate.of(2024,1,10), LocalTime.of(23,45,0)));
+        Assertions.assertThat(result.getContent().getLast().getDatumUhrzeitBis())
+                .isEqualTo(LocalDateTime.of(LocalDate.of(2024,1,10), LocalTime.of(0,0,0)));
+    }
+
+    @Test
+    void findByMqIdsAndDatumAndTagestypenOneDay() {
+        final var result = mqMesswerteRepository.findByMqIdsAndDatumAndTagestypen(
+                List.of("2"),
+                LocalDateTime.of(LocalDate.of(2024,1,10), LocalTime.MIN),
+                LocalDateTime.of(LocalDate.of(2024,1,10), LocalTime.MAX),
+                List.of(5),
+                PageRequest.of(0, 10000, Sort.by(Sort.Direction.ASC,"datumUhrzeitVon"))
+        );
+
         Assertions.assertThat(result.getTotalPages()).isEqualTo(1);
         Assertions.assertThat(result.getNumber()).isEqualTo(0);
         Assertions.assertThat(result.getNumberOfElements()).isEqualTo(96);
         Assertions.assertThat(result.getContent().getFirst().getDatumUhrzeitVon())
-                .isEqualTo(LocalDateTime.of(LocalDate.of(24,1,10), LocalTime.of(0,0,0)));
+                .isEqualTo(LocalDateTime.of(LocalDate.of(2024,1,10), LocalTime.of(0,0,0)));
         Assertions.assertThat(result.getContent().getFirst().getDatumUhrzeitBis())
-                .isEqualTo(LocalDateTime.of(LocalDate.of(24,1,10), LocalTime.of(0,15,0)));
+                .isEqualTo(LocalDateTime.of(LocalDate.of(2024,1,10), LocalTime.of(0,15,0)));
         Assertions.assertThat(result.getContent().getLast().getDatumUhrzeitVon())
-                .isEqualTo(LocalDateTime.of(LocalDate.of(24,1,10), LocalTime.of(23,45,0)));
+                .isEqualTo(LocalDateTime.of(LocalDate.of(2024,1,10), LocalTime.of(23,45,0)));
         Assertions.assertThat(result.getContent().getLast().getDatumUhrzeitBis())
-                .isEqualTo(LocalDateTime.of(LocalDate.of(24,1,10), LocalTime.of(0,0,0)));
+                .isEqualTo(LocalDateTime.of(LocalDate.of(2024,1,10), LocalTime.of(0,0,0)));
     }
 
 
