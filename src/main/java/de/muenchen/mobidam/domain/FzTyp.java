@@ -52,6 +52,6 @@ public enum FzTyp {
 
     SCHWERVERKEHR,
 
-    RAD;
+    RAD
 
 }

@@ -23,10 +23,10 @@
 package de.muenchen.mobidam.service;
 
 import de.muenchen.mobidam.domain.FzTyp;
-import de.muenchen.mobidam.domain.mapper.MesswerteMapper;
 import de.muenchen.mobidam.domain.MqMesswerte;
 import de.muenchen.mobidam.domain.MqMesswerteDto;
 import de.muenchen.mobidam.domain.Tagestyp;
+import de.muenchen.mobidam.domain.mapper.MesswerteMapper;
 import de.muenchen.mobidam.repository.MqMesswerteRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

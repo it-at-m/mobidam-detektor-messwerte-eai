@@ -86,15 +86,8 @@ public class MobidamJwtAuthenticationConverter implements Converter<Jwt, Abstrac
     /**
      * Bildet den folgenden Token-Claim ab:
      *
-     * "resource_access": {
-     * "mobidam-verkehrsdetektor-eai": {
-     * "roles": [
-     * "verkehrsdetektor-viewer"
-     * ]
-     * },
-     * ...
-     * },
-     * }
+     * "resource_access": { "mobidam-verkehrsdetektor-eai": { "roles": [ "verkehrsdetektor-viewer" ] },
+     * ... }, }
      */
     @Data
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -108,11 +101,7 @@ public class MobidamJwtAuthenticationConverter implements Converter<Jwt, Abstrac
     /**
      * Bildet den folgenden Token-Claim ab:
      *
-     * "mobidam-verkehrsdetektor-eai": {
-     * "roles": [
-     * "verkehrsdetektor-viewer"
-     * ]
-     * }
+     * "mobidam-verkehrsdetektor-eai": { "roles": [ "verkehrsdetektor-viewer" ] }
      */
     @Data
     @JsonIgnoreProperties(ignoreUnknown = true)

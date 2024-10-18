@@ -51,14 +51,11 @@ import java.util.Set;
 @Slf4j
 public class NfcRequest extends HttpServletRequestWrapper implements HttpServletRequest {
 
-    private Map<String, String[]> params;
-
-    private Cookie[] cookies;
-
-    private Map<String, List<String>> headers;
-
     @SuppressWarnings("unused")
     private final Set<String> contentTypes;
+    private Map<String, String[]> params;
+    private Cookie[] cookies;
+    private Map<String, List<String>> headers;
 
     public NfcRequest(final HttpServletRequest request, final Set<String> contentTypes) {
         super(request);
