@@ -95,10 +95,14 @@ public class MqMesswerteController {
             @RequestParam @NotNull final LocalDate datumBis,
             @RequestParam @NotEmpty final List<@NotNull Tagestyp> tagestypen,
             @RequestParam(required = false) final Optional<List<@NotNull FzTyp>> fzTypen,
-            @RequestParam(required = false, defaultValue = "${mobidam.detektor.messwerte.eai.pageing.default.page-number:0}") final @PositiveOrZero
-            Integer page,
-            @RequestParam(required = false, defaultValue = "${mobidam.detektor.messwerte.eai.pageing.default.page-size:100000}") final @Positive
-            Integer size) {
+            @RequestParam(
+                    required = false,
+                    defaultValue = "${mobidam.detektor.messwerte.eai.pageing.default.page-number:0}"
+            ) @PositiveOrZero final Integer page,
+            @RequestParam(
+                    required = false,
+                    defaultValue = "${mobidam.detektor.messwerte.eai.pageing.default.page-size:100000}"
+            ) @Positive final Integer size) {
         final var pageRequest = PageRequest.of(page, size);
         final var messwerte = messwerteService.loadMesswerteWithFullRange(
                 messquerschnitte,
