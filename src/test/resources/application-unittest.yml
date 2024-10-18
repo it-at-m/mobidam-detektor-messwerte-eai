@@ -1,7 +1,7 @@
 spring:
 
   # Spring JPA
-  datasource.url: jdbc:h2:mem:mobidammesswerteeai;DB_CLOSE_ON_EXIT=FALSE
+  datasource.url: jdbc:h2:mem:mobidammesswerteeai;MODE=Oracle;DB_CLOSE_ON_EXIT=FALSE
   jpa:
     database: H2
     hibernate:
@@ -12,10 +12,10 @@ spring:
       ddl-auto: create-drop
       naming.physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
     # Logging for database operation
-    show-sql: true
+    show-sql: false
     properties:
       hibernate:
-        format_sql: true
+        format_sql: false
   datasource:
     username: sa
   security:

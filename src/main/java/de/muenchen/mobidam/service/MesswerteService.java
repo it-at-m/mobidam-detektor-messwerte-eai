@@ -32,6 +32,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -48,6 +49,7 @@ public class MesswerteService {
 
     private final MesswerteMapper messwerteMapper;
 
+    @Transactional(readOnly = true)
     public MqMesswerteDto loadMesswerteWithinTimeRange(
             final List<String> messquerschnitte,
             final LocalDate datumVon,
@@ -86,6 +88,7 @@ public class MesswerteService {
         return messwerteMapper.map(messwerte, fzTypes);
     }
 
+    @Transactional(readOnly = true)
     public MqMesswerteDto loadMesswerteWithFullRange(
             final List<String> messquerschnitte,
             final LocalDate datumVon,

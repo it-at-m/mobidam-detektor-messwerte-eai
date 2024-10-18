@@ -2,16 +2,16 @@ package de.muenchen.mobidam.repository;
 
 import de.muenchen.mobidam.MicroServiceApplication;
 import de.muenchen.mobidam.TestConstants;
-import jakarta.transaction.Transactional;
+import de.muenchen.mobidam.TestData;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -32,7 +32,7 @@ class MqMesswerteRepositoryTest {
     @BeforeEach
     void beforeEach() {
         mqMesswerteRepository.deleteAll();
-        final var messwerte = TestConstants.createMqMesswerte(
+        final var messwerte = TestData.createMqMesswerte(
                 List.of(1L, 2L, 3L, 4L),
                 List.of(4,5,6),
                 LocalDate.of(2024,1,1),
