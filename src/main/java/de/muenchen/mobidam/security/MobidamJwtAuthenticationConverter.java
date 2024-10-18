@@ -24,7 +24,6 @@ package de.muenchen.mobidam.security;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.muenchen.mobidam.domain.Constants;
 import lombok.Data;
@@ -67,9 +66,7 @@ public class MobidamJwtAuthenticationConverter implements Converter<Jwt, Abstrac
         final var resourceAccessClaim = source.getClaimAsMap(RESOURCE_ACCESS);
         if (MapUtils.isNotEmpty(resourceAccessClaim)) {
             try {
-                final var typeRef = new TypeReference<ResourceAccess>() {
-                };
-                final var resourceAccess = new ObjectMapper().convertValue(resourceAccessClaim, typeRef);
+                final var resourceAccess = new ObjectMapper().convertValue(resourceAccessClaim, ResourceAccess.class);
                 final var roles = ObjectUtils.defaultIfNull(resourceAccess.getMobidamVerkehrsdetektorEai(), new MobidamVerkehrsdetektorEai()).getRoles();
                 CollectionUtils.emptyIfNull(roles)
                         .stream()
