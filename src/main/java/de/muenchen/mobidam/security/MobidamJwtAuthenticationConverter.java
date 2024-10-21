@@ -53,7 +53,8 @@ public class MobidamJwtAuthenticationConverter implements Converter<Jwt, Abstrac
     public static final String RESOURCE_ACCESS = "resource_access";
 
     /**
-     * Die Methode extrahiert aus dem JWT die Rollen aus folgendem Claim-Pfad.
+     * Die Methode extrahiert aus dem JWT die Rollen aus folgendem Claim-Pfad
+     * und fügt diese als Role-Authorities mit dem Rollen-Prefix "ROLE_" der Response an.
      *
      * - resource_access.mobidam-verkehrsdetektor-eai.roles
      *
