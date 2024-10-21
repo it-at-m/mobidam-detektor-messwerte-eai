@@ -79,11 +79,7 @@ public class MqMesswerteController {
                     @ApiResponse(
                             responseCode = "401", description = "Unauthorized",
                             content = @Content
-                    ),
-                    @ApiResponse(
-                            responseCode = "404", description = "No messwerte found",
-                            content = @Content
-                    ) }
+                    )}
     )
     @SecurityRequirement(name = "oauth2", scopes = { "read" })
     @PreAuthorize("hasRole(T(de.muenchen.mobidam.domain.Constants).CLIENT_ROLE)")
@@ -131,11 +127,7 @@ public class MqMesswerteController {
                     @ApiResponse(
                             responseCode = "401", description = "Unauthorized",
                             content = @Content
-                    ),
-                    @ApiResponse(
-                            responseCode = "404", description = "No messwerte found",
-                            content = @Content
-                    ) }
+                    )}
     )
     @SecurityRequirement(name = "oauth2", scopes = { "read" })
     @PreAuthorize("hasRole(T(de.muenchen.mobidam.domain.Constants).CLIENT_ROLE)")
