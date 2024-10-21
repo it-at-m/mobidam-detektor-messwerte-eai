@@ -51,7 +51,6 @@ public class MesswerteMapper {
         final var dto = new MqMesswerteDto();
         dto.setFormat(MesswerteFormatBuilder.createFormat(fzTypen));
         dto.setVersion(Constants.VERSION1);
-
         mapMesswerte(dto, messwerte, fzTypen);
         return dto;
     }
