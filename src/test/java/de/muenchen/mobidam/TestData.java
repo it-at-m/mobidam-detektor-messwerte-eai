@@ -35,6 +35,7 @@ public class TestData {
                             localDateTime = localDateTime.plusMinutes(15);
                             messwerte.setDatumUhrzeitBis(localDateTime);
                         } else {
+                            // Last interval of day
                             messwerte.setDatumUhrzeitBis(LocalDateTime.of(day, LocalTime.MIN));
                         }
                         messwerte.setTagetyp(tagesTyp);
