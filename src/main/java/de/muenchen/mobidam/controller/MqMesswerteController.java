@@ -143,8 +143,8 @@ public class MqMesswerteController {
             @RequestParam(name = "messquerschnitte") @NotEmpty final List<@NotNull Long> messquerschnitte,
             @RequestParam(name = "datumVon") @NotNull final LocalDate datumVon,
             @RequestParam(name = "datumBis") @NotNull final LocalDate datumBis,
-            @RequestParam(name = "uhrzeitVon") @NotNull final LocalTime uhrzeitVon,
-            @RequestParam(name = "uhrzeitBis") @NotNull final LocalTime uhrzeitBis,
+            @Schema(type = "string") @RequestParam(name = "uhrzeitVon") @NotNull final LocalTime uhrzeitVon,
+            @Schema(type = "string") @RequestParam(name = "uhrzeitBis") @NotNull final LocalTime uhrzeitBis,
             @RequestParam(name = "tagestypen") @NotEmpty final List<@NotNull Tagestyp> tagestypen,
             @RequestParam(
                     name = "fzTypen",
