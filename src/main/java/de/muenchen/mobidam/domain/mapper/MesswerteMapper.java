@@ -29,6 +29,7 @@ import de.muenchen.mobidam.domain.MesswerteFormatBuilder;
 import de.muenchen.mobidam.domain.MqMesswerte;
 import de.muenchen.mobidam.domain.MqMesswerteDto;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.collections4.ListUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
@@ -40,7 +41,8 @@ import java.util.List;
 public class MesswerteMapper {
 
     public MqMesswerteDto map(final Page<MqMesswerte> page, final List<FzTyp> fzTypen) {
-        final var dto = map(page.getContent(), fzTypen);
+        final var messwerte = ListUtils.defaultIfNull(page.getContent(), List.of());
+        final var dto = map(messwerte, fzTypen);
         dto.setPageNumber(page.getNumber());
         dto.setPageSize(page.getSize());
         dto.setTotalPages(page.getTotalPages());

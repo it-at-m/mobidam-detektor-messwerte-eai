@@ -23,11 +23,14 @@
 package de.muenchen.mobidam.domain;
 
 import de.muenchen.mobidam.domain.mapper.MesswerteMapper;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -44,7 +47,28 @@ public class MesswerteMapperTest {
     private final MesswerteMapper messwerteMapper = new MesswerteMapper();
 
     @Test
-    public void map() {
+    public void mapPageWithMesswerteEmpty() {
+        final var page = new PageImpl<MqMesswerte>(List.of(), PageRequest.of(2, 50), 512);
+
+        final List<FzTyp> fzTypen = new ArrayList<>();
+        fzTypen.add(FzTyp.SATTEL_KFZ);
+        fzTypen.add(FzTyp.KFZ_VERKEHR);
+
+        final var dto = messwerteMapper.map(page, fzTypen);
+
+        final var expected = new MqMesswerteDto();
+        expected.setMessquerschnitte(List.of());
+        expected.setPageSize(50);
+        expected.setPageNumber(2);
+        expected.setTotalPages(11);
+        expected.setVersion(Constants.VERSION1);
+        expected.setFormat(MesswerteFormatBuilder.createFormat(fzTypen));
+
+        Assertions.assertThat(dto).isNotNull().isEqualTo(expected);
+    }
+
+    @Test
+    public void mapMesswerte() {
         final List<MqMesswerte> messwerte = new ArrayList<>();
 
         LocalDateTime datumVon1 = LocalDateTime.of(2024, 9, 1, 0, 0, 0);
