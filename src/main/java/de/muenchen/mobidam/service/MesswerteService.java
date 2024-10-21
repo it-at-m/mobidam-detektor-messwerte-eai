@@ -49,9 +49,21 @@ public class MesswerteService {
 
     private final MesswerteMapper messwerteMapper;
 
+    /**
+     *
+     * @param messquerschnitte
+     * @param datumVon
+     * @param datumBis
+     * @param uhrzeitVon
+     * @param uhrzeitBis
+     * @param tagestypen
+     * @param fzTypen
+     * @param pageRequest
+     * @return
+     */
     @Transactional(readOnly = true)
     public MqMesswerteDto loadMesswerteWithinTimeRange(
-            final List<String> messquerschnitte,
+            final List<Long> messquerschnitte,
             final LocalDate datumVon,
             final LocalDate datumBis,
             final LocalTime uhrzeitVon,
@@ -86,9 +98,19 @@ public class MesswerteService {
         return messwerteMapper.map(messwerte, fzTypes);
     }
 
+    /**
+     *
+     * @param messquerschnitte
+     * @param datumVon
+     * @param datumBis
+     * @param tagestypen
+     * @param fzTypen
+     * @param pageRequest
+     * @return
+     */
     @Transactional(readOnly = true)
     public MqMesswerteDto loadMesswerteWithFullRange(
-            final List<String> messquerschnitte,
+            final List<Long> messquerschnitte,
             final LocalDate datumVon,
             final LocalDate datumBis,
             final List<Tagestyp> tagestypen,

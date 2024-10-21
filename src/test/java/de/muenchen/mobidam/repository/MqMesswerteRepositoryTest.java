@@ -43,7 +43,7 @@ class MqMesswerteRepositoryTest {
     @Test
     void findByMqIdsAndDatumOneDay() {
         final var result = mqMesswerteRepository.findByMqIdsAndDatum(
-                List.of("2"),
+                List.of(2L),
                 LocalDateTime.of(LocalDate.of(2024, 1, 10), LocalTime.MIN),
                 LocalDateTime.of(LocalDate.of(2024, 1, 10), LocalTime.MAX),
                 PageRequest.of(0, 10000, Sort.by(Sort.Direction.ASC, "datumUhrzeitVon")));
@@ -74,7 +74,7 @@ class MqMesswerteRepositoryTest {
         mqMesswerteRepository.saveAll(lastIntevalOfDay);
 
         final var result = mqMesswerteRepository.findByMqIdsAndDatum(
-                List.of("2"),
+                List.of(2L),
                 LocalDateTime.of(LocalDate.of(2024, 1, 10), LocalTime.MIN),
                 LocalDateTime.of(LocalDate.of(2024, 1, 10), LocalTime.MAX),
                 PageRequest.of(0, 10000, Sort.by(Sort.Direction.ASC, "datumUhrzeitVon")));
@@ -95,7 +95,7 @@ class MqMesswerteRepositoryTest {
     @Test
     void findByMqIdsAndDatumAndTagestypenOneDay() {
         final var result = mqMesswerteRepository.findByMqIdsAndDatumAndTagestypen(
-                List.of("2"),
+                List.of(2L),
                 LocalDateTime.of(LocalDate.of(2024, 1, 10), LocalTime.MIN),
                 LocalDateTime.of(LocalDate.of(2024, 1, 10), LocalTime.MAX),
                 List.of(5),
@@ -127,7 +127,7 @@ class MqMesswerteRepositoryTest {
         mqMesswerteRepository.saveAll(lastIntevalOfDay);
 
         final var result = mqMesswerteRepository.findByMqIdsAndDatumAndTagestypen(
-                List.of("2"),
+                List.of(2L),
                 LocalDateTime.of(LocalDate.of(2024, 1, 10), LocalTime.MIN),
                 LocalDateTime.of(LocalDate.of(2024, 1, 10), LocalTime.MAX),
                 List.of(5),
@@ -149,7 +149,7 @@ class MqMesswerteRepositoryTest {
     @Test
     void findByMqIdsAndDatumAndUhrzeitOneDay() {
         final var result = mqMesswerteRepository.findByMqIdsAndDatumAndUhrzeit(
-                List.of("2"),
+                List.of(2L),
                 LocalDateTime.of(LocalDate.of(2024, 1, 10), LocalTime.MIN),
                 LocalDateTime.of(LocalDate.of(2024, 1, 10), LocalTime.MAX),
                 LocalTime.of(10, 0, 0),
@@ -182,7 +182,7 @@ class MqMesswerteRepositoryTest {
         mqMesswerteRepository.saveAll(lastIntevalOfDay);
 
         final var result = mqMesswerteRepository.findByMqIdsAndDatumAndUhrzeit(
-                List.of("2"),
+                List.of(2L),
                 LocalDateTime.of(LocalDate.of(2024, 1, 10), LocalTime.MIN),
                 LocalDateTime.of(LocalDate.of(2024, 1, 10), LocalTime.MAX),
                 LocalTime.of(23, 15, 0),
@@ -203,7 +203,7 @@ class MqMesswerteRepositoryTest {
     @Test
     void findByMqIdsAndDatumAndUhrzeitAndTagestypenOneDay() {
         final var result = mqMesswerteRepository.findByMqIdsAndDatumAndUhrzeitAndTagestypen(
-                List.of("2"),
+                List.of(2L),
                 LocalDateTime.of(LocalDate.of(2024, 1, 10), LocalTime.MIN),
                 LocalDateTime.of(LocalDate.of(2024, 1, 10), LocalTime.MAX),
                 LocalTime.of(10, 0, 0),
@@ -227,7 +227,7 @@ class MqMesswerteRepositoryTest {
     @Test
     void findByMqIdsAndDatumAndUhrzeitAndTagestypenTwoDays() {
         final var result = mqMesswerteRepository.findByMqIdsAndDatumAndUhrzeitAndTagestypen(
-                List.of("2"),
+                List.of(2L),
                 LocalDateTime.of(LocalDate.of(2024, 1, 10), LocalTime.MIN),
                 LocalDateTime.of(LocalDate.of(2024, 1, 11), LocalTime.MAX),
                 LocalTime.of(10, 0, 0),
@@ -294,7 +294,7 @@ class MqMesswerteRepositoryTest {
     @Test
     void findByMqIdsAndDatumAndUhrzeitAndTagestypenTwoDaysAtEndOfDay() {
         final var result = mqMesswerteRepository.findByMqIdsAndDatumAndUhrzeitAndTagestypen(
-                List.of("2"),
+                List.of(2L),
                 LocalDateTime.of(LocalDate.of(2024, 1, 10), LocalTime.MIN),
                 LocalDateTime.of(LocalDate.of(2024, 1, 11), LocalTime.MAX),
                 LocalTime.of(23, 0, 0),
@@ -360,7 +360,7 @@ class MqMesswerteRepositoryTest {
         mqMesswerteRepository.saveAll(lastIntevalOfDay);
 
         final var result = mqMesswerteRepository.findByMqIdsAndDatumAndUhrzeitAndTagestypen(
-                List.of("2"),
+                List.of(2L),
                 LocalDateTime.of(LocalDate.of(2024, 1, 10), LocalTime.MIN),
                 LocalDateTime.of(LocalDate.of(2024, 1, 11), LocalTime.MAX),
                 LocalTime.of(23, 0, 0),

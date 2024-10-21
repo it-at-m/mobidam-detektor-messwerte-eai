@@ -90,7 +90,7 @@ public class MqMesswerteController {
     @GetMapping(value = "/fullrange", produces = MediaType.APPLICATION_JSON_VALUE)
     @LogExecutionTime
     public ResponseEntity<MqMesswerteDto> loadMesswerteFullRange(
-            @RequestParam @NotEmpty final List<@NotEmpty String> messquerschnitte,
+            @RequestParam @NotEmpty final List<@NotNull Long> messquerschnitte,
             @RequestParam @NotNull final LocalDate datumVon,
             @RequestParam @NotNull final LocalDate datumBis,
             @RequestParam @NotEmpty final List<@NotNull Tagestyp> tagestypen,
@@ -142,7 +142,7 @@ public class MqMesswerteController {
     @GetMapping(value = "/timerange", produces = MediaType.APPLICATION_JSON_VALUE)
     @LogExecutionTime
     public ResponseEntity<MqMesswerteDto> loadMesswerteTimeRange(
-            @RequestParam @NotEmpty final List<@NotEmpty String> messquerschnitte,
+            @RequestParam @NotEmpty final List<@NotNull Long> messquerschnitte,
             @RequestParam @NotNull final LocalDate datumVon,
             @RequestParam @NotNull final LocalDate datumBis,
             @RequestParam @NotNull final LocalTime uhrzeitVon,

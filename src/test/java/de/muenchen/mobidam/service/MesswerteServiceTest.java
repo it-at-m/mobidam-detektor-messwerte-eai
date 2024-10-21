@@ -54,7 +54,7 @@ class MesswerteServiceTest {
         final var page = new PageImpl<>(messwerte, PageRequest.of(4, 500), 2153);
 
         Mockito.when(mqMesswerteRepository.findByMqIdsAndDatumAndUhrzeit(
-                List.of("1"),
+                List.of(1L),
                 LocalDateTime.of(LocalDate.of(2024, 1, 1), LocalTime.MIN),
                 LocalDateTime.of(LocalDate.of(2024, 1, 1), LocalTime.MAX),
                 LocalTime.of(10, 0, 0),
@@ -62,7 +62,7 @@ class MesswerteServiceTest {
                 PageRequest.of(4, 500))).thenReturn(page);
 
         final var result = messwerteService.loadMesswerteWithinTimeRange(
-                List.of("1"),
+                List.of(1L),
                 LocalDate.of(2024, 1, 1),
                 LocalDate.of(2024, 1, 1),
                 LocalTime.of(10, 0, 0),
@@ -88,7 +88,7 @@ class MesswerteServiceTest {
         Assertions.assertThat(result).isNotNull().isEqualTo(expected);
 
         Mockito.verify(mqMesswerteRepository, Mockito.times(1)).findByMqIdsAndDatumAndUhrzeit(
-                List.of("1"),
+                List.of(1L),
                 LocalDateTime.of(LocalDate.of(2024, 1, 1), LocalTime.MIN),
                 LocalDateTime.of(LocalDate.of(2024, 1, 1), LocalTime.MAX),
                 LocalTime.of(10, 0, 0),
@@ -119,7 +119,7 @@ class MesswerteServiceTest {
         final var page = new PageImpl<>(messwerte, PageRequest.of(4, 500), 2153);
 
         Mockito.when(mqMesswerteRepository.findByMqIdsAndDatumAndUhrzeitAndTagestypen(
-                List.of("1"),
+                List.of(1L),
                 LocalDateTime.of(LocalDate.of(2024, 1, 1), LocalTime.MIN),
                 LocalDateTime.of(LocalDate.of(2024, 1, 1), LocalTime.MAX),
                 LocalTime.of(10, 0, 0),
@@ -128,7 +128,7 @@ class MesswerteServiceTest {
                 PageRequest.of(4, 500))).thenReturn(page);
 
         final var result = messwerteService.loadMesswerteWithinTimeRange(
-                List.of("1"),
+                List.of(1L),
                 LocalDate.of(2024, 1, 1),
                 LocalDate.of(2024, 1, 1),
                 LocalTime.of(10, 0, 0),
@@ -162,7 +162,7 @@ class MesswerteServiceTest {
                 Mockito.any(PageRequest.class));
 
         Mockito.verify(mqMesswerteRepository, Mockito.times(1)).findByMqIdsAndDatumAndUhrzeitAndTagestypen(
-                List.of("1"),
+                List.of(1L),
                 LocalDateTime.of(LocalDate.of(2024, 1, 1), LocalTime.MIN),
                 LocalDateTime.of(LocalDate.of(2024, 1, 1), LocalTime.MAX),
                 LocalTime.of(10, 0, 0),
@@ -185,13 +185,13 @@ class MesswerteServiceTest {
         final var page = new PageImpl<>(messwerte, PageRequest.of(4, 500), 2153);
 
         Mockito.when(mqMesswerteRepository.findByMqIdsAndDatum(
-                List.of("1"),
+                List.of(1L),
                 LocalDateTime.of(LocalDate.of(2024, 1, 1), LocalTime.MIN),
                 LocalDateTime.of(LocalDate.of(2024, 1, 1), LocalTime.MAX),
                 PageRequest.of(4, 500))).thenReturn(page);
 
         final var result = messwerteService.loadMesswerteWithFullRange(
-                List.of("1"),
+                List.of(1L),
                 LocalDate.of(2024, 1, 1),
                 LocalDate.of(2024, 1, 1),
                 List.of(),
@@ -215,7 +215,7 @@ class MesswerteServiceTest {
         Assertions.assertThat(result).isNotNull().isEqualTo(expected);
 
         Mockito.verify(mqMesswerteRepository, Mockito.times(1)).findByMqIdsAndDatum(
-                List.of("1"),
+                List.of(1L),
                 LocalDateTime.of(LocalDate.of(2024, 1, 1), LocalTime.MIN),
                 LocalDateTime.of(LocalDate.of(2024, 1, 1), LocalTime.MAX),
                 PageRequest.of(4, 500));
@@ -242,14 +242,14 @@ class MesswerteServiceTest {
         final var page = new PageImpl<>(messwerte, PageRequest.of(4, 500), 2153);
 
         Mockito.when(mqMesswerteRepository.findByMqIdsAndDatumAndTagestypen(
-                List.of("1"),
+                List.of(1L),
                 LocalDateTime.of(LocalDate.of(2024, 1, 1), LocalTime.MIN),
                 LocalDateTime.of(LocalDate.of(2024, 1, 1), LocalTime.MAX),
                 List.of(Tagestyp.SONNTAG_FEIERTAG.getId()),
                 PageRequest.of(4, 500))).thenReturn(page);
 
         final var result = messwerteService.loadMesswerteWithFullRange(
-                List.of("1"),
+                List.of(1L),
                 LocalDate.of(2024, 1, 1),
                 LocalDate.of(2024, 1, 1),
                 List.of(Tagestyp.SONNTAG_FEIERTAG),
@@ -279,7 +279,7 @@ class MesswerteServiceTest {
                 Mockito.any(PageRequest.class));
 
         Mockito.verify(mqMesswerteRepository, Mockito.times(1)).findByMqIdsAndDatumAndTagestypen(
-                List.of("1"),
+                List.of(1L),
                 LocalDateTime.of(LocalDate.of(2024, 1, 1), LocalTime.MIN),
                 LocalDateTime.of(LocalDate.of(2024, 1, 1), LocalTime.MAX),
                 List.of(Tagestyp.SONNTAG_FEIERTAG.getId()),
