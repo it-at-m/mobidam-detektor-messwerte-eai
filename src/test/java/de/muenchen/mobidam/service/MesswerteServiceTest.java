@@ -43,10 +43,10 @@ class MesswerteServiceTest {
     @Test
     void loadMesswerteWithinTimeRangeWithoutTagestyp() {
         final var messwerte = TestData.createMqMesswerte(
-                        List.of(1L),
-                        List.of(4),
-                        LocalDate.of(2024, 1, 1),
-                        LocalDate.of(2024, 1, 1))
+                List.of(1L),
+                List.of(4),
+                LocalDate.of(2024, 1, 1),
+                LocalDate.of(2024, 1, 1))
                 .stream()
                 .filter(messwert -> messwert.getDatumUhrzeitVon().isAfter(LocalDateTime.of(2024, 1, 1, 9, 59, 0))
                         && messwert.getDatumUhrzeitVon().isBefore(LocalDateTime.of(2024, 1, 1, 10, 29, 0)))
@@ -57,16 +57,16 @@ class MesswerteServiceTest {
                 List.of("1"),
                 LocalDateTime.of(LocalDate.of(2024, 1, 1), LocalTime.MIN),
                 LocalDateTime.of(LocalDate.of(2024, 1, 1), LocalTime.MAX),
-                LocalTime.of(10,0,0),
-                LocalTime.of(11,0,0),
+                LocalTime.of(10, 0, 0),
+                LocalTime.of(11, 0, 0),
                 PageRequest.of(4, 500))).thenReturn(page);
 
         final var result = messwerteService.loadMesswerteWithinTimeRange(
                 List.of("1"),
                 LocalDate.of(2024, 1, 1),
                 LocalDate.of(2024, 1, 1),
-                LocalTime.of(10,0,0),
-                LocalTime.of(11,0,0),
+                LocalTime.of(10, 0, 0),
+                LocalTime.of(11, 0, 0),
                 List.of(),
                 Optional.of(List.of(FzTyp.ALLE_PKW)),
                 PageRequest.of(4, 500));
@@ -91,8 +91,8 @@ class MesswerteServiceTest {
                 List.of("1"),
                 LocalDateTime.of(LocalDate.of(2024, 1, 1), LocalTime.MIN),
                 LocalDateTime.of(LocalDate.of(2024, 1, 1), LocalTime.MAX),
-                LocalTime.of(10,0,0),
-                LocalTime.of(11,0,0),
+                LocalTime.of(10, 0, 0),
+                LocalTime.of(11, 0, 0),
                 PageRequest.of(4, 500));
 
         Mockito.verify(mqMesswerteRepository, Mockito.times(0)).findByMqIdsAndDatumAndUhrzeitAndTagestypen(
@@ -108,10 +108,10 @@ class MesswerteServiceTest {
     @Test
     void loadMesswerteWithinTimeRangeWithTagestyp() {
         final var messwerte = TestData.createMqMesswerte(
-                        List.of(1L),
-                        List.of(4),
-                        LocalDate.of(2024, 1, 1),
-                        LocalDate.of(2024, 1, 1))
+                List.of(1L),
+                List.of(4),
+                LocalDate.of(2024, 1, 1),
+                LocalDate.of(2024, 1, 1))
                 .stream()
                 .filter(messwert -> messwert.getDatumUhrzeitVon().isAfter(LocalDateTime.of(2024, 1, 1, 9, 59, 0))
                         && messwert.getDatumUhrzeitVon().isBefore(LocalDateTime.of(2024, 1, 1, 10, 29, 0)))
@@ -122,8 +122,8 @@ class MesswerteServiceTest {
                 List.of("1"),
                 LocalDateTime.of(LocalDate.of(2024, 1, 1), LocalTime.MIN),
                 LocalDateTime.of(LocalDate.of(2024, 1, 1), LocalTime.MAX),
-                LocalTime.of(10,0,0),
-                LocalTime.of(11,0,0),
+                LocalTime.of(10, 0, 0),
+                LocalTime.of(11, 0, 0),
                 List.of(Tagestyp.SONNTAG_FEIERTAG.getId()),
                 PageRequest.of(4, 500))).thenReturn(page);
 
@@ -131,8 +131,8 @@ class MesswerteServiceTest {
                 List.of("1"),
                 LocalDate.of(2024, 1, 1),
                 LocalDate.of(2024, 1, 1),
-                LocalTime.of(10,0,0),
-                LocalTime.of(11,0,0),
+                LocalTime.of(10, 0, 0),
+                LocalTime.of(11, 0, 0),
                 List.of(Tagestyp.SONNTAG_FEIERTAG),
                 Optional.of(List.of(FzTyp.ALLE_PKW)),
                 PageRequest.of(4, 500));
@@ -165,8 +165,8 @@ class MesswerteServiceTest {
                 List.of("1"),
                 LocalDateTime.of(LocalDate.of(2024, 1, 1), LocalTime.MIN),
                 LocalDateTime.of(LocalDate.of(2024, 1, 1), LocalTime.MAX),
-                LocalTime.of(10,0,0),
-                LocalTime.of(11,0,0),
+                LocalTime.of(10, 0, 0),
+                LocalTime.of(11, 0, 0),
                 List.of(Tagestyp.SONNTAG_FEIERTAG.getId()),
                 PageRequest.of(4, 500));
     }

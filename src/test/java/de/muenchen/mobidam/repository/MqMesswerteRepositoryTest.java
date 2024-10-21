@@ -66,14 +66,10 @@ class MqMesswerteRepositoryTest {
         final var lastIntevalOfDay = mqMesswerteRepository.findAll()
                 .stream()
                 .filter(interval -> interval.getDatumUhrzeitBis().toLocalTime().equals(LocalTime.MIN))
-                .peek(interval ->
-                        interval.setDatumUhrzeitBis(
-                                LocalDateTime.of(
-                                        interval.getDatumUhrzeitBis().toLocalDate(),
-                                        LocalTime.of(23,59,59)
-                                )
-                        )
-                )
+                .peek(interval -> interval.setDatumUhrzeitBis(
+                        LocalDateTime.of(
+                                interval.getDatumUhrzeitBis().toLocalDate(),
+                                LocalTime.of(23, 59, 59))))
                 .toList();
         mqMesswerteRepository.saveAll(lastIntevalOfDay);
 
@@ -123,14 +119,10 @@ class MqMesswerteRepositoryTest {
         final var lastIntevalOfDay = mqMesswerteRepository.findAll()
                 .stream()
                 .filter(interval -> interval.getDatumUhrzeitBis().toLocalTime().equals(LocalTime.MIN))
-                .peek(interval ->
-                        interval.setDatumUhrzeitBis(
-                                LocalDateTime.of(
-                                        interval.getDatumUhrzeitBis().toLocalDate(),
-                                        LocalTime.of(23,59,59)
-                                )
-                        )
-                )
+                .peek(interval -> interval.setDatumUhrzeitBis(
+                        LocalDateTime.of(
+                                interval.getDatumUhrzeitBis().toLocalDate(),
+                                LocalTime.of(23, 59, 59))))
                 .toList();
         mqMesswerteRepository.saveAll(lastIntevalOfDay);
 
@@ -182,14 +174,10 @@ class MqMesswerteRepositoryTest {
         final var lastIntevalOfDay = mqMesswerteRepository.findAll()
                 .stream()
                 .filter(interval -> interval.getDatumUhrzeitBis().toLocalTime().equals(LocalTime.MIN))
-                .peek(interval ->
-                        interval.setDatumUhrzeitBis(
-                                LocalDateTime.of(
-                                        interval.getDatumUhrzeitBis().toLocalDate(),
-                                        LocalTime.of(23,59,59)
-                                )
-                        )
-                )
+                .peek(interval -> interval.setDatumUhrzeitBis(
+                        LocalDateTime.of(
+                                interval.getDatumUhrzeitBis().toLocalDate(),
+                                LocalTime.of(23, 59, 59))))
                 .toList();
         mqMesswerteRepository.saveAll(lastIntevalOfDay);
 
@@ -364,14 +352,10 @@ class MqMesswerteRepositoryTest {
         final var lastIntevalOfDay = mqMesswerteRepository.findAll()
                 .stream()
                 .filter(interval -> interval.getDatumUhrzeitBis().toLocalTime().equals(LocalTime.MIN))
-                .peek(interval ->
-                    interval.setDatumUhrzeitBis(
-                            LocalDateTime.of(
-                                    interval.getDatumUhrzeitBis().toLocalDate(),
-                                    LocalTime.of(23,59,59)
-                            )
-                    )
-                )
+                .peek(interval -> interval.setDatumUhrzeitBis(
+                        LocalDateTime.of(
+                                interval.getDatumUhrzeitBis().toLocalDate(),
+                                LocalTime.of(23, 59, 59))))
                 .toList();
         mqMesswerteRepository.saveAll(lastIntevalOfDay);
 
