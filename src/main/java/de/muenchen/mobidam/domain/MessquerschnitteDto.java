@@ -51,6 +51,9 @@ import java.util.List;
 }*/
 @Data
 public class MessquerschnitteDto implements Serializable {
+
     private Long mqId;
+
     private List<List<String>> intervalle = new ArrayList<>();
+
 }
