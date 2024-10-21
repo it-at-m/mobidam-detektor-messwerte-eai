@@ -82,10 +82,6 @@ public class MesswerteService {
                     tagesTypIds,
                     pageRequest);
         }
-
-        if (pageRequest.getPageNumber() >= messwerte.getTotalPages()) {
-            //throw new Exception();
-        }
         final var fzTypes = fzTypen.orElseGet(() -> Arrays.asList(FzTyp.values()));
         return messwerteMapper.map(messwerte, fzTypes);
     }
@@ -116,10 +112,6 @@ public class MesswerteService {
                     datumBisEndOfDay,
                     tagesTypIds,
                     pageRequest);
-        }
-
-        if (pageRequest.getPageNumber() >= messwerte.getTotalPages()) {
-            //throw new Exception();
         }
         final var fzTypes = fzTypen.orElseGet(() -> Arrays.asList(FzTyp.values()));
         return messwerteMapper.map(messwerte, fzTypes);
