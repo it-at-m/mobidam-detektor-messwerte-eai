@@ -42,12 +42,133 @@ class MesswerteServiceTest {
 
     @Test
     void loadMesswerteWithinTimeRangeWithoutTagestyp() {
-        Assertions.assertThat(1).isEqualTo(2);
+        final var messwerte = TestData.createMqMesswerte(
+                        List.of(1L),
+                        List.of(4),
+                        LocalDate.of(2024, 1, 1),
+                        LocalDate.of(2024, 1, 1))
+                .stream()
+                .filter(messwert -> messwert.getDatumUhrzeitVon().isAfter(LocalDateTime.of(2024, 1, 1, 9, 59, 0))
+                        && messwert.getDatumUhrzeitVon().isBefore(LocalDateTime.of(2024, 1, 1, 10, 29, 0)))
+                .toList();
+        final var page = new PageImpl<>(messwerte, PageRequest.of(4, 500), 2153);
+
+        Mockito.when(mqMesswerteRepository.findByMqIdsAndDatumAndUhrzeit(
+                List.of("1"),
+                LocalDateTime.of(LocalDate.of(2024, 1, 1), LocalTime.MIN),
+                LocalDateTime.of(LocalDate.of(2024, 1, 1), LocalTime.MAX),
+                LocalTime.of(10,0,0),
+                LocalTime.of(11,0,0),
+                PageRequest.of(4, 500))).thenReturn(page);
+
+        final var result = messwerteService.loadMesswerteWithinTimeRange(
+                List.of("1"),
+                LocalDate.of(2024, 1, 1),
+                LocalDate.of(2024, 1, 1),
+                LocalTime.of(10,0,0),
+                LocalTime.of(11,0,0),
+                List.of(),
+                Optional.of(List.of(FzTyp.ALLE_PKW)),
+                PageRequest.of(4, 500));
+
+        final var expected = new MqMesswerteDto();
+        expected.setTotalPages(5);
+        expected.setPageSize(500);
+        expected.setPageNumber(4);
+        expected.setVersion("v1");
+        expected.setFormat("DATUM_UHRZEIT_VON DATUM_UHRZEIT_BIS ALLE_PKW");
+
+        final var expectedMq = new MessquerschnitteDto();
+        expectedMq.setMqId(1L);
+        expectedMq.setIntervalle(
+                List.of(List.of("2024-01-01 10:00:00", "2024-01-01 10:15:00", "41"), List.of("2024-01-01 10:15:00", "2024-01-01 10:30:00", "42")));
+
+        expected.setMessquerschnitte(List.of(expectedMq));
+
+        Assertions.assertThat(result).isNotNull().isEqualTo(expected);
+
+        Mockito.verify(mqMesswerteRepository, Mockito.times(1)).findByMqIdsAndDatumAndUhrzeit(
+                List.of("1"),
+                LocalDateTime.of(LocalDate.of(2024, 1, 1), LocalTime.MIN),
+                LocalDateTime.of(LocalDate.of(2024, 1, 1), LocalTime.MAX),
+                LocalTime.of(10,0,0),
+                LocalTime.of(11,0,0),
+                PageRequest.of(4, 500));
+
+        Mockito.verify(mqMesswerteRepository, Mockito.times(0)).findByMqIdsAndDatumAndUhrzeitAndTagestypen(
+                Mockito.anyList(),
+                Mockito.any(LocalDateTime.class),
+                Mockito.any(LocalDateTime.class),
+                Mockito.any(LocalTime.class),
+                Mockito.any(LocalTime.class),
+                Mockito.anyList(),
+                Mockito.any(PageRequest.class));
     }
 
     @Test
     void loadMesswerteWithinTimeRangeWithTagestyp() {
-        Assertions.assertThat(1).isEqualTo(2);
+        final var messwerte = TestData.createMqMesswerte(
+                        List.of(1L),
+                        List.of(4),
+                        LocalDate.of(2024, 1, 1),
+                        LocalDate.of(2024, 1, 1))
+                .stream()
+                .filter(messwert -> messwert.getDatumUhrzeitVon().isAfter(LocalDateTime.of(2024, 1, 1, 9, 59, 0))
+                        && messwert.getDatumUhrzeitVon().isBefore(LocalDateTime.of(2024, 1, 1, 10, 29, 0)))
+                .toList();
+        final var page = new PageImpl<>(messwerte, PageRequest.of(4, 500), 2153);
+
+        Mockito.when(mqMesswerteRepository.findByMqIdsAndDatumAndUhrzeitAndTagestypen(
+                List.of("1"),
+                LocalDateTime.of(LocalDate.of(2024, 1, 1), LocalTime.MIN),
+                LocalDateTime.of(LocalDate.of(2024, 1, 1), LocalTime.MAX),
+                LocalTime.of(10,0,0),
+                LocalTime.of(11,0,0),
+                List.of(Tagestyp.SONNTAG_FEIERTAG.getId()),
+                PageRequest.of(4, 500))).thenReturn(page);
+
+        final var result = messwerteService.loadMesswerteWithinTimeRange(
+                List.of("1"),
+                LocalDate.of(2024, 1, 1),
+                LocalDate.of(2024, 1, 1),
+                LocalTime.of(10,0,0),
+                LocalTime.of(11,0,0),
+                List.of(Tagestyp.SONNTAG_FEIERTAG),
+                Optional.of(List.of(FzTyp.ALLE_PKW)),
+                PageRequest.of(4, 500));
+
+        final var expected = new MqMesswerteDto();
+        expected.setTotalPages(5);
+        expected.setPageSize(500);
+        expected.setPageNumber(4);
+        expected.setVersion("v1");
+        expected.setFormat("DATUM_UHRZEIT_VON DATUM_UHRZEIT_BIS ALLE_PKW");
+
+        final var expectedMq = new MessquerschnitteDto();
+        expectedMq.setMqId(1L);
+        expectedMq.setIntervalle(
+                List.of(List.of("2024-01-01 10:00:00", "2024-01-01 10:15:00", "41"), List.of("2024-01-01 10:15:00", "2024-01-01 10:30:00", "42")));
+
+        expected.setMessquerschnitte(List.of(expectedMq));
+
+        Assertions.assertThat(result).isNotNull().isEqualTo(expected);
+
+        Mockito.verify(mqMesswerteRepository, Mockito.times(0)).findByMqIdsAndDatumAndUhrzeit(
+                Mockito.anyList(),
+                Mockito.any(LocalDateTime.class),
+                Mockito.any(LocalDateTime.class),
+                Mockito.any(LocalTime.class),
+                Mockito.any(LocalTime.class),
+                Mockito.any(PageRequest.class));
+
+        Mockito.verify(mqMesswerteRepository, Mockito.times(1)).findByMqIdsAndDatumAndUhrzeitAndTagestypen(
+                List.of("1"),
+                LocalDateTime.of(LocalDate.of(2024, 1, 1), LocalTime.MIN),
+                LocalDateTime.of(LocalDate.of(2024, 1, 1), LocalTime.MAX),
+                LocalTime.of(10,0,0),
+                LocalTime.of(11,0,0),
+                List.of(Tagestyp.SONNTAG_FEIERTAG.getId()),
+                PageRequest.of(4, 500));
     }
 
     @Test
