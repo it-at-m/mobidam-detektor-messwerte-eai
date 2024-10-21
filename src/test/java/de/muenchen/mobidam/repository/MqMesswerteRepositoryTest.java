@@ -62,6 +62,41 @@ class MqMesswerteRepositoryTest {
     }
 
     @Test
+    void findByMqIdsAndDatumOneDayWithLastIntervalOfDayDatumUhrzeitBis2359() {
+        final var lastIntevalOfDay = mqMesswerteRepository.findAll()
+                .stream()
+                .filter(interval -> interval.getDatumUhrzeitBis().toLocalTime().equals(LocalTime.MIN))
+                .peek(interval ->
+                        interval.setDatumUhrzeitBis(
+                                LocalDateTime.of(
+                                        interval.getDatumUhrzeitBis().toLocalDate(),
+                                        LocalTime.of(23,59,59)
+                                )
+                        )
+                )
+                .toList();
+        mqMesswerteRepository.saveAll(lastIntevalOfDay);
+
+        final var result = mqMesswerteRepository.findByMqIdsAndDatum(
+                List.of("2"),
+                LocalDateTime.of(LocalDate.of(2024, 1, 10), LocalTime.MIN),
+                LocalDateTime.of(LocalDate.of(2024, 1, 10), LocalTime.MAX),
+                PageRequest.of(0, 10000, Sort.by(Sort.Direction.ASC, "datumUhrzeitVon")));
+
+        Assertions.assertThat(result.getTotalPages()).isEqualTo(1);
+        Assertions.assertThat(result.getNumber()).isEqualTo(0);
+        Assertions.assertThat(result.getNumberOfElements()).isEqualTo(288);
+        Assertions.assertThat(result.getContent().getFirst().getDatumUhrzeitVon())
+                .isEqualTo(LocalDateTime.of(LocalDate.of(2024, 1, 10), LocalTime.of(0, 0, 0)));
+        Assertions.assertThat(result.getContent().getFirst().getDatumUhrzeitBis())
+                .isEqualTo(LocalDateTime.of(LocalDate.of(2024, 1, 10), LocalTime.of(0, 15, 0)));
+        Assertions.assertThat(result.getContent().getLast().getDatumUhrzeitVon())
+                .isEqualTo(LocalDateTime.of(LocalDate.of(2024, 1, 10), LocalTime.of(23, 45, 0)));
+        Assertions.assertThat(result.getContent().getLast().getDatumUhrzeitBis())
+                .isEqualTo(LocalDateTime.of(LocalDate.of(2024, 1, 10), LocalTime.of(23, 59, 59)));
+    }
+
+    @Test
     void findByMqIdsAndDatumAndTagestypenOneDay() {
         final var result = mqMesswerteRepository.findByMqIdsAndDatumAndTagestypen(
                 List.of("2"),
@@ -81,6 +116,42 @@ class MqMesswerteRepositoryTest {
                 .isEqualTo(LocalDateTime.of(LocalDate.of(2024, 1, 10), LocalTime.of(23, 45, 0)));
         Assertions.assertThat(result.getContent().getLast().getDatumUhrzeitBis())
                 .isEqualTo(LocalDateTime.of(LocalDate.of(2024, 1, 10), LocalTime.of(0, 0, 0)));
+    }
+
+    @Test
+    void findByMqIdsAndDatumAndTagestypenOneDayWithLastIntervalOfDayDatumUhrzeitBis2359() {
+        final var lastIntevalOfDay = mqMesswerteRepository.findAll()
+                .stream()
+                .filter(interval -> interval.getDatumUhrzeitBis().toLocalTime().equals(LocalTime.MIN))
+                .peek(interval ->
+                        interval.setDatumUhrzeitBis(
+                                LocalDateTime.of(
+                                        interval.getDatumUhrzeitBis().toLocalDate(),
+                                        LocalTime.of(23,59,59)
+                                )
+                        )
+                )
+                .toList();
+        mqMesswerteRepository.saveAll(lastIntevalOfDay);
+
+        final var result = mqMesswerteRepository.findByMqIdsAndDatumAndTagestypen(
+                List.of("2"),
+                LocalDateTime.of(LocalDate.of(2024, 1, 10), LocalTime.MIN),
+                LocalDateTime.of(LocalDate.of(2024, 1, 10), LocalTime.MAX),
+                List.of(5),
+                PageRequest.of(0, 10000, Sort.by(Sort.Direction.ASC, "datumUhrzeitVon")));
+
+        Assertions.assertThat(result.getTotalPages()).isEqualTo(1);
+        Assertions.assertThat(result.getNumber()).isEqualTo(0);
+        Assertions.assertThat(result.getNumberOfElements()).isEqualTo(96);
+        Assertions.assertThat(result.getContent().getFirst().getDatumUhrzeitVon())
+                .isEqualTo(LocalDateTime.of(LocalDate.of(2024, 1, 10), LocalTime.of(0, 0, 0)));
+        Assertions.assertThat(result.getContent().getFirst().getDatumUhrzeitBis())
+                .isEqualTo(LocalDateTime.of(LocalDate.of(2024, 1, 10), LocalTime.of(0, 15, 0)));
+        Assertions.assertThat(result.getContent().getLast().getDatumUhrzeitVon())
+                .isEqualTo(LocalDateTime.of(LocalDate.of(2024, 1, 10), LocalTime.of(23, 45, 0)));
+        Assertions.assertThat(result.getContent().getLast().getDatumUhrzeitBis())
+                .isEqualTo(LocalDateTime.of(LocalDate.of(2024, 1, 10), LocalTime.of(23, 59, 59)));
     }
 
     @Test
@@ -104,6 +175,41 @@ class MqMesswerteRepositoryTest {
                 .isEqualTo(LocalDateTime.of(LocalDate.of(2024, 1, 10), LocalTime.of(11, 0, 0)));
         Assertions.assertThat(result.getContent().getLast().getDatumUhrzeitBis())
                 .isEqualTo(LocalDateTime.of(LocalDate.of(2024, 1, 10), LocalTime.of(11, 15, 0)));
+    }
+
+    @Test
+    void findByMqIdsAndDatumAndUhrzeitOneDayWithLastIntervalOfDayDatumUhrzeitBis2359() {
+        final var lastIntevalOfDay = mqMesswerteRepository.findAll()
+                .stream()
+                .filter(interval -> interval.getDatumUhrzeitBis().toLocalTime().equals(LocalTime.MIN))
+                .peek(interval ->
+                        interval.setDatumUhrzeitBis(
+                                LocalDateTime.of(
+                                        interval.getDatumUhrzeitBis().toLocalDate(),
+                                        LocalTime.of(23,59,59)
+                                )
+                        )
+                )
+                .toList();
+        mqMesswerteRepository.saveAll(lastIntevalOfDay);
+
+        final var result = mqMesswerteRepository.findByMqIdsAndDatumAndUhrzeit(
+                List.of("2"),
+                LocalDateTime.of(LocalDate.of(2024, 1, 10), LocalTime.MIN),
+                LocalDateTime.of(LocalDate.of(2024, 1, 10), LocalTime.MAX),
+                LocalTime.of(23, 15, 0),
+                LocalTime.of(23, 59, 59),
+                PageRequest.of(0, 10000, Sort.by(Sort.Direction.ASC, "datumUhrzeitVon")));
+
+        Assertions.assertThat(result.getTotalPages()).isEqualTo(1);
+        Assertions.assertThat(result.getNumber()).isEqualTo(0);
+        Assertions.assertThat(result.getNumberOfElements()).isEqualTo(9);
+        Assertions.assertThat(result.getContent().get(6).getDatumUhrzeitBis())
+                .isEqualTo(LocalDateTime.of(LocalDate.of(2024, 1, 10), LocalTime.of(23, 59, 59)));
+        Assertions.assertThat(result.getContent().get(7).getDatumUhrzeitBis())
+                .isEqualTo(LocalDateTime.of(LocalDate.of(2024, 1, 10), LocalTime.of(23, 59, 59)));
+        Assertions.assertThat(result.getContent().get(8).getDatumUhrzeitBis())
+                .isEqualTo(LocalDateTime.of(LocalDate.of(2024, 1, 10), LocalTime.of(23, 59, 59)));
     }
 
     @Test
@@ -251,6 +357,76 @@ class MqMesswerteRepositoryTest {
                 .isEqualTo(LocalDateTime.of(LocalDate.of(2024, 1, 11), LocalTime.of(23, 45, 0)));
         Assertions.assertThat(result.getContent().get(7).getDatumUhrzeitBis())
                 .isEqualTo(LocalDateTime.of(LocalDate.of(2024, 1, 11), LocalTime.of(0, 0, 0)));
+    }
+
+    @Test
+    void findByMqIdsAndDatumAndUhrzeitAndTagestypenTwoDaysAtEndOfDayWithLastIntervalOfDayDatumUhrzeitBis2359() {
+        final var lastIntevalOfDay = mqMesswerteRepository.findAll()
+                .stream()
+                .filter(interval -> interval.getDatumUhrzeitBis().toLocalTime().equals(LocalTime.MIN))
+                .peek(interval ->
+                    interval.setDatumUhrzeitBis(
+                            LocalDateTime.of(
+                                    interval.getDatumUhrzeitBis().toLocalDate(),
+                                    LocalTime.of(23,59,59)
+                            )
+                    )
+                )
+                .toList();
+        mqMesswerteRepository.saveAll(lastIntevalOfDay);
+
+        final var result = mqMesswerteRepository.findByMqIdsAndDatumAndUhrzeitAndTagestypen(
+                List.of("2"),
+                LocalDateTime.of(LocalDate.of(2024, 1, 10), LocalTime.MIN),
+                LocalDateTime.of(LocalDate.of(2024, 1, 11), LocalTime.MAX),
+                LocalTime.of(23, 0, 0),
+                LocalTime.of(23, 59, 59),
+                List.of(5),
+                PageRequest.of(0, 10000, Sort.by(Sort.Direction.ASC, "datumUhrzeitVon")));
+
+        Assertions.assertThat(result.getTotalPages()).isEqualTo(1);
+        Assertions.assertThat(result.getNumber()).isEqualTo(0);
+        Assertions.assertThat(result.getNumberOfElements()).isEqualTo(8);
+
+        Assertions.assertThat(result.getContent().get(0).getDatumUhrzeitVon())
+                .isEqualTo(LocalDateTime.of(LocalDate.of(2024, 1, 10), LocalTime.of(23, 0, 0)));
+        Assertions.assertThat(result.getContent().get(0).getDatumUhrzeitBis())
+                .isEqualTo(LocalDateTime.of(LocalDate.of(2024, 1, 10), LocalTime.of(23, 15, 0)));
+
+        Assertions.assertThat(result.getContent().get(1).getDatumUhrzeitVon())
+                .isEqualTo(LocalDateTime.of(LocalDate.of(2024, 1, 10), LocalTime.of(23, 15, 0)));
+        Assertions.assertThat(result.getContent().get(1).getDatumUhrzeitBis())
+                .isEqualTo(LocalDateTime.of(LocalDate.of(2024, 1, 10), LocalTime.of(23, 30, 0)));
+
+        Assertions.assertThat(result.getContent().get(2).getDatumUhrzeitVon())
+                .isEqualTo(LocalDateTime.of(LocalDate.of(2024, 1, 10), LocalTime.of(23, 30, 0)));
+        Assertions.assertThat(result.getContent().get(2).getDatumUhrzeitBis())
+                .isEqualTo(LocalDateTime.of(LocalDate.of(2024, 1, 10), LocalTime.of(23, 45, 0)));
+
+        Assertions.assertThat(result.getContent().get(3).getDatumUhrzeitVon())
+                .isEqualTo(LocalDateTime.of(LocalDate.of(2024, 1, 10), LocalTime.of(23, 45, 0)));
+        Assertions.assertThat(result.getContent().get(3).getDatumUhrzeitBis())
+                .isEqualTo(LocalDateTime.of(LocalDate.of(2024, 1, 10), LocalTime.of(23, 59, 59)));
+
+        Assertions.assertThat(result.getContent().get(4).getDatumUhrzeitVon())
+                .isEqualTo(LocalDateTime.of(LocalDate.of(2024, 1, 11), LocalTime.of(23, 0, 0)));
+        Assertions.assertThat(result.getContent().get(4).getDatumUhrzeitBis())
+                .isEqualTo(LocalDateTime.of(LocalDate.of(2024, 1, 11), LocalTime.of(23, 15, 0)));
+
+        Assertions.assertThat(result.getContent().get(5).getDatumUhrzeitVon())
+                .isEqualTo(LocalDateTime.of(LocalDate.of(2024, 1, 11), LocalTime.of(23, 15, 0)));
+        Assertions.assertThat(result.getContent().get(5).getDatumUhrzeitBis())
+                .isEqualTo(LocalDateTime.of(LocalDate.of(2024, 1, 11), LocalTime.of(23, 30, 0)));
+
+        Assertions.assertThat(result.getContent().get(6).getDatumUhrzeitVon())
+                .isEqualTo(LocalDateTime.of(LocalDate.of(2024, 1, 11), LocalTime.of(23, 30, 0)));
+        Assertions.assertThat(result.getContent().get(6).getDatumUhrzeitBis())
+                .isEqualTo(LocalDateTime.of(LocalDate.of(2024, 1, 11), LocalTime.of(23, 45, 0)));
+
+        Assertions.assertThat(result.getContent().get(7).getDatumUhrzeitVon())
+                .isEqualTo(LocalDateTime.of(LocalDate.of(2024, 1, 11), LocalTime.of(23, 45, 0)));
+        Assertions.assertThat(result.getContent().get(7).getDatumUhrzeitBis())
+                .isEqualTo(LocalDateTime.of(LocalDate.of(2024, 1, 11), LocalTime.of(23, 59, 59)));
     }
 
 }
