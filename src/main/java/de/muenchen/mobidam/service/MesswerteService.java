@@ -155,8 +155,8 @@ public class MesswerteService {
     /**
      * @param pageRequest
      * @param pageResponse
-     * @throws PageNumberExceedsTotalPages falls die angefragte Seitenummer die zur Verfügung stehende
-     *             Seitezahl überschreitet.
+     * @throws PageNumberExceedsTotalPages falls die angefragte Seitennummer die zur Verfügung stehende
+     *             Seitenzahl überschreitet.
      */
     protected void throwExceptionWhenPageNumberExceedsTotalPages(final PageRequest pageRequest, final Page pageResponse) throws PageNumberExceedsTotalPages {
         if (pageRequest.getPageNumber() >= pageResponse.getTotalPages()
