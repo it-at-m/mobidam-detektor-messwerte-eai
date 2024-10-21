@@ -53,6 +53,7 @@ public class MesswerteService {
     private final MesswerteMapper messwerteMapper;
 
     /**
+     * Ermittelt die Messwerte für die im Parameter gegebenen Attribute für einen untertägigen Zeitraum.
      *
      * @param messquerschnitte die zu extrahierenden Messquerschnitte.
      * @param datumVon als Startdatum zur Extraktion der Messwerte.
@@ -106,6 +107,7 @@ public class MesswerteService {
     }
 
     /**
+     * Ermittelt die Messwerte für die im Parameter gegebenen Attribute ganztägige Zeiträume.
      *
      * @param messquerschnitte die zu extrahierenden Messquerschnitte.
      * @param datumVon als Startdatum zur Extraktion der Messwerte.
