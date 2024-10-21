@@ -65,7 +65,7 @@ public class MesswerteService {
      *            werden alle Fahrzeugtypen zurückgegeben.
      * @param pageRequest für den Seitenabruf.
      * @return die Messwerte mit den Informationen zur Paginierung.
-     * @throws PageNumberExceedsTotalPages falls die Anzahl gewünschte Seite die Anzahl der verfügbaren
+     * @throws PageNumberExceedsTotalPages falls die gewünschte Seite die Anzahl der verfügbaren
      *             Seiten übersteigt.
      */
     @Transactional(readOnly = true)
@@ -117,7 +117,7 @@ public class MesswerteService {
      *            werden alle Fahrzeugtypen zurückgegeben.
      * @param pageRequest für den Seitenabruf.
      * @return die Messwerte mit den Informationen zur Paginierung.
-     * @throws PageNumberExceedsTotalPages falls die Anzahl gewünschte Seite die Anzahl der verfügbaren
+     * @throws PageNumberExceedsTotalPages falls die gewünschte Seite die Anzahl der verfügbaren
      *             Seiten übersteigt.
      */
     @Transactional(readOnly = true)
