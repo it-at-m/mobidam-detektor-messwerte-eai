@@ -22,7 +22,7 @@
  */
 package de.muenchen.mobidam.controller;
 
-import de.muenchen.mobidam.configuration.LogExecutionTime;
+import de.muenchen.mobidam.configuration.aspect.LogExecutionTime;
 import de.muenchen.mobidam.domain.Constants;
 import de.muenchen.mobidam.domain.FzTyp;
 import de.muenchen.mobidam.domain.MqMesswerteDto;

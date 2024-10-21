@@ -20,25 +20,14 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package de.muenchen.mobidam.configuration;
+package de.muenchen.mobidam.configuration.aspect;
 
-import lombok.extern.slf4j.Slf4j;
-import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.annotation.Around;
-import org.aspectj.lang.annotation.Aspect;
-import org.springframework.stereotype.Component;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-@Aspect
-@Component
-@Slf4j
-public class AspectConfiguration {
-
-    @Around("@annotation(de.muenchen.mobidam.configuration.LogExecutionTime)")
-    public Object logExecutionTime(final ProceedingJoinPoint joinPoint) throws Throwable {
-        final var start = System.currentTimeMillis();
-        final var proceed = joinPoint.proceed();
-        final var executionTime = System.currentTimeMillis() - start;
-        log.debug(">> {} executed in {} seconds", joinPoint.getSignature(), executionTime / 1000.0);
-        return proceed;
-    }
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.METHOD)
+public @interface LogExecutionTime {
 }
