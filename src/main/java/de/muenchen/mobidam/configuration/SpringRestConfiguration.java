@@ -23,11 +23,12 @@
 package de.muenchen.mobidam.configuration;
 
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.validation.Validator;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
-//@Configuration
-public class SpringRestConfiguration /* implements RepositoryRestConfigurer */ {
+@Configuration
+public class SpringRestConfiguration {
 
     /**
      * The method returns a {@link Validator} to get correct validation error messages.
@@ -38,26 +39,5 @@ public class SpringRestConfiguration /* implements RepositoryRestConfigurer */ {
     public Validator validator() {
         return new LocalValidatorFactoryBean();
     }
-
-    /**
-     * See {@link RepositoryRestConfigurer#configureRepositoryRestConfiguration}
-     */
-    //    @Override
-    //    public void configureRepositoryRestConfiguration(final RepositoryRestConfiguration config, final CorsRegistry corsRegistry) {
-    //        config.setRepositoryDetectionStrategy(RepositoryDetectionStrategies.VISIBILITY);
-    //    }
-
-    /**
-     * See {@link RepositoryRestConfigurer#configureValidatingRepositoryEventListener}
-     */
-    //    @Override
-    //    public void configureValidatingRepositoryEventListener(final ValidatingRepositoryEventListener validatingListener) {
-    //        validatingListener.addValidator("afterCreate", validator());
-    //        validatingListener.addValidator("beforeCreate", validator());
-    //        validatingListener.addValidator("afterSave", validator());
-    //        validatingListener.addValidator("beforeSave", validator());
-    //        validatingListener.addValidator("beforeLinkSave", validator());
-    //        validatingListener.addValidator("afterLinkSave", validator());
-    //    }
 
 }
