@@ -3,6 +3,7 @@ package de.muenchen.mobidam.service;
 import de.muenchen.mobidam.TestData;
 import de.muenchen.mobidam.domain.FzTyp;
 import de.muenchen.mobidam.domain.MessquerschnitteDto;
+import de.muenchen.mobidam.domain.MqMesswerte;
 import de.muenchen.mobidam.domain.MqMesswerteDto;
 import de.muenchen.mobidam.domain.Tagestyp;
 import de.muenchen.mobidam.domain.mapper.MesswerteMapper;
@@ -285,6 +286,29 @@ class MesswerteServiceTest {
                 LocalDateTime.of(LocalDate.of(2024, 1, 1), LocalTime.MAX),
                 List.of(Tagestyp.SONNTAG_FEIERTAG.getId()),
                 PageRequest.of(4, 500));
+    }
+
+    @Test
+    void throwExceptionWhenPageNumberExceedsTotalPages() throws PageNumberExceedsTotalPages {
+        messwerteService.throwExceptionWhenPageNumberExceedsTotalPages(
+                PageRequest.of(1, 50),
+                new PageImpl<MqMesswerte>(List.of(), PageRequest.of(1, 50), 512));
+
+        messwerteService.throwExceptionWhenPageNumberExceedsTotalPages(
+                PageRequest.of(10, 50),
+                new PageImpl<>(List.of(), PageRequest.of(10, 50), 512));
+
+        Assertions.assertThatExceptionOfType(PageNumberExceedsTotalPages.class).isThrownBy(() -> {
+            messwerteService.throwExceptionWhenPageNumberExceedsTotalPages(PageRequest.of(11, 50), new PageImpl<>(List.of(), PageRequest.of(11, 50), 512));
+        });
+
+        messwerteService.throwExceptionWhenPageNumberExceedsTotalPages(
+                PageRequest.of(0, 50),
+                new PageImpl<>(List.of(), PageRequest.of(10, 50), 0));
+
+        messwerteService.throwExceptionWhenPageNumberExceedsTotalPages(
+                PageRequest.of(11, 50),
+                new PageImpl<>(List.of(), PageRequest.of(10, 50), 0));
     }
 
 }

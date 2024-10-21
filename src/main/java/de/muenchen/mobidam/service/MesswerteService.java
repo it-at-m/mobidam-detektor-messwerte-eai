@@ -158,7 +158,7 @@ public class MesswerteService {
      */
     protected void throwExceptionWhenPageNumberExceedsTotalPages(final PageRequest pageRequest, final Page pageResponse) throws PageNumberExceedsTotalPages {
         if (pageRequest.getPageNumber() >= pageResponse.getTotalPages() && pageResponse.getTotalPages() != 0) {
-            final var errorMessage = "The requested page number exceeds the total number of pages";
+            final var errorMessage = "The requested zero based page number exceeds the total number of pages";
             log.error(errorMessage);
             throw new PageNumberExceedsTotalPages(errorMessage);
         }
