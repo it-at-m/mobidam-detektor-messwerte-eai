@@ -48,7 +48,6 @@ import java.util.Collections;
 @Configuration
 public class SwaggerConfig implements WebMvcConfigurer {
 
-
     private final String buildVersion;
 
     @Autowired

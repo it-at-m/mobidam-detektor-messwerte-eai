@@ -87,16 +87,21 @@ public class MqMesswerteController {
     @GetMapping(value = "/fullrange", produces = MediaType.APPLICATION_JSON_VALUE)
     @LogExecutionTime
     public ResponseEntity<MqMesswerteDto> loadMesswerteFullRange(
-            @RequestParam @NotEmpty final List<@NotNull Long> messquerschnitte,
-            @RequestParam @NotNull final LocalDate datumVon,
-            @RequestParam @NotNull final LocalDate datumBis,
-            @RequestParam @NotEmpty final List<@NotNull Tagestyp> tagestypen,
-            @RequestParam(required = false) final Optional<List<@NotNull FzTyp>> fzTypen,
+            @RequestParam(name = "messquerschnitte") @NotEmpty final List<@NotNull Long> messquerschnitte,
+            @RequestParam(name = "datumVon") @NotNull final LocalDate datumVon,
+            @RequestParam(name = "datumBis") @NotNull final LocalDate datumBis,
+            @RequestParam(name = "tagestypen") @NotEmpty final List<@NotNull Tagestyp> tagestypen,
             @RequestParam(
+                    name = "fzTypen",
+                    required = false
+            ) final Optional<List<@NotNull FzTyp>> fzTypen,
+            @RequestParam(
+                    name = "page",
                     required = false,
                     defaultValue = "${mobidam.detektor.messwerte.eai.pageing.default.page-number:0}"
             ) @PositiveOrZero final Integer page,
             @RequestParam(
+                    name = "size",
                     required = false,
                     defaultValue = "${mobidam.detektor.messwerte.eai.pageing.default.page-size:100000}"
             ) @Positive final Integer size) throws PageNumberExceedsTotalPages {
@@ -135,18 +140,23 @@ public class MqMesswerteController {
     @GetMapping(value = "/timerange", produces = MediaType.APPLICATION_JSON_VALUE)
     @LogExecutionTime
     public ResponseEntity<MqMesswerteDto> loadMesswerteTimeRange(
-            @RequestParam @NotEmpty final List<@NotNull Long> messquerschnitte,
-            @RequestParam @NotNull final LocalDate datumVon,
-            @RequestParam @NotNull final LocalDate datumBis,
-            @RequestParam @NotNull final LocalTime uhrzeitVon,
-            @RequestParam @NotNull final LocalTime uhrzeitBis,
-            @RequestParam @NotEmpty final List<@NotNull Tagestyp> tagestypen,
-            @RequestParam(required = false) final Optional<List<@NotNull FzTyp>> fzTypen,
+            @RequestParam(name = "messquerschnitte") @NotEmpty final List<@NotNull Long> messquerschnitte,
+            @RequestParam(name = "datumVon") @NotNull final LocalDate datumVon,
+            @RequestParam(name = "datumBis") @NotNull final LocalDate datumBis,
+            @RequestParam(name = "uhrzeitVon") @NotNull final LocalTime uhrzeitVon,
+            @RequestParam(name = "uhrzeitBis") @NotNull final LocalTime uhrzeitBis,
+            @RequestParam(name = "tagestypen") @NotEmpty final List<@NotNull Tagestyp> tagestypen,
             @RequestParam(
+                    name = "fzTypen",
+                    required = false
+            ) final Optional<List<@NotNull FzTyp>> fzTypen,
+            @RequestParam(
+                    name = "page",
                     required = false,
                     defaultValue = "${mobidam.detektor.messwerte.eai.pageing.default.page-number:0}"
             ) @PositiveOrZero final Integer page,
             @RequestParam(
+                    name = "size",
                     required = false,
                     defaultValue = "${mobidam.detektor.messwerte.eai.pageing.default.page-size:100000}"
             ) @Positive final Integer size) throws PageNumberExceedsTotalPages {

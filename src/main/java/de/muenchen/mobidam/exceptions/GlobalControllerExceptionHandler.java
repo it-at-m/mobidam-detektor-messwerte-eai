@@ -22,18 +22,25 @@
  */
 package de.muenchen.mobidam.exceptions;
 
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 @RestControllerAdvice
-public class GlobalControllerExceptionHandler {
+public class GlobalControllerExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(PageNumberExceedsTotalPages.class)
-    public ResponseEntity<String> handlePageNumberExceedsTotalPages(final PageNumberExceedsTotalPages exception) {
-        return ResponseEntity
-                .badRequest()
-                .body(exception.getMessage());
+    public ResponseEntity<Object> handlePageNumberExceedsTotalPages(final PageNumberExceedsTotalPages exception, final WebRequest request) {
+        return handleExceptionInternal(
+                exception,
+                null,
+                new HttpHeaders(),
+                HttpStatus.BAD_REQUEST,
+                request);
     }
 
 }
