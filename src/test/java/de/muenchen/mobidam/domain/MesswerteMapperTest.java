@@ -44,7 +44,7 @@ public class MesswerteMapperTest {
     private final MesswerteMapper messwerteMapper = new MesswerteMapper();
 
     @Test
-    public void testMap() {
+    public void map() {
         final List<MqMesswerte> messwerte = new ArrayList<>();
 
         LocalDateTime datumVon1 = LocalDateTime.of(2024, 9, 1, 0, 0, 0);
