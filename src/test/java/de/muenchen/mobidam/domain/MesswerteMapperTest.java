@@ -68,6 +68,25 @@ public class MesswerteMapperTest {
     }
 
     @Test
+    public void mapMesswerteWichAreNull() {
+        final List<FzTyp> fzTypen = new ArrayList<>();
+        fzTypen.add(FzTyp.SATTEL_KFZ);
+        fzTypen.add(FzTyp.KFZ_VERKEHR);
+
+        MqMesswerteDto dto = messwerteMapper.map((List<MqMesswerte>) null, fzTypen);
+
+        final var expected = new MqMesswerteDto();
+        expected.setMessquerschnitte(List.of());
+        expected.setPageSize(null);
+        expected.setPageNumber(null);
+        expected.setTotalPages(null);
+        expected.setVersion(Constants.VERSION1);
+        expected.setFormat(MesswerteFormatBuilder.createFormat(fzTypen));
+
+        Assertions.assertThat(dto).isNotNull().isEqualTo(expected);
+    }
+
+    @Test
     public void mapMesswerte() {
         final List<MqMesswerte> messwerte = new ArrayList<>();
 

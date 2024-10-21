@@ -6,6 +6,7 @@ import de.muenchen.mobidam.domain.MessquerschnitteDto;
 import de.muenchen.mobidam.domain.MqMesswerteDto;
 import de.muenchen.mobidam.domain.Tagestyp;
 import de.muenchen.mobidam.domain.mapper.MesswerteMapper;
+import de.muenchen.mobidam.exceptions.PageNumberExceedsTotalPages;
 import de.muenchen.mobidam.repository.MqMesswerteRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -41,7 +42,7 @@ class MesswerteServiceTest {
     }
 
     @Test
-    void loadMesswerteWithinTimeRangeWithoutTagestyp() {
+    void loadMesswerteWithinTimeRangeWithoutTagestyp() throws PageNumberExceedsTotalPages {
         final var messwerte = TestData.createMqMesswerte(
                 List.of(1L),
                 List.of(4),
@@ -106,7 +107,7 @@ class MesswerteServiceTest {
     }
 
     @Test
-    void loadMesswerteWithinTimeRangeWithTagestyp() {
+    void loadMesswerteWithinTimeRangeWithTagestyp() throws PageNumberExceedsTotalPages {
         final var messwerte = TestData.createMqMesswerte(
                 List.of(1L),
                 List.of(4),
@@ -172,7 +173,7 @@ class MesswerteServiceTest {
     }
 
     @Test
-    void loadMesswerteWithFullRangeWithoutTagestyp() {
+    void loadMesswerteWithFullRangeWithoutTagestyp() throws PageNumberExceedsTotalPages {
         final var messwerte = TestData.createMqMesswerte(
                 List.of(1L),
                 List.of(4),
@@ -229,7 +230,7 @@ class MesswerteServiceTest {
     }
 
     @Test
-    void loadMesswerteWithFullRangeWithTagestyp() {
+    void loadMesswerteWithFullRangeWithTagestyp() throws PageNumberExceedsTotalPages {
         final var messwerte = TestData.createMqMesswerte(
                 List.of(1L),
                 List.of(4),

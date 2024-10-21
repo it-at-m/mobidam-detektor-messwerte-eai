@@ -27,8 +27,10 @@ import de.muenchen.mobidam.domain.MqMesswerte;
 import de.muenchen.mobidam.domain.MqMesswerteDto;
 import de.muenchen.mobidam.domain.Tagestyp;
 import de.muenchen.mobidam.domain.mapper.MesswerteMapper;
+import de.muenchen.mobidam.exceptions.PageNumberExceedsTotalPages;
 import de.muenchen.mobidam.repository.MqMesswerteRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -43,6 +45,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class MesswerteService {
 
     private final MqMesswerteRepository mqMesswerteRepository;
@@ -51,15 +54,18 @@ public class MesswerteService {
 
     /**
      *
-     * @param messquerschnitte
-     * @param datumVon
-     * @param datumBis
-     * @param uhrzeitVon
-     * @param uhrzeitBis
-     * @param tagestypen
-     * @param fzTypen
-     * @param pageRequest
-     * @return
+     * @param messquerschnitte die zu extrahierenden Messquerschnitte.
+     * @param datumVon als Startdatum zur Extraktion der Messwerte.
+     * @param datumBis als Enddatum zur Extraktion der Messwerte.
+     * @param uhrzeitVon als Startuhrzeit zur Extraktion der Messwerte eines Messtags.
+     * @param uhrzeitBis als Startuhrzeit zur Extraktion der Messwerte eines Messtags.
+     * @param tagestypen die zu extrahierenden Tage.
+     * @param fzTypen die Auswahl der zu extrahierenden Fahrzeugtypen. Sind keine Fahrzeugtypen gegeben,
+     *            werden alle Fahrzeugtypen zurückgegeben.
+     * @param pageRequest für den Seitenabruf.
+     * @return die Messwerte mit den Informationen zur Paginierung.
+     * @throws PageNumberExceedsTotalPages falls die Anzahl gewünschte Seite die Anzahl der verfügbaren
+     *             Seiten übersteigt.
      */
     @Transactional(readOnly = true)
     public MqMesswerteDto loadMesswerteWithinTimeRange(
@@ -70,7 +76,7 @@ public class MesswerteService {
             final LocalTime uhrzeitBis,
             final List<Tagestyp> tagestypen,
             final Optional<List<FzTyp>> fzTypen,
-            final PageRequest pageRequest) {
+            final PageRequest pageRequest) throws PageNumberExceedsTotalPages {
         final var datumVonStartOfDay = LocalDateTime.of(datumVon, LocalTime.MIN);
         final var datumBisEndOfDay = LocalDateTime.of(datumBis, LocalTime.MAX);
         final Page<MqMesswerte> messwerte;
@@ -94,19 +100,23 @@ public class MesswerteService {
                     tagesTypIds,
                     pageRequest);
         }
+        this.throwExceptionWhenPageNumberExceedsTotalPages(pageRequest, messwerte);
         final var fzTypes = fzTypen.orElseGet(() -> Arrays.asList(FzTyp.values()));
         return messwerteMapper.map(messwerte, fzTypes);
     }
 
     /**
      *
-     * @param messquerschnitte
-     * @param datumVon
-     * @param datumBis
-     * @param tagestypen
-     * @param fzTypen
-     * @param pageRequest
-     * @return
+     * @param messquerschnitte die zu extrahierenden Messquerschnitte.
+     * @param datumVon als Startdatum zur Extraktion der Messwerte.
+     * @param datumBis als Enddatum zur Extraktion der Messwerte.
+     * @param tagestypen die zu extrahierenden Tage.
+     * @param fzTypen die Auswahl der zu extrahierenden Fahrzeugtypen. Sind keine Fahrzeugtypen gegeben,
+     *            werden alle Fahrzeugtypen zurückgegeben.
+     * @param pageRequest für den Seitenabruf.
+     * @return die Messwerte mit den Informationen zur Paginierung.
+     * @throws PageNumberExceedsTotalPages falls die Anzahl gewünschte Seite die Anzahl der verfügbaren
+     *             Seiten übersteigt.
      */
     @Transactional(readOnly = true)
     public MqMesswerteDto loadMesswerteWithFullRange(
@@ -115,7 +125,7 @@ public class MesswerteService {
             final LocalDate datumBis,
             final List<Tagestyp> tagestypen,
             final Optional<List<FzTyp>> fzTypen,
-            final PageRequest pageRequest) {
+            final PageRequest pageRequest) throws PageNumberExceedsTotalPages {
         final var datumVonStartOfDay = LocalDateTime.of(datumVon, LocalTime.MIN);
         final var datumBisEndOfDay = LocalDateTime.of(datumBis, LocalTime.MAX);
         final Page<MqMesswerte> messwerte;
@@ -135,8 +145,23 @@ public class MesswerteService {
                     tagesTypIds,
                     pageRequest);
         }
+        this.throwExceptionWhenPageNumberExceedsTotalPages(pageRequest, messwerte);
         final var fzTypes = fzTypen.orElseGet(() -> Arrays.asList(FzTyp.values()));
         return messwerteMapper.map(messwerte, fzTypes);
+    }
+
+    /**
+     * @param pageRequest
+     * @param pageResponse
+     * @throws PageNumberExceedsTotalPages falls die angefragte Seitenummer die zur Verfügung stehende
+     *             Seitezahl überschreitet.
+     */
+    protected void throwExceptionWhenPageNumberExceedsTotalPages(final PageRequest pageRequest, final Page pageResponse) throws PageNumberExceedsTotalPages {
+        if (pageRequest.getPageNumber() >= pageResponse.getTotalPages() && pageResponse.getTotalPages() != 0) {
+            final var errorMessage = "The requested page number exceeds the total number of pages";
+            log.error(errorMessage);
+            throw new PageNumberExceedsTotalPages(errorMessage);
+        }
     }
 
 }

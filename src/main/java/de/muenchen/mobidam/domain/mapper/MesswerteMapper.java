@@ -41,8 +41,7 @@ import java.util.List;
 public class MesswerteMapper {
 
     public MqMesswerteDto map(final Page<MqMesswerte> page, final List<FzTyp> fzTypen) {
-        final var messwerte = ListUtils.defaultIfNull(page.getContent(), List.of());
-        final var dto = map(messwerte, fzTypen);
+        final var dto = map(page.getContent(), fzTypen);
         dto.setPageNumber(page.getNumber());
         dto.setPageSize(page.getSize());
         dto.setTotalPages(page.getTotalPages());
@@ -53,7 +52,7 @@ public class MesswerteMapper {
         final var dto = new MqMesswerteDto();
         dto.setFormat(MesswerteFormatBuilder.createFormat(fzTypen));
         dto.setVersion(Constants.VERSION1);
-        mapMesswerte(dto, messwerte, fzTypen);
+        mapMesswerte(dto, ListUtils.defaultIfNull(messwerte, List.of()), fzTypen);
         return dto;
     }
 

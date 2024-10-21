@@ -27,6 +27,7 @@ import de.muenchen.mobidam.domain.Constants;
 import de.muenchen.mobidam.domain.FzTyp;
 import de.muenchen.mobidam.domain.MqMesswerteDto;
 import de.muenchen.mobidam.domain.Tagestyp;
+import de.muenchen.mobidam.exceptions.PageNumberExceedsTotalPages;
 import de.muenchen.mobidam.service.MesswerteService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -79,7 +80,7 @@ public class MqMesswerteController {
                     @ApiResponse(
                             responseCode = "401", description = "Unauthorized",
                             content = @Content
-                    )}
+                    ) }
     )
     @SecurityRequirement(name = "oauth2", scopes = { "read" })
     @PreAuthorize("hasRole(T(de.muenchen.mobidam.domain.Constants).CLIENT_ROLE)")
@@ -98,7 +99,7 @@ public class MqMesswerteController {
             @RequestParam(
                     required = false,
                     defaultValue = "${mobidam.detektor.messwerte.eai.pageing.default.page-size:100000}"
-            ) @Positive final Integer size) {
+            ) @Positive final Integer size) throws PageNumberExceedsTotalPages {
         final var pageRequest = PageRequest.of(page, size);
         final var messwerte = messwerteService.loadMesswerteWithFullRange(
                 messquerschnitte,
@@ -127,7 +128,7 @@ public class MqMesswerteController {
                     @ApiResponse(
                             responseCode = "401", description = "Unauthorized",
                             content = @Content
-                    )}
+                    ) }
     )
     @SecurityRequirement(name = "oauth2", scopes = { "read" })
     @PreAuthorize("hasRole(T(de.muenchen.mobidam.domain.Constants).CLIENT_ROLE)")
@@ -148,7 +149,7 @@ public class MqMesswerteController {
             @RequestParam(
                     required = false,
                     defaultValue = "${mobidam.detektor.messwerte.eai.pageing.default.page-size:100000}"
-            ) @Positive final Integer size) {
+            ) @Positive final Integer size) throws PageNumberExceedsTotalPages {
         final var pageRequest = PageRequest.of(page, size);
         final var messwerte = messwerteService.loadMesswerteWithinTimeRange(
                 messquerschnitte,
