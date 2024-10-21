@@ -23,6 +23,7 @@
 package de.muenchen.mobidam.configuration.aspect;
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.time.DateUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -38,7 +39,7 @@ public class AspectConfiguration {
         final var start = System.currentTimeMillis();
         final var proceed = joinPoint.proceed();
         final var executionTime = System.currentTimeMillis() - start;
-        log.debug(">> {} executed in {} seconds", joinPoint.getSignature(), executionTime / 1000.0);
+        log.debug(">> {} executed in {} seconds", joinPoint.getSignature(), executionTime / DateUtils.MILLIS_PER_SECOND);
         return proceed;
     }
 }
